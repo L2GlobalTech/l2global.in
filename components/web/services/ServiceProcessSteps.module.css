@@ -1,0 +1,144 @@
+.gradientText {
+    background: linear-gradient(135deg,
+            hsl(221, 88%, 52%),
+            hsl(270, 70%, 55%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.wrapper {
+    position: relative;
+    padding: 80px 0;
+}
+
+.gradientLine {
+    display: none;
+}
+
+@media (min-width: 1024px) {
+    .gradientLine {
+        display: block;
+        position: absolute;
+        top: 44px;
+        left: calc(10% + 26px);
+        right: calc(10% + 26px);
+        height: 2px;
+        z-index: 0;
+        background: linear-gradient(90deg,
+                rgb(159, 188, 249),
+                rgb(176, 147, 236),
+                rgb(255, 187, 128),
+                rgb(133, 224, 179),
+                rgb(125, 214, 232));
+    }
+}
+
+.card {
+    background: hsl(0 0% 100%);
+    border-radius: 20px;
+    padding: 24px 20px;
+    border: 1px solid hsl(220 16% 91%);
+    box-shadow:
+        0 2px 12px -2px hsl(221 88% 52% / 0.08),
+        0 1px 3px hsl(220 20% 20% / 0.05);
+    position: relative;
+    overflow: hidden;
+    transition: all 0.25s ease;
+    animation: fadeUp 0.6s ease forwards;
+    opacity: 0;
+}
+
+.card:hover {
+    transform: translateY(-6px);
+    box-shadow:
+        0 8px 24px -6px hsl(221 88% 52% / 0.15),
+        0 4px 12px hsl(220 20% 20% / 0.08);
+}
+
+.card::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg,
+            hsl(265 70% 58%),
+            hsl(28 100% 65%));
+    border-radius: 0 0 20px 20px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+
+.card:hover::after {
+    opacity: 1;
+}
+
+.number {
+    position: absolute;
+    top: -16px;
+    right: 16px;
+    font-size: 56px;
+    font-weight: 900;
+    line-height: 1;
+    color: hsl(220 16% 91%);
+    user-select: none;
+    transition: transform 0.3s ease;
+}
+
+.iconBox {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    transition: transform 0.3s ease;
+}
+
+.card:hover .iconBox {
+    transform: scale(1.1);
+}
+
+.card:hover .number {
+    color: #ff6900;
+}
+
+.stepLabel {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+}
+
+.title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #111;
+}
+
+.card:hover .title {
+    color: #ff6900;
+}
+
+.desc {
+    font-size: 12px;
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

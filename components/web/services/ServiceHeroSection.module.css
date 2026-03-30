@@ -1,0 +1,126 @@
+.backgroundMesh {
+  background-color: #f8fafb;
+  background-image:
+    radial-gradient(ellipse 60% 50% at 10% 20%,
+      hsl(221, 100%, 95%) 0%,
+      transparent 70%),
+    radial-gradient(ellipse 50% 60% at 90% 10%,
+      hsl(260, 80%, 95%) 0%,
+      transparent 65%),
+    radial-gradient(ellipse 40% 40% at 80% 85%,
+      hsl(30, 100%, 96%) 0%,
+      transparent 60%),
+    radial-gradient(ellipse 35% 35% at 20% 80%,
+      hsl(180, 60%, 95%) 0%,
+      transparent 55%);
+}
+
+.gradientText {
+  background: linear-gradient(135deg,
+      hsl(221, 88%, 52%),
+      hsl(270, 70%, 55%));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(8px);
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.badgeIcon {
+  width: 14px;
+  height: 14px;
+  color: #F15A23;
+  stroke-width: 2;
+}
+
+
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-radius: 16px;
+
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Avatar Group */
+.avatarGroup {
+  display: flex;
+}
+
+.avatarGroup>div:not(:first-child) {
+  margin-left: -10px;
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid white;
+
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Avatar Colors */
+.blue {
+  background-image: url("../../../public/assets/web/people/Image-1.png");
+}
+
+.purple {
+  background-image: url("../../../public/assets/web/people/Image-2.png");
+}
+
+.orange {
+  background-image: url("../../../public/assets/web/people/Image-3.png");
+}
+
+.green {
+  background-image: url("../../../public/assets/web/people/Image.png");
+}
+
+/* Divider */
+.divider {
+  width: 1px;
+  height: 32px;
+  background: #e5e7eb;
+}
+
+/* Stars */
+.stars {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.starIcon {
+  width: 14px;
+  height: 14px;
+  fill: rgb(255, 191, 0);
+  stroke: rgb(255, 191, 0);
+}
+
+/* Text */
+.text {
+  font-size: 12px;
+  font-weight: 500;
+  color: #6b7280;
+  letter-spacing: -0.5px;
+}

@@ -1,0 +1,67 @@
+.gradientText {
+    background: linear-gradient(135deg,
+            hsl(221, 88%, 52%),
+            hsl(270, 70%, 55%));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.backgroundMesh {
+    background-color: #f8fafb;
+    background-image:
+        radial-gradient(ellipse 60% 50% at 10% 20%,
+            hsl(221, 100%, 95%) 0%,
+            transparent 70%),
+        radial-gradient(ellipse 50% 60% at 90% 10%,
+            hsl(260, 80%, 95%) 0%,
+            transparent 65%),
+        radial-gradient(ellipse 40% 40% at 80% 85%,
+            hsl(30, 100%, 96%) 0%,
+            transparent 60%),
+        radial-gradient(ellipse 35% 35% at 20% 80%,
+            hsl(180, 60%, 95%) 0%,
+            transparent 55%);
+}
+
+
+.card {
+    background: hsl(0 0% 100%);
+    border-radius: 16px;
+    padding: 16px 18px;
+    border: 1px solid hsl(220 16% 91%);
+    box-shadow: 0 8px 32px -6px hsl(221 88% 52% / .14), 0 2px 8px hsl(220 20% 20% / .06);
+    ;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    transition: all 0.2s ease;
+}
+
+.card:hover {
+    box-shadow: 0 8px 32px -6px hsl(221 88% 52% / .14), 0 2px 8px hsl(220 20% 20% / .06);
+    transform: translateY(-2px);
+    border-color: hsl(221 88% 52% / 0.3);
+}
+
+.iconBox {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+}
+
+.card:hover .iconBox {
+    transform: scale(1.1);
+}
+
+.title {
+    font-size: 14px;
+    font-weight: 600;
+    color: hsl(220 50% 10%);
+    line-height: 1.3;
+}
