@@ -97,7 +97,7 @@ const ContactUsContainer = () => {
                                 <div>
                                     <p className="text-gray-500">Address:</p>
                                     <p className="font-semibold text-lg text-gray-900">
-                                        1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286
+                                        Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286
                                     </p>
                                 </div>
                             </div>
