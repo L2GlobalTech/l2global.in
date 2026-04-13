@@ -1,2 +1,24 @@
-User-Agent: *
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /_next/
+
 Sitemap: https://l2global.in/sitemap.xml
+
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /

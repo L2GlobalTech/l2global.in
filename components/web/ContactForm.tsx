@@ -3,22 +3,40 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 
+// const COUNTRIES = [
+//   { name: "India", phoneCode: "91", flag: "https://flagcdn.com/in.svg", maxLength: 10 },
+//   { name: "United States", phoneCode: "1", flag: "https://flagcdn.com/us.svg", maxLength: 10 },
+//   { name: "United Kingdom", phoneCode: "44", flag: "https://flagcdn.com/gb.svg", maxLength: 10 },
+//   { name: "Canada", phoneCode: "1", flag: "https://flagcdn.com/ca.svg", maxLength: 10 },
+//   { name: "Australia", phoneCode: "61", flag: "https://flagcdn.com/au.svg", maxLength: 9 },
+//   { name: "Singapore", phoneCode: "65", flag: "https://flagcdn.com/sg.svg", maxLength: 8 },
+//   { name: "Romania", phoneCode: "40", flag: "https://flagcdn.com/ro.svg", maxLength: 9 },
+// ];
+
 const COUNTRIES = [
-  { name: "India", phoneCode: "91", flag: "https://flagcdn.com/in.svg", maxLength: 10 },
-  { name: "United States", phoneCode: "1", flag: "https://flagcdn.com/us.svg", maxLength: 10 },
-  { name: "United Kingdom", phoneCode: "44", flag: "https://flagcdn.com/gb.svg", maxLength: 10 },
-  { name: "Canada", phoneCode: "1", flag: "https://flagcdn.com/ca.svg", maxLength: 10 },
-  { name: "Australia", phoneCode: "61", flag: "https://flagcdn.com/au.svg", maxLength: 9 },
-  { name: "Singapore", phoneCode: "65", flag: "https://flagcdn.com/sg.svg", maxLength: 8 },
-  { name: "Romania", phoneCode: "40", flag: "https://flagcdn.com/ro.svg", maxLength: 9 },
+  // Primary markets — top of list
+  { name: 'United Kingdom', phoneCode: '44', flag: 'https://flagcdn.com/gb.svg', maxLength: 10 },
+  { name: 'United States', phoneCode: '1', flag: 'https://flagcdn.com/us.svg', maxLength: 10 },
+  // Gulf countries
+  { name: 'UAE (Dubai)', phoneCode: '971', flag: 'https://flagcdn.com/ae.svg', maxLength: 9 },
+  { name: 'Saudi Arabia', phoneCode: '966', flag: 'https://flagcdn.com/sa.svg', maxLength: 9 },
+  { name: 'Qatar', phoneCode: '974', flag: 'https://flagcdn.com/qa.svg', maxLength: 8 },
+  { name: 'Kuwait', phoneCode: '965', flag: 'https://flagcdn.com/kw.svg', maxLength: 8 },
+  { name: 'Bahrain', phoneCode: '973', flag: 'https://flagcdn.com/bh.svg', maxLength: 8 },
+  { name: 'Oman', phoneCode: '968', flag: 'https://flagcdn.com/om.svg', maxLength: 8 },
+  // Other markets
+  { name: 'India', phoneCode: '91', flag: 'https://flagcdn.com/in.svg', maxLength: 10 },
+  { name: 'Canada', phoneCode: '1', flag: 'https://flagcdn.com/ca.svg', maxLength: 10 },
+  { name: 'Australia', phoneCode: '61', flag: 'https://flagcdn.com/au.svg', maxLength: 9 },
 ];
+
 
 export default function ContactForm() {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
-
-  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[3]);
+  const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
+  // const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[3]);
   const [submitted, setSubmitted] = useState(false);
 
   const [form, setForm] = useState({
@@ -40,6 +58,32 @@ export default function ContactForm() {
     };
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  // Timezone detection — set initial country based on user's local timezone
+  useEffect(() => {
+    try {
+      const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+      let detected;
+
+      if (tz.includes("London")) detected = COUNTRIES[0];
+      else if (tz.includes("Kolkata") || tz.includes("Calcutta")) detected = COUNTRIES[8];
+      else if (tz.includes("Dubai")) detected = COUNTRIES[2];
+      else if (tz.includes("Riyadh")) detected = COUNTRIES[3];
+      else if (tz.includes("Qatar")) detected = COUNTRIES[4];
+      else if (tz.includes("Kuwait")) detected = COUNTRIES[5];
+      else if (tz.includes("Bahrain")) detected = COUNTRIES[6];
+      else if (tz.includes("Muscat")) detected = COUNTRIES[7];
+      else if (tz.includes("Australia")) detected = COUNTRIES[10];
+      else if (tz.includes("Toronto") || tz.includes("Vancouver") || tz.includes("Canada")) detected = COUNTRIES[9];
+      else if (tz.includes("America") || tz.includes("US/")) detected = COUNTRIES[1];
+
+      if (detected) {
+        setSelectedCountry(detected);
+      }
+    } catch (e) {
+      console.error("Timezone detection failed", e);
+    }
   }, []);
 
 

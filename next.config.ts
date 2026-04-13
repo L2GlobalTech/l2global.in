@@ -5,6 +5,16 @@ const nextConfig: NextConfig = {
   output: 'export',
   images: {
     unoptimized: true,   // <<— important
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "maps.googleapis.com",
+      },
+      {
+        protocol: "https",
+        hostname: "flagcdn.com",
+      },
+    ],
   },
 };
 

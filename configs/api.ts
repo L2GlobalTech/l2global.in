@@ -1,6 +1,8 @@
-export const ENDPOINT = 'https://api.tripate.com/';
-export const DEV_ENDPOINT = 'https://api.tripate.com/';
-// export const DEV_ENDPOINT = 'http://localhost:3100/';
-// export const ENDPOINT = 'http://localhost:3100/'
+// configs/api.ts — replace entire file
+export const ENDPOINT =
+    process.env.NEXT_PUBLIC_API_URL ?? 'https://api.l2global.in/';
 
-export const WEB_ENDPOINT = 'https://tripate.com/'
+export const DEV_ENDPOINT =
+    process.env.NEXT_PUBLIC_DEV_API_URL ?? 'http://localhost:3100/';
+
+export const WEB_ENDPOINT = 'https://l2global.in/';

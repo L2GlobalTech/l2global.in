@@ -26,7 +26,7 @@ const locationDetails = [
     {
         title: 'Vijayawada',
         image: img1,
-        address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
+        address: "Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
     },
     {
         title: 'Bengaluru',
@@ -131,7 +131,7 @@ const ContactUsContainer = () => {
                         <div className="col-span-5" data-aos="fade-up" data-aos-delay="200">
                             <div className="w-full h-[300px] sm:h-[400px] md:h-full overflow-hidden rounded-3xl">
                                 <iframe
-                                    src="https://www.google.com/maps/embed?pb=..."
+                                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12861.426132917264!2d80.82355037055001!3d16.590351060859113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a3609c03fffffff%3A0xc4a5842b6cfe828e!2sHRQJ%2BX8X%2C%201-68%2C%20Tempalli%2C%20Gannavaram%2C%20Andhra%20Pradesh%20521286!5e0!3m2!1sen!2sin!4v1776065434208!5m2!1sen!2sin"
                                     className="w-full h-full border-0"
                                     allowFullScreen
                                     loading="lazy"

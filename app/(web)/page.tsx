@@ -244,10 +244,25 @@ import HomeConatiner from '@/containers/web/HomeConatiner'
 import { Metadata } from 'next';
 import React from 'react'
 
+// export const metadata: Metadata = {
+//     title: 'L2 Global Technologies | Home',
+//     description: '',
+// };
 export const metadata: Metadata = {
-    title: 'L2 Global Technologies | Home',
-    description: '',
+    title: 'Salesforce, SAP & MuleSoft Consultants | UK, USA & Gulf | L2 Global',
+    description:
+        'L2 Global Technologies — expert Salesforce, SAP, MuleSoft and cloud integration' +
+        ' consultants serving UK, USA, UAE, Saudi Arabia and Gulf businesses.' +
+        ' 182+ projects delivered. Free consultation today.',
+    alternates: { canonical: 'https://l2global.in' },
+    openGraph: {
+        title: 'Salesforce, SAP & MuleSoft Consultants | L2 Global Technologies',
+        description: 'Expert IT integration for UK, USA and Gulf businesses. Free consultation.',
+        url: 'https://l2global.in',
+        images: ['/assets/web/og-image.png'],
+    },
 };
+
 
 const page = () => {
     return (

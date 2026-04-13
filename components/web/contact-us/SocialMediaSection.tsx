@@ -1,3 +1,4 @@
+"use client";
 import React from 'react'
 import SectionHeader from '../SectionHeader'
 import mainImg from '../../../public/assets/web/contact-us/Social-Media/social-img.png'
@@ -25,23 +26,23 @@ const SocialMediaSection = () => {
                     <img src={mainImg.src} alt="social media" className="w-4/5 h-full" data-aos="zoom-out" />
 
                     {/* Social IMages */}
-                    <div className={`${iconBase} -top-6 md:left-24 left-14 hover:shadow-[0_0_35px_#25D366]`} data-aos="zoom-in" data-aos-delay="200">
+                    <div className={`${iconBase} -top-6 md:left-24 left-14 hover:shadow-[0_0_35px_#25D366]`} data-aos="zoom-in" data-aos-delay="200" onClick={() => window.open('https://wa.me/+447442586325', '_blank')}>
                         <img src={whatsapp.src} alt="whatsapp" />
                     </div>
 
-                    <div className={`${iconBase} -top-6 md:right-24 right-16 hover:shadow-[0_0_35px_#FF0000]`} data-aos="zoom-in" data-aos-delay="400">
+                    <div className={`${iconBase} -top-6 md:right-24 right-16 hover:shadow-[0_0_35px_#FF0000]`} data-aos="zoom-in" data-aos-delay="400" onClick={() => window.open('https://www.youtube.com/@l2globaltechnologies', '_blank')}>
                         <img src={youtube.src} alt="youtube" />
                     </div>
 
-                    <div className={`${iconBase} top-[45%] right-8 -translate-y-1/2 hover:shadow-[0_0_35px_#0A66C2]`} data-aos="zoom-in" data-aos-delay="600">
+                    <div className={`${iconBase} top-[45%] right-8 -translate-y-1/2 hover:shadow-[0_0_35px_#0A66C2]`} data-aos="zoom-in" data-aos-delay="600" onClick={() => window.open('https://www.linkedin.com/company/l2-global-technologies', '_blank')}>
                         <img src={linkedin.src} alt="linkedin" />
                     </div>
 
-                    <div className={`${iconBase} bottom-12 md:left-18 left-5 hover:shadow-[0_0_35px_#E4405F]`} data-aos="zoom-in" data-aos-delay="800">
+                    <div className={`${iconBase} bottom-12 md:left-18 left-5 hover:shadow-[0_0_35px_#E4405F]`} data-aos="zoom-in" data-aos-delay="800" onClick={() => window.open('https://www.instagram.com/l2globaltechnologies', '_blank')}>
                         <img src={instagram.src} alt="instagram" />
                     </div>
 
-                    <div className={`${iconBase} md:bottom-10 bottom-4 right-12 hover:shadow-[0_0_35px_#000000]`} data-aos="zoom-in" data-aos-delay="1000">
+                    <div className={`${iconBase} md:bottom-10 bottom-4 right-12 hover:shadow-[0_0_35px_#000000]`} data-aos="zoom-in" data-aos-delay="1000" onClick={() => window.open('https://twitter.com/l2globaltech', '_blank')}>
                         <img src={twitter.src} alt="twitter" />
                     </div>
                 </div>

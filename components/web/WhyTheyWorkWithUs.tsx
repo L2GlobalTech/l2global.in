@@ -13,18 +13,18 @@ import img9 from '@/public/assets/web/partners/logo10.svg'
 import img10 from '@/public/assets/web/partners/logo11.svg'
 import PrimaryButton from '../shared/PrimaryButton'
 
-    const partnersLogos = [
-        { id: "partner-1", src: img1.src, alt: "partner-1", },
-        { id: "partner-2", src: img2.src, alt: "partner-2", },
-        { id: "partner-3", src: img3.src, alt: "partner-3", },
-        { id: "partner-4", src: img4.src, alt: "partner-4", },
-        { id: "partner-5", src: img5.src, alt: "partner-5", },
-        { id: "partner-6", src: img6.src, alt: "partner-6", },
-        { id: "partner-7", src: img7.src, alt: "partner-7", },
-        { id: "partner-8", src: img8.src, alt: "partner-8", },
-        { id: "partner-9", src: img9.src, alt: "partner-9", },
-        { id: "partner-9", src: img10.src, alt: "partner-10", },
-    ];
+const partnersLogos = [
+    { id: "partner-1", src: img1.src, alt: "partner-1", },
+    { id: "partner-2", src: img2.src, alt: "partner-2", },
+    { id: "partner-3", src: img3.src, alt: "partner-3", },
+    { id: "partner-4", src: img4.src, alt: "partner-4", },
+    { id: "partner-5", src: img5.src, alt: "partner-5", },
+    { id: "partner-6", src: img6.src, alt: "partner-6", },
+    { id: "partner-7", src: img7.src, alt: "partner-7", },
+    { id: "partner-8", src: img8.src, alt: "partner-8", },
+    { id: "partner-9", src: img9.src, alt: "partner-9", },
+    { id: "partner-10", src: img10.src, alt: "partner-10", },
+];
 
 const WhyTheyWorkWithUs = () => {
     return (
