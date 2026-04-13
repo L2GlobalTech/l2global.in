@@ -56,6 +56,7 @@ const LocationCard = ({
                     "group-hover:bg-orange-500 group-hover:text-white group-hover:border-orange-500 cursor-pointer  transition-all duration-500"
                 )}
                 style={{ letterSpacing: '-0.5px' }}
+                onClick={() => window.open(`https://www.google.com/maps/search/${address}`, '_blank')}
             >
                 View on Google Maps
             </button>

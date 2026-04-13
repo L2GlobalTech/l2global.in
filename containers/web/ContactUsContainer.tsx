@@ -36,13 +36,13 @@ const locationDetails = [
     {
         title: 'London',
         image: img3,
-        address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
+        address: "194, Cheltenham Road, Gloucester, GL2 0JR"
     },
-    {
-        title: 'Texas',
-        image: img4,
-        address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
-    },
+    // {
+    //     title: 'Texas',
+    //     image: img4,
+    //     address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
+    // },
     {
         title: 'New York',
         image: img5,
