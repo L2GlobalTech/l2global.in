@@ -31,7 +31,7 @@ const locationDetails = [
     {
         title: 'Bengaluru',
         image: img2,
-        address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
+        address: "Marathahalli, Bengaluru, Karnataka – 560037"
     },
     {
         title: 'London',
@@ -44,9 +44,9 @@ const locationDetails = [
     //     address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
     // },
     {
-        title: 'New York',
+        title: 'Texas, USA',
         image: img5,
-        address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
+        address: "Spring, TX USA – 77388"
     }
 ]
 
@@ -54,9 +54,9 @@ const ContactUsContainer = () => {
     return (
         <div>
             <HeroSection
-                label="Contact Us"
-                title="Let’s Talk Design & Innovation"
-                description="Have questions about our services or how L2 Global can power your next project? We’ll get back to you within 1 business day."
+                label="Free. Fast. No Commitment."
+                title="We Fix What Others Couldn't"
+                description="Salesforce, SAP, MuleSoft & cloud experts serving London, Dubai and New York. Book your free 30-minute consultation now — spots fill fast."
                 image={heroImage}
             />
 
