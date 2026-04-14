@@ -31,12 +31,12 @@ const locationDetails = [
     {
         title: 'Bengaluru',
         image: img2,
-        address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
+        address: "Marathahalli,Bengaluru, Karnataka - 560037"
     },
     {
         title: 'London',
         image: img3,
-        address: "194, Cheltenham Road, Gloucester, GL2 0JR"
+        address: "Cheltenham Road, Gloucester,UK - GL2 0JR"
     },
     // {
     //     title: 'Texas',
@@ -46,7 +46,7 @@ const locationDetails = [
     {
         title: 'New York',
         image: img5,
-        address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
+        address: "3204, Spring, TX, USA - 77388"
     }
 ]
 
@@ -56,7 +56,7 @@ const ContactUsContainer = () => {
             <HeroSection
                 label="Free Consultation — UK · USA · UAE · India"
                 title="Got an IT Challenge? We'll Solve It."
-                description="Looking for a Salesforce consultant in London, SAP services in Dubai, or MuleSoft integration near you? L2 Global Technologies provides certified Salesforce, SAP, MuleSoft and cloud consulting across the UK, USA and Gulf region. 182+ projects delivered. Book your free 30-minute consultation today — no obligation, same-day response."
+                description="Looking for a Salesforce consultant in London, SAP services in Dubai, or MuleSoft integration near you? L2 Global Technologies provides certified Salesforce, SAP, MuleSoft and cloud consulting across the UK, USA and Gulf region. "
                 image={heroImage}
             />
 

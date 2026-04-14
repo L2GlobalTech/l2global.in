@@ -48,7 +48,7 @@ const ContactSection = () => {
                                 <Image src={locationimg} alt='location icon' width={70} height={70} className='object-contain' style={{ boxShadow: '0px 0px 36px 0px #0000000F;' }} />
                                 <div>
                                     <p className='text-gray-500'>Address:</p>
-                                    <p className='font-semibold text-lg text-gray-900'>1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286</p>
+                                    <p className='font-semibold text-lg text-gray-900'>Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286</p>
                                 </div>
                             </div>
 
