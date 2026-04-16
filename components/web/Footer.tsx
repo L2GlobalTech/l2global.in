@@ -254,7 +254,7 @@ const Footer: React.FC = () => {
                     {/* Bottom row */}
                     <div className="mt-8 flex flex-col gap-4 items-center justify-between text-[#6F6C90] md:flex-row">
                         <div className="md:flex justify-start items-center">
-                            <p>Copyright {year} © L2 Global Technologies Ltd. · UK · USA · UAE · India</p>
+                            <p>Copyright {year} © L2 Global Technologies Ltd. · UK · USA · UAE · India</p>{" "}
                             <div className="flex items-center gap-3">
                                 <span>All Rights Reserved</span>
                                 {/* <span className="text-slate-300">|</span>

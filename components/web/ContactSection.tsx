@@ -8,7 +8,8 @@ import emailimg from '../../public/assets/web/contact-us/email-Icon.svg';
 import ContactForm from './ContactForm';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import contactimg from '../../public/assets/web/home/contcat-us.svg'
+// import contactimg from '../../public/assets/web/home/contcat-us.svg'
+import contactimg from '../../public/assets/web/home/ContactUs.png'
 
 const ContactSection = () => {
 
@@ -62,14 +63,16 @@ const ContactSection = () => {
                         </div>
 
                         <div>
-                            <Image src={contactimg} alt='contact us' width={500} height={500} className='object-contain mt-10' />
+                            <Image src={contactimg} alt='contact us' width={450} height={400} className='object-contain' />
                         </div>
                     </section>
 
                     {/* Right column form */}
                     <section data-aos="fade-in" data-aos-delay="400" data-aos-easing="ease-out-cubic" className="relative">
-                        <div className="absolute inset-0 -z-10 rounded-3xl" />
-                        <ContactForm />
+                        <div className='mt-15'>
+                            <div className="absolute inset-0 -z-10 rounded-3xl" />
+                            <ContactForm />
+                        </div>
                     </section>
 
                 </div>

@@ -48,7 +48,7 @@ const HomeConatiner = () => {
         { id: "partner-7", src: img7.src, alt: "partner-7", },
         { id: "partner-8", src: img8.src, alt: "partner-8", },
         { id: "partner-9", src: img9.src, alt: "partner-9", },
-        { id: "partner-9", src: img10.src, alt: "partner-10", },
+        { id: "partner-10", src: img10.src, alt: "partner-10", },
     ];
 
 
