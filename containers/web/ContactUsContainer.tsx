@@ -31,12 +31,12 @@ const locationDetails = [
     {
         title: 'Bengaluru',
         image: img2,
-        address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
+        address: "Marathahalli,Bengaluru, Karnataka - 560037"
     },
     {
         title: 'London',
         image: img3,
-        address: "194, Cheltenham Road, Gloucester, GL2 0JR"
+        address: "Cheltenham Road, Gloucester,UK - GL2 0JR"
     },
     // {
     //     title: 'Texas',
@@ -46,7 +46,7 @@ const locationDetails = [
     {
         title: 'New York',
         image: img5,
-        address: "1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286"
+        address: "3204, Spring, TX, USA - 77388"
     }
 ]
 
@@ -54,9 +54,9 @@ const ContactUsContainer = () => {
     return (
         <div>
             <HeroSection
-                label="Contact Us"
-                title="Let’s Talk Design & Innovation"
-                description="Have questions about our services or how L2 Global can power your next project? We’ll get back to you within 1 business day."
+                label="Free Consultation — UK · USA · UAE · India"
+                title="Got an IT Challenge? We'll Solve It."
+                description="Looking for a Salesforce consultant in London, SAP services in Dubai, or MuleSoft integration near you? L2 Global Technologies provides certified Salesforce, SAP, MuleSoft and cloud consulting across the UK, USA and Gulf region. "
                 image={heroImage}
             />
 
@@ -97,7 +97,7 @@ const ContactUsContainer = () => {
                                 <div>
                                     <p className="text-gray-500">Address:</p>
                                     <p className="font-semibold text-lg text-gray-900">
-                                        1-8, Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286
+                                        Tempalli, Gannavaram, Krishna District, Andhra Pradesh – 521286
                                     </p>
                                 </div>
                             </div>

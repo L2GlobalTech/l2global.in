@@ -77,9 +77,8 @@ const Footer: React.FC = () => {
                         </div>
 
                         <p className="mt-6 max-w-md leading-7 text-[#6F6C90]">
-                            Enterprise IT consulting delivering Salesforce, SAP, MuleSoft and cloud solutions
-                            for businesses across the UK, USA, Gulf region and India.
-
+                            Certified Salesforce, SAP, MuleSoft and cloud integration consultants serving businesses across the UK, USA, Gulf and India. 
+                            182+ projects delivered. Free consultation available.
                         </p>
 
                         {/* Social icons */}
