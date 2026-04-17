@@ -34,16 +34,17 @@ const services = [
 const companyLinks = [
   { href: '/about-us', label: 'About' },
   { href: '/contact-us', label: 'Contact Us' },
+  { href: '/team', label: 'Team' },
   // { href: '/career', label: 'Career' },
   // { href: '/team', label: 'Team' },
 ]
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/industries/education', label: 'Industries' },
   { href: '/services/sap-link-by-salesforce', label: 'Services' },
+  { href: '/industries/education', label: 'Industries' },
   { href: '/career', label: 'Career' },
-  { href: '/team', label: 'Team' },
+  // { href: '/team', label: 'Team' },
   { href: '/company', label: 'Company' },
 ]
 
@@ -54,7 +55,8 @@ const isLinkActive = (label: string, href: string, path: string) => {
   if (label === 'Company')
     return (
       path.startsWith('/about') ||
-      path.startsWith('/contact')
+      path.startsWith('/contact') ||
+      path.startsWith('/team')
     )
   return path === href
 }

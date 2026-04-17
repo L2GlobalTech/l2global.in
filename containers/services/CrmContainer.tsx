@@ -11,6 +11,7 @@ import React from 'react'
 import { Users, Workflow, GitMerge, BarChart3, Shield, Zap } from "lucide-react";
 import crmImg from '../../public/assets/web/Service-detail/crm-service-img.png'
 import CRMAbout from '../../public/assets/web/Service-detail/CRM-About.png'
+import ServiceRegions from '@/components/web/services/ServiceRegions'
 
 
 const stats = [
@@ -132,7 +133,7 @@ const CrmContainer = () => {
                 titleBefore={'Scalable & Insightful'}
                 titleAfter={''}
                 linearText={'CRM Consulting'}
-                description={'Unlock the full potential of your customer relationships by implementing and optimizing CRM solutions. Enhance sales, marketing, and service operations with data-driven insights, automated workflows, and seamless system integration to drive customer satisfaction and business growth.'}
+                description={'Salesforce CRM consultants near you — serving London, Manchester, Birmingham, New York, Los Angeles, Dubai and Saudi Arabia. 180+ CRM deployments. Salesforce implementation, customisation, rescue projects and support. Free consultation.'}
                 tag1={'Certified Experts'} tag2={'Enterprise Grade Solutions'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />
@@ -147,6 +148,8 @@ const CrmContainer = () => {
             <ServiceServedIndustries />
 
             <ServiceWhyChooseUs />
+
+            <ServiceRegions serviceName='Salesforce CRM Consulting' />
 
             <div className=' pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA

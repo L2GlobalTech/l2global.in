@@ -11,6 +11,7 @@ import React from 'react'
 import { Cloud, GitMerge, Shield, BarChart3, Zap, Database } from "lucide-react";
 import ApiImg from '../../public/assets/web/Service-detail/api-service-img.png'
 import APIAbout from '../../public/assets/web/Service-detail/API-About.png'
+import ServiceRegions from '@/components/web/services/ServiceRegions'
 
 
 const stats = [
@@ -127,12 +128,12 @@ const ApiIntegrationContainer = () => {
     return (
         <div>
             <ServiceHeroSection
-            image={ApiImg}
+                image={ApiImg}
                 sectionTitle={'API Integration'}
                 titleBefore={'Seamless & Scalable'}
                 titleAfter={''}
                 linearText={'API Integration'}
-                description={'Connect all your applications, platforms, and services with robust API integrations. Automate data exchange, reduce manual processes, and ensure consistent information flow across your enterprise systems to boost efficiency and agility.'}
+                description={'Enterprise API integration experts serving UK, USA and Gulf businesses. Connecting Salesforce, SAP, Oracle, AWS and legacy systems in London, New York and Dubai. 250+ APIs delivered with 99.9% uptime. Free consultation.'}
                 tag1={'Enterprise Ready'} tag2={'ISO Certified'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />
@@ -147,6 +148,8 @@ const ApiIntegrationContainer = () => {
             <ServiceServedIndustries />
 
             <ServiceWhyChooseUs />
+
+            <ServiceRegions serviceName='API Integration Services' />
 
             <div className=' pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA

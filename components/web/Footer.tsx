@@ -77,7 +77,7 @@ const Footer: React.FC = () => {
                         </div>
 
                         <p className="mt-6 max-w-md leading-7 text-[#6F6C90]">
-                            Certified Salesforce, SAP, MuleSoft and cloud integration consultants serving businesses across the UK, USA, Gulf and India. 
+                            Certified Salesforce, SAP, MuleSoft and cloud integration consultants serving businesses across the UK, USA, Gulf and India.
                             182+ projects delivered. Free consultation available.
                         </p>
 
@@ -253,9 +253,9 @@ const Footer: React.FC = () => {
                     {/* Bottom row */}
                     <div className="mt-8 flex flex-col gap-4 items-center justify-between text-[#6F6C90] md:flex-row">
                         <div className="md:flex justify-start items-center">
-                            <p>Copyright {year} © L2 Global Technologies Ltd. · UK · USA · UAE · India</p>{" "}
+                            <p>Copyright {year} © L2 Global Technologies Ltd. · UK · USA · UAE · India</p>
                             <div className="flex items-center gap-3">
-                                <span>All Rights Reserved</span>
+                                <p className="ml-2">All Rights Reserved</p>
                                 {/* <span className="text-slate-300">|</span>
                                 <Link href="#" className="text-orange-600 hover:underline transition-all duration-500">Terms and Conditions</Link>
                                 <span className="text-slate-300">|</span>

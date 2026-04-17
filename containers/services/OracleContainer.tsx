@@ -11,6 +11,7 @@ import React from 'react'
 import { Database, Settings, Cloud, ShieldCheck, Activity, HardDrive } from "lucide-react";
 import oracleImg from '../../public/assets/web/Service-detail/oracle-service-img.png'
 import OracleAbout from '../../public/assets/web/Service-detail/oracle-about.png'
+import ServiceRegions from '@/components/web/services/ServiceRegions'
 
 
 const stats = [
@@ -132,7 +133,7 @@ const OracleContainer = () => {
                 titleBefore={'Reliable Operations'}
                 titleAfter={`Proactive Performance`}
                 linearText={'Oracle'}
-                description={'Our Oracle Managed Services ensure your critical Oracle applications and databases run securely, efficiently, and without disruption. From continuous monitoring and performance optimization to patch management and incident resolution, we provide end-to-end operational support tailored to your business needs.'}
+                description={'24/7 Oracle DBA and Oracle Cloud Infrastructure specialists near you. Serving London, New York, Dubai and all GCC countries remotely. Performance optimisation, security, OCI migration. Free Oracle health check.'}
                 tag1={'Oracle Monitoring'} tag2={'Secure Operations'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />
@@ -147,6 +148,8 @@ const OracleContainer = () => {
             <ServiceServedIndustries />
 
             <ServiceWhyChooseUs />
+
+            <ServiceRegions serviceName='Oracle Managed Services' />
 
             <div className=' pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA

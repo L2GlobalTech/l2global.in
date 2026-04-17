@@ -11,6 +11,7 @@ import React from 'react'
 import { Database, Cloud, GitMerge, BarChart3, Shield, Zap, } from "lucide-react";
 import sapImg from '../../public/assets/web/Service-detail/sap-service-img.png'
 import SAPImage from '../../public/assets/web/Service-detail/SAP-About.png'
+import ServiceRegions from '@/components/web/services/ServiceRegions'
 
 
 const stats = [
@@ -132,7 +133,7 @@ const SapContainer = () => {
                 titleBefore={'Scalable & Secure'}
                 titleAfter={'Solutions'}
                 linearText={'SAP'}
-                description={'Unlock the full potential of your enterprise systems by seamlessly connecting SAP and Salesforce. Enable real-time data synchronization, automated workflows, and unified visibility to streamline operations and accelerate growth.'}
+                description={'Expert SAP implementation and SAP–Salesforce integration specialists serving UK (London, Birmingham, Manchester), USA (New York, Texas) and Gulf (Dubai, Riyadh, Doha). SAP S/4HANA, BTP, and real-time Salesforce connectivity. Free consultation.'}
                 tag1={'ISO Certified'} tag2={'Enterprise Grade'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />
@@ -147,6 +148,8 @@ const SapContainer = () => {
             <ServiceServedIndustries />
 
             <ServiceWhyChooseUs />
+
+            <ServiceRegions serviceName='SAP Integration & Implementation' />
 
             <div className=' pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA

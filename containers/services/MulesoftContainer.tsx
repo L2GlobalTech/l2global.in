@@ -11,6 +11,7 @@ import React from 'react'
 import { Database, Cloud, GitMerge, BarChart3, Shield, Zap, } from "lucide-react";
 import MulesoftImg from '../../public/assets/web/Service-detail/mulesoft-service-img.png'
 import MulesoftAbout from '../../public/assets/web/Service-detail/Mulesoft-About.png'
+import ServiceRegions from '@/components/web/services/ServiceRegions'
 
 
 const stats = [
@@ -132,7 +133,7 @@ const MulesoftContainer = () => {
                 titleBefore={'Scalable & Secure'}
                 titleAfter={'Solutions'}
                 linearText={'MuleSoft'}
-                description={'Unlock the full potential of your enterprise systems with MuleSoft’s API-led connectivity. Seamlessly integrate applications, data, and devices across cloud and on-premise environments to enable real-time visibility, automation, and business agility.'}
+                description={'Certified MuleSoft Anypoint Platform consultants serving businesses in London, Manchester, New York, Texas, Dubai and across the UAE. API-led connectivity, enterprise integration, and 24/7 monitoring. 250+ APIs delivered. Free consultation.'}
                 tag1={'API-Led Architecture'} tag2={'Grade Security'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />
@@ -147,6 +148,8 @@ const MulesoftContainer = () => {
             <ServiceServedIndustries />
 
             <ServiceWhyChooseUs />
+
+            <ServiceRegions serviceName='MuleSoft Integration Services' />
 
             <div className=' pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA

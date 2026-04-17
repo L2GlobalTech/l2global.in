@@ -7,7 +7,6 @@ import { ToastContainer } from "react-toastify";
 import { Urbanist } from "next/font/google";
 import "aos/dist/aos.css";
 import CookieConsent from "@/components/shared/CookieConsent";
-import { OrganizationSchema } from "@/components/shared/JsonLd";
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://l2global.in'),
@@ -95,7 +94,6 @@ export default function RootLayout({
         <link rel='alternate' hrefLang='en-bh' href='https://l2global.in' />
         <link rel='alternate' hrefLang='en-om' href='https://l2global.in' />
         <link rel='alternate' hrefLang='x-default' href='https://l2global.in' />
-        <OrganizationSchema />
       </head>
       <body
         className={`antialiased ${urbanist.className}`}

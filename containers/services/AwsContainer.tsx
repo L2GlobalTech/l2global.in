@@ -11,6 +11,7 @@ import React from 'react'
 import { Server, Cloud, GitMerge, BarChart3, Shield, Zap, } from "lucide-react";
 import awsImg from '../../public/assets/web/Service-detail/aws-service-img.png'
 import awsAbout from '../../public/assets/web/Service-detail/AWS-About.png'
+import ServiceRegions from '@/components/web/services/ServiceRegions'
 
 
 const stats = [
@@ -132,7 +133,7 @@ const AwsContainer = () => {
                 titleBefore={'Scalable & Secure'}
                 titleAfter={'Services'}
                 linearText={'AWS Cloud'}
-                description={'Unlock the full potential of your enterprise infrastructure with AWS Cloud. Migrate, modernize, and manage workloads securely while enabling real-time scalability, cost optimization, and seamless collaboration across your organization.'}
+                description={'Certified AWS cloud consultants serving UK (London, Manchester), USA (New York, Texas) and Gulf (Dubai, Abu Dhabi, Riyadh). Cloud migration, DevOps, architecture design and managed cloud services. Free cloud assessment.'}
                 tag1={'ISO Certified'} tag2={'Enterprise Grade'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />
@@ -147,6 +148,8 @@ const AwsContainer = () => {
             <ServiceServedIndustries />
 
             <ServiceWhyChooseUs />
+
+            <ServiceRegions serviceName='AWS Cloud Services' />
 
             <div className=' pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA
