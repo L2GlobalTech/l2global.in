@@ -93,9 +93,9 @@ const NonProfitContainer = () => {
         />
       </div>
 
-      <div data-aos="fade-up"  className='bg-[#F6F5F8]'>
+      <div data-aos="fade-up" className='bg-[#F6F5F8]'>
         <div className='container mx-auto'>
-           <InnovationStatsSection
+          <InnovationStatsSection
             title={
               <>
                 Numbers That Define Our <br />
