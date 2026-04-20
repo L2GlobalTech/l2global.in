@@ -30,7 +30,17 @@ const companyLinks = [
     // { label: "Team", href: "/team" },
 ]
 
-type ViewType = "MENU" | "INDUSTRIES" | "COMPANY"
+const services = [
+    { label: 'Salesforce Services', href: '/services/salesforce-services' },
+    { label: 'SAP Link by Salesforce', href: '/services/sap-link-by-salesforce' },
+    { label: 'MuleSoft', href: '/services/mulesoft' },
+    { label: 'Oracle Managed Services', href: '/services/oracle-managed-services' },
+    { label: 'API Integration', href: '/services/api-integration' },
+    { label: 'AWS Cloud Services', href: '/services/aws-cloud-services' },
+    { label: 'CRM Consulting', href: '/services/crm-consulting' },
+]
+
+type ViewType = "MENU" | "INDUSTRIES" | "COMPANY" | "SERVICES"
 
 const MobileHeader = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
@@ -127,6 +137,7 @@ const MobileHeader = () => {
                         <h3 className="font-semibold text-md text-[#074FDA]">
                             {view === "INDUSTRIES" && "Industries"}
                             {view === "COMPANY" && "Company"}
+                            {view === "SERVICES" && "Services"}
                         </h3>
                     </div>
                 )}
@@ -145,6 +156,14 @@ const MobileHeader = () => {
                                 className={buttonClass}
                             >
                                 Industries
+                                <ChevronRight size={18} />
+                            </button>
+
+                            <button
+                                onClick={() => setView("SERVICES")}
+                                className={buttonClass}
+                            >
+                                Services
                                 <ChevronRight size={18} />
                             </button>
 
@@ -199,6 +218,18 @@ const MobileHeader = () => {
 
                     {view === "COMPANY" &&
                         companyLinks.map(item => (
+                            <Link
+                                key={item.href}
+                                href={item.href}
+                                onClick={onNavigate}
+                                className={linkClass}
+                            >
+                                {item.label}
+                            </Link>
+                        ))}
+
+                    {view === "SERVICES" &&
+                        services.map(item => (
                             <Link
                                 key={item.href}
                                 href={item.href}
