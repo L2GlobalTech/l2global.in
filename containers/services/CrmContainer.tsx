@@ -12,6 +12,7 @@ import { Users, Workflow, GitMerge, BarChart3, Shield, Zap } from "lucide-react"
 import crmImg from '../../public/assets/web/Service-detail/crm-service-img.png'
 import CRMAbout from '../../public/assets/web/Service-detail/CRM-About.png'
 import ServiceRegions from '@/components/web/services/ServiceRegions'
+import ServiceFAQ from '@/components/web/services/ServiceFAQ'
 
 
 const stats = [
@@ -123,6 +124,30 @@ const services = [
     },
 ];
 
+const crmFaqs = [
+    {
+        'q': 'Where can I find a Salesforce consultant near me in the UK?',
+        'a': 'L2 Global Technologies provides certified Salesforce consultants across London, Manchester, Birmingham and all UK regions — remote and on-site. Free consultation at l2global.in/contact-us.'
+    },
+    {
+        'q': 'How much does Salesforce consulting cost in the UK?',
+        'a': 'UK Salesforce consulting rates: £750–£1,500/day. Full implementations range from £8,000 (small business) to £250,000+ (enterprise). L2 Global offers transparent fixed-price packages.'
+    },
+    {
+        'q': 'Do you offer Salesforce consulting in Dubai and UAE?',
+        'a': 'Yes. L2 Global Technologies serves Dubai, Abu Dhabi and all GCC countries with Salesforce CRM implementation, customisation and support. Free consultation available.'
+    },
+    {
+        'q': 'Can you fix a broken Salesforce project?',
+        'a': 'Yes — Salesforce rescue is one of our core specialisms. We audit your org, identify root causes, and deliver a clear remediation plan. Free initial review.'
+    },
+    {
+        'q': 'How long does Salesforce implementation take?',
+        'a': 'Typically 6–16 weeks depending on scope. L2 Global has delivered 180+ CRM projects, many on accelerated timelines.'
+    },
+];
+
+
 
 const CrmContainer = () => {
     return (
@@ -150,6 +175,8 @@ const CrmContainer = () => {
             <ServiceWhyChooseUs />
 
             <ServiceRegions serviceName='Salesforce CRM Consulting' />
+
+            <ServiceFAQ faqs={crmFaqs} serviceName='Salesforce CRM Consulting' />
 
             <div className=' pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA

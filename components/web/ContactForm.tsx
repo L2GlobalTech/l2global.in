@@ -46,6 +46,7 @@ export default function ContactForm() {
     company: "",
     city: "",
     description: "",
+    service: ""
   });
 
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -114,7 +115,7 @@ export default function ContactForm() {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     const newValue = name === "mobile" ? value.replace(/\D/g, "") : value;
@@ -139,6 +140,7 @@ export default function ContactForm() {
               company: "",
               city: "",
               description: "",
+              service: ""
             });
 
             setTimeout(() => {
@@ -170,6 +172,7 @@ export default function ContactForm() {
             setSubmitted(true);
           }}
         >
+          <input type='hidden' name='lead_source' value='Website' />
           <input type="hidden" name="oid" value="00D4P0000010dcs" />
           <input type="hidden" name="retURL" value="" />
 
@@ -268,6 +271,25 @@ export default function ContactForm() {
             />
           </div>
 
+          <div>
+            <label className='block text-sm font-semibold'>Service Interested In</label>
+            <select name='service' value={form.service}
+              onChange={handleChange}
+              className='mt-2 w-full rounded-lg ring-1 ring-[#F1EDFF] bg-white px-4 py-3'>
+              <option value=''>Select a service...</option>
+              <option value='salesforce'>Salesforce / CRM Consulting</option>
+              <option value='sap'>SAP Integration & Implementation</option>
+              <option value='mulesoft'>MuleSoft Integration</option>
+              <option value='api'>API Integration Services</option>
+              <option value='aws'>AWS Cloud Services</option>
+              <option value='oracle'>Oracle Managed Services</option>
+              <option value='web'>Web Development</option>
+              <option value='custom'>Custom IT Solutions</option>
+              <option value='other'>Other / Not Sure</option>
+            </select>
+          </div>
+
+
           {/* Description */}
           <div>
             <label className="block text-sm font-semibold">Description</label>
@@ -286,7 +308,7 @@ export default function ContactForm() {
             className="rounded-full cursor-pointer px-5 py-3 text-white font-semibold shadow-md transition-all hover:scale-[1.02]"
             style={{ background: "linear-gradient(to bottom, #4684FF, #074FDA)" }}
           >
-            Get Started
+            Request Free Consultation
           </button>
         </form>
 

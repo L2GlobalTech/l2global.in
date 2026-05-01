@@ -12,6 +12,7 @@ import { Database, Cloud, GitMerge, BarChart3, Shield, Zap, } from "lucide-react
 import MulesoftImg from '../../public/assets/web/Service-detail/mulesoft-service-img.png'
 import MulesoftAbout from '../../public/assets/web/Service-detail/Mulesoft-About.png'
 import ServiceRegions from '@/components/web/services/ServiceRegions'
+import ServiceFAQ from '@/components/web/services/ServiceFAQ'
 
 
 const stats = [
@@ -124,6 +125,25 @@ const services = [
     },
 ];
 
+const mulesoftFaqs = [
+    {
+        q: 'Where can I find a MuleSoft consultant near me?',
+        a: 'L2 Global Technologies provides certified MuleSoft consultants across UK (London, Manchester), USA (New York, Texas) and Gulf (Dubai, Riyadh). Remote delivery. Free consultation at l2global.in/contact-us.'
+    },
+    {
+        q: 'How much does MuleSoft integration cost?',
+        a: 'Single integration: £10,000–£40,000. Enterprise programme: £40,000–£200,000+. L2 Global offers transparent pricing. Free consultation available.'
+    },
+    {
+        q: 'Do you offer MuleSoft services in Dubai?',
+        a: 'Yes. L2 Global serves UAE and Gulf enterprises with MuleSoft implementation, API design and 24/7 integration monitoring.'
+    },
+    {
+        q: 'How long does a MuleSoft project take?',
+        a: 'Single integration: 4–10 weeks. Enterprise programme: 3–9 months. Our proven agile methodology delivers 40% faster than industry average.'
+    },
+];
+
 const MulesoftContainer = () => {
     return (
         <div>
@@ -150,6 +170,8 @@ const MulesoftContainer = () => {
             <ServiceWhyChooseUs />
 
             <ServiceRegions serviceName='MuleSoft Integration Services' />
+
+            <ServiceFAQ faqs={mulesoftFaqs} serviceName='MuleSoft Integration Services' />
 
             <div className=' pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA

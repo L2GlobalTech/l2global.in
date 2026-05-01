@@ -1,3 +1,4 @@
+
 import HeroSection from '@/components/web/HeroSection'
 import React from 'react'
 import heroImage from '@/public/assets/web/contact-us/hero-img.png'
@@ -55,8 +56,10 @@ const ContactUsContainer = () => {
         <div>
             <HeroSection
                 label="Free Consultation — UK · USA · UAE · India"
-                title="Got an IT Challenge? We'll Solve It."
-                description="Looking for a Salesforce consultant in London, SAP services in Dubai, or MuleSoft integration near you? L2 Global Technologies provides certified Salesforce, SAP, MuleSoft and cloud consulting across the UK, USA and Gulf region. "
+                // title="Got an IT Challenge? We'll Solve It."
+                // description="Looking for a Salesforce consultant in London, SAP services in Dubai, or MuleSoft integration near you? L2 Global Technologies provides certified Salesforce, SAP, MuleSoft and cloud consulting across the UK, USA and Gulf region. "
+                title="Let's Build Something Great Together"
+                description="Whether you're in the UK, USA or Gulf region — our expert team is ready. Free consultation, no obligation. Same-day response."
                 image={heroImage}
             />
 
@@ -125,6 +128,21 @@ const ContactUsContainer = () => {
                         >
                             <div className="absolute inset-0 -z-10 rounded-3xl" />
                             <ContactForm />
+                            <div className='mt-16 text-center'>
+                                <h3 className='text-2xl font-medium mb-2'>Or book directly in our calendar</h3>
+                                <p className='text-[#6F6C90] mb-6'>Pick a time that suits you — UK and UAE hours</p>
+                                <div
+                                    className='calendly-inline-widget'
+                                    data-url='https://calendly.com/lenin040784/30-minute-it-discovery-call?primary_color=16b32b'
+                                    style={{ minWidth: '320px', height: '700px' }}
+                                />
+                                <script
+                                    type='text/javascript'
+                                    src='https://assets.calendly.com/assets/external/widget.js'
+                                    async
+                                />
+                            </div>
+
                         </section>
 
                         {/* Map */}
@@ -191,12 +209,19 @@ const ContactUsContainer = () => {
             <div className='pt-12'>
                 <HeroCTA
                     tag="Let's Grow Together"
-                    heading="Expand Your Business with Us!"
-                    description="Partner with L2 Global Technology Ltd. to accelerate growth through innovative design, technology, and digital strategy."
-                    primaryBtnText="Get Started"
-                    primaryBtnLink="/get-started"
-                    secondaryBtnText="Watch Demo"
-                    secondaryBtnLink="/demo"
+                    // heading="Expand Your Business with Us!"
+                    // description="Partner with L2 Global Technology Ltd. to accelerate growth through innovative design, technology, and digital strategy."
+                    // primaryBtnText="Get Started"
+                    // primaryBtnLink="/get-started"
+                    // secondaryBtnText="Watch Demo"
+                    // secondaryBtnLink="/demo"
+                    heading='Serving UK, USA & Gulf Businesses'
+                    description='From London to Dubai — expert Salesforce, SAP and MuleSoft solutions.'
+                    primaryBtnText='Book Free Consultation'
+                    primaryBtnLink='/contact-us'
+                    secondaryBtnText='View Services'
+                    secondaryBtnLink='/services/sap-link-by-salesforce'
+
                 />
 
             </div>

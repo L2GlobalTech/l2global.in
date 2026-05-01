@@ -12,6 +12,7 @@ import { Database, Cloud, GitMerge, BarChart3, Shield, Zap, } from "lucide-react
 import sapImg from '../../public/assets/web/Service-detail/sap-service-img.png'
 import SAPImage from '../../public/assets/web/Service-detail/SAP-About.png'
 import ServiceRegions from '@/components/web/services/ServiceRegions'
+import ServiceFAQ from '@/components/web/services/ServiceFAQ'
 
 
 const stats = [
@@ -124,6 +125,26 @@ const services = [
     },
 ];
 
+const sapFaqs = [
+    {
+        'q': 'How do I find an SAP consultant near me in London?',
+        'a': 'L2 Global Technologies provides SAP consultants across London and all UK regions. Remote and on-site delivery. Free SAP consultation at l2global.in/contact-us.'
+    },
+    {
+        'q': 'How much does SAP implementation cost in the UK?',
+        'a': 'UK SAP costs: £30,000–£90,000 (small), £90,000–£400,000 (mid-market), £400,000+ (enterprise). L2 Global offers transparent fixed-price packages.'
+    },
+    {
+        'q': 'Do you offer SAP services in Dubai and the Gulf?',
+        'a': 'Yes. L2 Global serves Dubai, Abu Dhabi, Riyadh, Doha and all GCC countries. SAP S/4HANA, BTP and SAP–Salesforce integration. Free consultation available.'
+    },
+    {
+        'q': 'Can you integrate SAP with Salesforce?',
+        'a': 'Yes — this is one of our flagship services. We use MuleSoft Anypoint Platform for real-time SAP–Salesforce data sync, eliminating manual data entry.'
+    },
+];
+
+
 const SapContainer = () => {
     return (
         <div>
@@ -150,6 +171,8 @@ const SapContainer = () => {
             <ServiceWhyChooseUs />
 
             <ServiceRegions serviceName='SAP Integration & Implementation' />
+
+            <ServiceFAQ faqs={sapFaqs} serviceName='SAP Integration & Implementation' />
 
             <div className=' pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA

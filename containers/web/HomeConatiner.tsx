@@ -131,11 +131,11 @@ const HomeConatiner = () => {
             <div className='pt-10'>
                 <AboutSection
                     title="Who We Are. Learn About Us"
-                    subtitle="L2 Global Technology Ltd. is a Professional Design Agency providing innovative and creative digital solutions."
+                    subtitle="L2 Global Technologies is a specialist IT integration consultancy delivering Salesforce, SAP, MuleSoft and cloud solutions to businesses across the UK, USA, Gulf region and India."
                     imageSrc={aboutUsImage.src}
                     buttonText="Read More"
                     contactLabel="Take a Quote"
-                    contactNumber="+91 90000 14701"
+                    contactNumber="+44 7442 586325"
                     stats={[
                         { id: "1", icon: <Image src={rocket} alt='rocket' height={0} width={0} className='object-contain' />, value: '182 +', label: "Completed Projects" },
                         { id: "2", icon: <Image src={user} alt='rocket' height={0} width={0} className='object-contain' />, value: "1682 +", label: "Happy Customers" },
@@ -181,7 +181,7 @@ const HomeConatiner = () => {
             </div>
 
             <div>
-                <HeroCTA
+                {/* <HeroCTA
                     tag="Let's Grow Together"
                     heading="Expand Your Business with Us!"
                     description="Partner with L2 Global Technology Ltd. to accelerate growth through innovative design, technology, and digital strategy."
@@ -189,7 +189,17 @@ const HomeConatiner = () => {
                     primaryBtnLink="/get-started"
                     secondaryBtnText="Watch Demo"
                     secondaryBtnLink="/demo"
+                /> */}
+                <HeroCTA
+                    tag='UK · USA · UAE · India'
+                    heading='Serving Businesses Across Three Continents'
+                    description='From London to Dubai to New York — L2 Global Technologies delivers expert Salesforce, SAP and MuleSoft solutions wherever you are.'
+                    primaryBtnText='Book Free Consultation'
+                    primaryBtnLink='/contact-us'
+                    secondaryBtnText='View Our Services'
+                    secondaryBtnLink='/services/sap-link-by-salesforce'
                 />
+
 
             </div>
 
