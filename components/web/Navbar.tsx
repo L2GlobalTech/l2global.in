@@ -23,13 +23,14 @@ const industries = [
 
 // Services
 const services = [
-  { label: 'Sap Link By Salesforce', href: '/services/sap-link-by-salesforce' },
-  { label: 'Mulesoft', href: '/services/mulesoft' },
+  { label: 'Salesforce Services', href: '/services/salesforce-services' },
+  { label: 'SAP Link by Salesforce', href: '/services/sap-link-by-salesforce' },
+  { label: 'MuleSoft', href: '/services/mulesoft' },
   { label: 'Oracle Managed Services', href: '/services/oracle-managed-services' },
-  { label: 'Api Integration', href: '/services/api-integration' },
+  { label: 'API Integration', href: '/services/api-integration' },
   { label: 'AWS Cloud Services', href: '/services/aws-cloud-services' },
   { label: 'CRM Consulting', href: '/services/crm-consulting' },
-]
+];
 
 const companyLinks = [
   { href: '/about-us', label: 'About' },
