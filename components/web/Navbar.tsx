@@ -37,8 +37,8 @@ const companyLinks = [
   { href: '/about-us', label: 'About' },
   { href: '/contact-us', label: 'Contact Us' },
   { href: '/team', label: 'Team' },
-  // { href: '/career', label: 'Career' },
-  // { href: '/team', label: 'Team' },
+  { href: '/blog', label: 'Blog' },
+  { href: '/faq', label: 'FAQ' },
 ]
 
 const navLinks = [
@@ -58,7 +58,9 @@ const isLinkActive = (label: string, href: string, path: string) => {
     return (
       path.startsWith('/about') ||
       path.startsWith('/contact') ||
-      path.startsWith('/team')
+      path.startsWith('/team') ||
+      path.startsWith('/blog') ||
+      path.startsWith('/faq')
     )
   return path === href
 }

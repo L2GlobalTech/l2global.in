@@ -26,8 +26,8 @@ const industries = [
 const companyLinks = [
     { label: "About", href: "/about-us" },
     { label: "Contact Us", href: "/contact-us" },
-    // { label: "Careers", href: "/career" },
-    // { label: "Team", href: "/team" },
+    { label: "Blog", href: "/blog" },
+    { label: "FAQ", href: "/faq" },
 ]
 
 const services = [
