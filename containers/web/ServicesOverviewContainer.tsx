@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { ArrowUpRight, Bot, Sparkles, Cloud, Workflow, Database, Server, Users, BarChart3, Code2, GitMerge, RefreshCw } from 'lucide-react'
+import { ArrowUpRight, Bot, Sparkles, Cloud, Workflow, Database, Server, Users, BarChart3, Code2, GitMerge, RefreshCw, Wrench, CheckCircle2 } from 'lucide-react'
 import HeroCTA from '@/components/web/HeroCTA'
 
 const services = [
@@ -75,6 +75,18 @@ const services = [
         title: 'Website Design & Development',
         desc: 'Fixed-price B2B websites — modern, SEO-built-in, delivered on a fixed timeline.',
         href: '/services/web-development',
+    },
+    {
+        icon: Wrench,
+        title: 'Application Support & Maintenance',
+        desc: 'Ongoing enhancement, bug fixes and support across Salesforce, SAP, MuleSoft, AWS and websites.',
+        href: '/services/support-maintenance',
+    },
+    {
+        icon: CheckCircle2,
+        title: 'Software Testing & QA',
+        desc: 'Manual and automated testing, regression and QA for Salesforce, SAP, MuleSoft, AWS and web apps.',
+        href: '/services/software-testing',
     },
 ]
 

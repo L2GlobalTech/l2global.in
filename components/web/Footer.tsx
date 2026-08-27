@@ -40,6 +40,8 @@ const footerLinks = {
         { label: 'Website Development', href: '/services/web-development' },
         { label: 'API Integration', href: '/services/api-integration' },
         { label: 'AWS Cloud', href: '/services/aws-cloud-services' },
+        { label: 'Application Support & Maintenance', href: '/services/support-maintenance' },
+        { label: 'Software Testing & QA', href: '/services/software-testing' },
     ],
 
 

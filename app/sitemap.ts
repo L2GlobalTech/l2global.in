@@ -34,6 +34,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     // Services — Digital
     { path: '/services/data-science', freq: 'monthly', pri: 0.9 },
     { path: '/services/web-development', freq: 'monthly', pri: 0.9 },
+    { path: '/services/support-maintenance', freq: 'monthly', pri: 0.9 },
+    { path: '/services/software-testing', freq: 'monthly', pri: 0.9 },
     // Industries
     { path: '/industries/education', freq: 'monthly', pri: 0.7 },
     { path: '/industries/health-care', freq: 'monthly', pri: 0.7 },

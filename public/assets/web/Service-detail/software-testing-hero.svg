@@ -1,0 +1,36 @@
+<svg width="600" height="580" viewBox="0 0 600 580" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="testingHeroBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8152E0"/>
+      <stop offset="100%" stop-color="#195DF0"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="20" y="40" width="560" height="500" rx="56" fill="url(#testingHeroBg)"/>
+
+  <circle cx="300" cy="290" r="150" fill="#ffffff" fill-opacity="0.14"/>
+  <circle cx="300" cy="290" r="115" fill="#ffffff"/>
+
+  <path d="M270 290l20 20 40-45" fill="none" stroke="#2DB470" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="300" cy="290" r="70" fill="none" stroke="#195DF0" stroke-width="8"/>
+  <circle cx="352" cy="238" r="8" fill="#8152E0"/>
+  <circle cx="248" cy="330" r="6" fill="#F49308"/>
+
+  <g>
+    <rect x="52" y="90" width="200" height="56" rx="16" fill="#ffffff"/>
+    <circle cx="80" cy="118" r="12" fill="#195DF0"/>
+    <text x="102" y="123" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#0D1526">Manual &amp; Automated</text>
+  </g>
+
+  <g>
+    <rect x="372" y="440" width="200" height="56" rx="16" fill="#ffffff"/>
+    <circle cx="400" cy="468" r="12" fill="#F49308"/>
+    <text x="422" y="473" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#0D1526">QA Assurance</text>
+  </g>
+
+  <g>
+    <rect x="30" y="430" width="220" height="56" rx="16" fill="#ffffff"/>
+    <circle cx="58" cy="458" r="12" fill="#2DB470"/>
+    <text x="80" y="463" font-family="Arial, sans-serif" font-size="16" font-weight="600" fill="#0D1526">Bug-Free Releases</text>
+  </g>
+</svg>
