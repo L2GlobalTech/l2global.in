@@ -8,6 +8,7 @@ export default function FloatingWhatsAppButton() {
             href="https://wa.me/447442586325?text=Hi%2C%20I%27m%20interested%20in%20your%20IT%20services"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="Chat with us on WhatsApp"
             onClick={() => trackEvent('whatsapp_click', { location: 'floating_button' })}
             className="fixed bottom-6 right-6 text-white p-4 rounded-full hover:scale-110 transition-transform duration-300 flex items-center justify-center z-50"
         >

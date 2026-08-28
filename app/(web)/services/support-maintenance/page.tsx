@@ -3,10 +3,10 @@ import SupportMaintenanceContainer from '@/containers/services/SupportMaintenanc
 import React from 'react'
 
 export const metadata = {
-  title: 'Application Support & Maintenance | Salesforce, SAP, MuleSoft, AWS',
+  title: 'Application Support & Maintenance',
   description:
-    'Ongoing application enhancement, bug fixes, support and consulting for Salesforce, SAP,' +
-    ' MuleSoft and AWS, plus website hosting and maintenance. UK, USA and India offices, remote worldwide delivery.',
+    'Ongoing application enhancement, bug fixes, support and consulting for Salesforce,' +
+    ' SAP, MuleSoft and AWS, plus website hosting and maintenance.',
   alternates: { canonical: 'https://l2global.in/services/support-maintenance' },
   openGraph: {
     title: 'Application Support & Maintenance | L2 Global Technologies',

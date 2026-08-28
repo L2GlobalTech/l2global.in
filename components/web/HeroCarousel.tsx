@@ -7,15 +7,15 @@ import { useRef, useState } from "react";
 import PrimaryButton from "../shared/PrimaryButton";
 import OutlineButton from "../shared/OutlineButton";
 
-import img1 from "../../public/assets/web/home/hero-main.png";
-import img2 from "../../public/assets/web/home/saleforce-img.png";
-import img3 from "../../public/assets/web/home/sap-img.png";
-import img4 from "../../public/assets/web/home/all-ind-img.png";
-import img5 from "../../public/assets/web/home/trust-img.png";
-import img6 from "../../public/assets/web/home/build-img.png";
+import img1 from "../../public/assets/web/home/hero-main.webp";
+import img2 from "../../public/assets/web/home/saleforce-img.webp";
+import img3 from "../../public/assets/web/home/sap-img.webp";
+import img4 from "../../public/assets/web/home/all-ind-img.webp";
+import img5 from "../../public/assets/web/home/trust-img.webp";
+import img6 from "../../public/assets/web/home/build-img.webp";
 import Typewriter from "typewriter-effect";
 import Slider, { Settings } from "react-slick";
-import excellance from '../../public/assets/web/home/excellence.svg';
+import excellance from '../../public/assets/web/home/excellence-badge.webp';
 import ContactPopup from "../shared/ContactPopup";
 
 // ✅ Hero slides
@@ -123,7 +123,7 @@ export default function HeroCarousel() {
 
             <section
                 className="w-full bg-cover bg-center bg-no-repeat pt-20 md:pt-36 pb-12 md:pb-24"
-                style={{ backgroundImage: "url('/assets/web/home/bg-hero.png')" }}
+                style={{ backgroundImage: "url('/assets/web/home/bg-hero.webp')" }}
             >
                 <div className="container mx-auto px-6">
                     <h1 className="sr-only">

@@ -90,7 +90,7 @@ const DeveloperCard = ({
                 <div>
                   <p className="text-gray-600 text-sm">{phoneLabel}</p>
                   <Link
-                    href={`tel:${phoneNumber}`}
+                    href={`tel:${phoneNumber.replace(/\s+/g, '')}`}
                     className="font-semibold text-[#030714] text-xl hover:text-[#F15A23] transition"
                   >
                     {phoneNumber}

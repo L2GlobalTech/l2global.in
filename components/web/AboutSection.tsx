@@ -262,7 +262,7 @@ export default function AboutSection({
                                 <div>
                                     <p className="text-gray-600 text-sm">{contactLabel}</p>
                                     <Link
-                                        href={`tel:${contactNumber}`}
+                                        href={`tel:${contactNumber.replace(/\s+/g, '')}`}
                                         onClick={() => trackEvent('phone_click', { number: contactNumber, location: 'about_section' })}
                                         className="font-semibold text-[#030714] text-xl hover:text-[#F15A23] transition"
                                     >

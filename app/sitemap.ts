@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/career', freq: 'monthly', pri: 0.7 },
     { path: '/team', freq: 'monthly', pri: 0.6 },
     { path: '/blog', freq: 'weekly', pri: 0.7 },
+    { path: '/faq', freq: 'monthly', pri: 0.6 },
     { path: '/privacy-policy', freq: 'yearly', pri: 0.3 },
     { path: '/terms-and-conditions', freq: 'yearly', pri: 0.3 },
 

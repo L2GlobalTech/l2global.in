@@ -47,7 +47,7 @@ export default function HeroCTA({
           shadow-[0px_0px_40px_rgba(0,0,0,0.05)]
           bg-cover bg-center bg-no-repeat
         "
-        style={{ backgroundImage: "url('/assets/web/home/bg-cta.png')" }}
+        style={{ backgroundImage: "url('/assets/web/home/bg-cta.webp')" }}
       >
         <div className="w-full mb-6 sm:mb-8" data-aos="fade-down" data-aos-delay="100">
           <Divider label={tag} pillClassName="bg-white" />

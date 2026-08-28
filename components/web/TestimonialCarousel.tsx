@@ -166,8 +166,9 @@ export default function TestimonialCarousel() {
         </Slider>
       </div>
 
-      <div className="flex justify-center items-end gap-6 h-40 md:h-60 lg:h-80 pb-6 md:pb-10 lg:pb-16 -mt-10 md:-mt-20 lg:-mt-40 bg-[url('/assets/web/home/bg-testimonials.png')] bg-cover bg-center">
+      <div className="flex justify-center items-end gap-6 h-40 md:h-60 lg:h-80 pb-6 md:pb-10 lg:pb-16 -mt-10 md:-mt-20 lg:-mt-40 bg-[url('/assets/web/home/bg-testimonials.webp')] bg-cover bg-center">
         <button
+          aria-label="Previous testimonial"
           className="w-10 h-10 md:w-12 md:h-12 bg-[#5A59FF] text-white flex items-center justify-center rounded-full shadow-md hover:scale-105 transition"
           onClick={() => sliderRef.current?.slickPrev()}
         >
@@ -175,6 +176,7 @@ export default function TestimonialCarousel() {
         </button>
 
         <button
+          aria-label="Next testimonial"
           className="w-10 h-10 md:w-12 md:h-12 bg-[#5A59FF] text-white flex items-center justify-center rounded-full shadow-md hover:scale-105 transition"
           onClick={() => sliderRef.current?.slickNext()}
         >

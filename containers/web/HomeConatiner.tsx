@@ -20,7 +20,7 @@ import TestimonialCarousel from '@/components/web/TestimonialCarousel';
 import ContactForm from '@/components/web/ContactForm';
 import IndustriesSection from '@/components/web/IndustriesSection';
 import HeroCarousel from '@/components/web/HeroCarousel';
-import aboutUsImage from '@/public/assets/web/home/home-about-us.png'
+import aboutUsImage from '@/public/assets/web/home/home-about-us.webp'
 import Services from '@/components/web/Services';
 import MemberLogosSection from '@/components/web/MemberLogosSection';
 import rocket from '@/public/assets/web/icons/rocket.svg'

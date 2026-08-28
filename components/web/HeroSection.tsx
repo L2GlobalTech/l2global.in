@@ -23,7 +23,7 @@ const HeroSection = ({
     title,
     description,
     image,
-    backgroundImage = "/assets/web/home/bg-hero.png",
+    backgroundImage = "/assets/web/home/bg-hero.webp",
     btnName = 'Get a Quote',
     btnLink = '/contact-us'
 }: HeroSectionProps) => {

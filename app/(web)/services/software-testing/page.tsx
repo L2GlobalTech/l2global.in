@@ -3,10 +3,10 @@ import SoftwareTestingContainer from '@/containers/services/SoftwareTestingConta
 import React from 'react'
 
 export const metadata = {
-  title: 'Software Testing & QA Services | Manual & Automated',
+  title: 'Software Testing & QA Services',
   description:
-    'Manual and automated software testing, QA and regression testing for Salesforce, SAP,' +
-    ' MuleSoft, AWS and custom web applications. UK, USA and India offices, remote worldwide delivery.',
+    'Manual and automated software testing, QA and regression testing for Salesforce,' +
+    ' SAP, MuleSoft, AWS and custom web applications.',
   alternates: { canonical: 'https://l2global.in/services/software-testing' },
   openGraph: {
     title: 'Software Testing & QA Services | L2 Global Technologies',
