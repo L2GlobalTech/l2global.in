@@ -22,15 +22,15 @@ import ContactPopup from "../shared/ContactPopup";
 const heroSlides = [
     {
         id: 1,
-        customers: "UK · USA · UAE · India",
+        customers: "USA · UK · Canada · Australia · Asia · Gulf",
         title: { line1: "Generate More", line2: "ROI With Us" },
-        desc: "Drive measurable business growth with intelligent digital solutions designed to maximize efficiency and returns, designed for UK, USA and Gulf businesses.",
+        desc: "Drive measurable business growth with intelligent digital solutions designed to maximize efficiency and returns, designed for USA, UK, Canada, Australia, Asia and Gulf businesses.",
         img: img1,
         alt: "Generate more ROI with L2 Global digital solutions",
     },
     {
         id: 2,
-        customers: "UK · USA · UAE · India",
+        customers: "USA · UK · Canada · Australia · Asia · Gulf",
         title: { line1: "Connect Salesforce", line2: "With MuleSoft" },
         desc: "Unify data, automate workflows, and enable seamless enterprise integration using Salesforce and MuleSoft.Trusted by businesses from London to Dubai.",
         img: img2,
@@ -38,7 +38,7 @@ const heroSlides = [
     },
     {
         id: 3,
-        customers: "UK · USA · UAE · India",
+        customers: "USA · UK · Canada · Australia · Asia · Gulf",
         title: { line1: "Transform Business", line2: "With SAP" },
         desc: "Optimize core processes, improve visibility, and scale operations efficiently with our SAP expertise, serving clients from London to Dubai to New York",
         img: img3,
@@ -46,7 +46,7 @@ const heroSlides = [
     },
     {
         id: 4,
-        customers: "UK · USA · UAE · India",
+        customers: "USA · UK · Canada · Australia · Asia · Gulf",
         title: { line1: "Solutions Across", line2: "Industries" },
         desc: "Delivering tailored digital solutions for healthcare, education, finance, manufacturing, and more across three continents.",
         img: img4,
@@ -54,7 +54,7 @@ const heroSlides = [
     },
     {
         id: 5,
-        customers: "UK · USA · UAE · India",
+        customers: "USA · UK · Canada · Australia · Asia · Gulf",
         title: { line1: "Driven By", line2: "Innovation & Trust" },
         desc: "A technology partner focused on building scalable, secure, and future-ready digital solutions for global enterprises.",
         img: img5,
@@ -62,9 +62,9 @@ const heroSlides = [
     },
     {
         id: 6,
-        customers: "UK · USA · UAE · India",
+        customers: "USA · UK · Canada · Australia · Asia · Gulf",
         title: { line1: "Let’s Build", line2: "Something Great" },
-        desc: "Connect with our experts to discuss your requirements and start your digital transformation journey wherever you are — UK, USA or Gulf.",
+        desc: "Connect with our experts to discuss your requirements and start your digital transformation journey wherever you are — worldwide, remotely.",
         img: img6,
         alt: "Build something great with L2 Global experts",
     },
@@ -127,7 +127,7 @@ export default function HeroCarousel() {
             >
                 <div className="container mx-auto px-6">
                     <h1 className="sr-only">
-                        L2 Global Technologies — Salesforce Agentforce AI, SAP, MuleSoft &amp; Cloud Consultants for UK, USA and Gulf Businesses
+                        L2 Global Technologies — Salesforce Agentforce AI, SAP, MuleSoft &amp; Cloud Consultants for USA, UK, Canada, Australia, Asia and Gulf Businesses
                     </h1>
                     <Slider ref={sliderRef} {...settings}>
                         {heroSlides.map((t) => (

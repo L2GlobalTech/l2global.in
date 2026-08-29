@@ -10,7 +10,7 @@ export const metadata = {
   alternates: { canonical: 'https://l2global.in/services/sap-ai' },
   openGraph: {
     title: 'SAP Joule AI Implementation | L2 Global Technologies',
-    description: 'SAP Joule generative AI, embedded in your SAP landscape. UK · USA · UAE & Gulf. Free consultation.',
+    description: 'SAP Joule generative AI, embedded in your SAP landscape. UK · USA · Canada · Australia · Asia & Gulf. Free consultation.',
     url: 'https://l2global.in/services/sap-ai',
     images: ['/assets/web/og-image.png'],
   },
@@ -23,7 +23,7 @@ const page = () => {
       <ServiceLocalSchema
         serviceName='SAP Joule AI'
         serviceUrl='https://l2global.in/services/sap-ai'
-        description='Certified SAP Joule AI implementation consultants for UK, USA and Gulf enterprises.'
+        description='Certified SAP Joule AI implementation consultants for USA, UK, Canada, Australia, Asia and Gulf enterprises.'
         cities={[
           'London', 'Manchester', 'Birmingham', 'Edinburgh', 'Leeds', 'Bristol',
           'New York', 'Texas', 'California', 'Chicago', 'Houston', 'Los Angeles',

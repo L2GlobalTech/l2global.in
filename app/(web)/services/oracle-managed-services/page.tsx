@@ -10,7 +10,7 @@ export const metadata = {
   alternates: { canonical: 'https://l2global.in/services/oracle-managed-services' },
   openGraph: {
     title: 'Oracle Managed Services | L2 Global Technologies',
-    description: '24/7 Oracle DBA support. UK · USA · UAE & Gulf. Free health check.',
+    description: '24/7 Oracle DBA support. UK · USA · Canada · Australia · Asia & Gulf. Free health check.',
     url: 'https://l2global.in/services/oracle-managed-services',
     images: ['/assets/web/og-image.png'],
   },

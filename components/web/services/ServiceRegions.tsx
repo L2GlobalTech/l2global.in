@@ -39,8 +39,8 @@ export default function ServiceRegions({ serviceName }: { serviceName: string })
                         {serviceName} — Cities & Regions We Serve
                     </h2>
                     <p className='text-[#6F6C90] mt-3 max-w-xl mx-auto'>
-                        Our consultants deliver {serviceName.toLowerCase()} remotely and on-site
-                        across the UK, USA, Gulf and India.
+                        Our consultants deliver {serviceName.toLowerCase()} remotely
+                        across the USA, UK, Canada, Australia, Asia and Gulf.
                     </p>
                 </div>
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>

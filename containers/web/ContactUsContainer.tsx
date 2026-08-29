@@ -58,11 +58,11 @@ const ContactUsContainer = () => {
     return (
         <div>
             <HeroSection
-                label="Free Consultation — UK · USA · UAE · India"
+                label="Free Consultation — Worldwide, Remote"
                 // title="Got an IT Challenge? We'll Solve It."
-                // description="Looking for a Salesforce consultant in London, SAP services in Dubai, or MuleSoft integration near you? L2 Global Technologies provides certified Salesforce, SAP, MuleSoft and cloud consulting across the UK, USA and Gulf region. "
+                // description="Looking for a Salesforce consultant in London, SAP services in Dubai, or MuleSoft integration near you? L2 Global Technologies provides certified Salesforce, SAP, MuleSoft and cloud consulting across the USA, UK, Canada, Australia, Asia and Gulf region. "
                 title="Let's Build Something Great Together"
-                description="Whether you're in the UK, USA or Gulf region — our expert team is ready. Free consultation, no obligation. Same-day response."
+                description="Wherever you are — USA, UK, Canada, Australia, Asia or the Gulf — our expert team is ready. Free consultation, no obligation. Same-day response."
                 image={heroImage}
             />
 
@@ -213,7 +213,7 @@ const ContactUsContainer = () => {
                     // primaryBtnLink="/get-started"
                     // secondaryBtnText="Watch Demo"
                     // secondaryBtnLink="/demo"
-                    heading='Serving UK, USA & Gulf Businesses'
+                    heading='Serving USA, UK, Canada, Australia, Asia & Gulf Businesses'
                     description='From London to Dubai — expert Salesforce, SAP and MuleSoft solutions.'
                     primaryBtnText='Book Free Consultation'
                     primaryBtnLink='/contact-us'

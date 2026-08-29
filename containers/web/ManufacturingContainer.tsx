@@ -21,7 +21,7 @@ import ServiceFAQ from '@/components/web/services/ServiceFAQ'
 const manufacturingFaqs = [
     {
         q: 'Do you deliver manufacturing IT solutions near me?',
-        a: 'Yes. L2 Global delivers manufacturing IT solutions across the UK, USA, Saudi Arabia and UAE. Free consultation at l2global.in/contact-us.'
+        a: 'Yes. L2 Global delivers manufacturing IT solutions across the USA, UK, Canada, Australia, Asia and Gulf, remotely worldwide. Free consultation at l2global.in/contact-us.'
     },
     {
         q: 'What manufacturing technology services does L2 Global offer?',

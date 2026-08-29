@@ -125,7 +125,7 @@ const services = [
 const webDevFaqs = [
     {
         q: 'Where can I find web development services near me?',
-        a: 'L2 Global provides B2B website design and development across UK, USA and Gulf (Dubai, Riyadh). 150+ websites delivered. Free consultation at l2global.in/contact-us.'
+        a: 'L2 Global provides B2B website design and development across USA, UK, Canada, Australia, Asia and Gulf (Dubai, Riyadh). 150+ websites delivered. Free consultation at l2global.in/contact-us.'
     },
     {
         q: 'How much does a business website cost in the UK?',
@@ -151,7 +151,7 @@ const WebDevelopmentContainer = () => {
                 titleBefore={'Fast, Fixed-Price'}
                 titleAfter={''}
                 linearText={'Websites'}
-                description={'B2B website design and development experts serving UK, USA and Gulf businesses. Modern, SEO-built-in websites for companies in London, New York and Dubai. 150+ websites delivered, fixed price, fixed timeline. Free consultation.'}
+                description={'B2B website design and development experts serving USA, UK, Canada, Australia, Asia and Gulf businesses. Modern, SEO-built-in websites for companies in London, New York and Dubai. 150+ websites delivered, fixed price, fixed timeline. Free consultation.'}
                 tag1={'Fixed Price'} tag2={'SEO Built-In'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />

@@ -10,7 +10,7 @@ export const metadata = {
   alternates: { canonical: 'https://l2global.in/services/crm-consulting' },
   openGraph: {
     title: 'Salesforce CRM Consulting | L2 Global Technologies',
-    description: 'Salesforce CRM experts. UK · USA · UAE. 180+ projects. Free consultation.',
+    description: 'Salesforce CRM experts. UK · USA · Canada · Australia · Asia · UAE. 180+ projects. Free consultation.',
     url: 'https://l2global.in/services/crm-consulting',
     images: ['/assets/web/og-image.png'],
   },
@@ -24,7 +24,7 @@ const page = () => {
       <ServiceLocalSchema
         serviceName='CRM Consulting Services'
         serviceUrl='https://l2global.in/services/crm-consulting'
-        description='Certified CRM consultants for UK, USA and Gulf enterprises.'
+        description='Certified CRM consultants for USA, UK, Canada, Australia, Asia and Gulf enterprises.'
         cities={[
           'London', 'Manchester', 'Birmingham', 'Edinburgh', 'Leeds', 'Bristol',
           'New York', 'Texas', 'California', 'Chicago', 'Houston', 'Los Angeles',

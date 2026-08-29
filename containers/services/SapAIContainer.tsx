@@ -126,7 +126,7 @@ const services = [
 const sapAIFaqs = [
     {
         q: 'Where can I find SAP Joule AI implementation consultants near me?',
-        a: 'L2 Global implements SAP Joule AI across UK, USA and Gulf (Dubai, Riyadh). 50+ use cases deployed. Free consultation at l2global.in/contact-us.'
+        a: 'L2 Global implements SAP Joule AI across USA, UK, Canada, Australia, Asia and Gulf (Dubai, Riyadh). 50+ use cases deployed. Free consultation at l2global.in/contact-us.'
     },
     {
         q: 'Do I need S/4HANA to use SAP Joule?',
@@ -152,7 +152,7 @@ const SapAIContainer = () => {
                 titleBefore={'Generative AI, Native'}
                 titleAfter={''}
                 linearText={'To Your SAP'}
-                description={'SAP Joule AI implementation experts serving UK, USA and Gulf businesses. Natural-language reporting and process automation embedded across S/4HANA in London, New York and Dubai. 50+ use cases deployed. Free consultation.'}
+                description={'SAP Joule AI implementation experts serving USA, UK, Canada, Australia, Asia and Gulf businesses. Natural-language reporting and process automation embedded across S/4HANA in London, New York and Dubai. 50+ use cases deployed. Free consultation.'}
                 tag1={'SAP Gold Partner'} tag2={'BTP Certified'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />

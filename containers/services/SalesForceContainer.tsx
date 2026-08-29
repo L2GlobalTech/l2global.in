@@ -191,7 +191,7 @@ const SalesForceContainer = () => {
                 <HeroCTA
                     tag="Let's Grow Together"
                     heading="Ready to Transform Your Salesforce?"
-                    description="Partner with L2 Global for Salesforce implementation and consulting backed by 180+ deployments across the UK, USA and Gulf."
+                    description="Partner with L2 Global for Salesforce implementation and consulting backed by 180+ deployments across the USA, UK, Canada, Australia, Asia and Gulf."
                     primaryBtnText="Book a Salesforce Consultation"
                     primaryBtnLink="/contact-us"
                     secondaryBtnText="View Services"

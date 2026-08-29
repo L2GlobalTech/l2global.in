@@ -127,7 +127,7 @@ const services = [
 const agentforceFaqs = [
     {
         q: 'Where can I find Salesforce Agentforce consultants near me?',
-        a: 'L2 Global implements Salesforce Agentforce AI agents across UK, USA and Gulf (Dubai, Riyadh). 60+ agents deployed. Free consultation at l2global.in/contact-us.'
+        a: 'L2 Global implements Salesforce Agentforce AI agents across USA, UK, Canada, Australia, Asia and Gulf (Dubai, Riyadh). 60+ agents deployed. Free consultation at l2global.in/contact-us.'
     },
     {
         q: 'How much does an Agentforce implementation cost?',
@@ -153,7 +153,7 @@ const AgentforceAIContainer = () => {
                 titleBefore={'Autonomous AI Agents'}
                 titleAfter={''}
                 linearText={'For Your Business'}
-                description={'Salesforce Agentforce implementation experts serving UK, USA and Gulf businesses. Autonomous sales and service agents grounded in your Data Cloud, live in London, New York and Dubai. 60+ agents deployed. Free consultation.'}
+                description={'Salesforce Agentforce implementation experts serving USA, UK, Canada, Australia, Asia and Gulf businesses. Autonomous sales and service agents grounded in your Data Cloud, live in London, New York and Dubai. 60+ agents deployed. Free consultation.'}
                 tag1={'Certified Salesforce Partner'} tag2={'Data Cloud Ready'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />

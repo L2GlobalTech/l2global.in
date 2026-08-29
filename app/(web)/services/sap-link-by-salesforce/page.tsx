@@ -10,7 +10,7 @@ export const metadata = {
     alternates: { canonical: 'https://l2global.in/services/sap-link-by-salesforce' },
     openGraph: {
         title: 'SAP & Salesforce Integration | L2 Global Technologies',
-        description: 'SAP–Salesforce integration for UK, USA and Gulf enterprises. Free consultation.',
+        description: 'SAP–Salesforce integration for USA, UK, Canada, Australia, Asia and Gulf enterprises. Free consultation.',
         url: 'https://l2global.in/services/sap-link-by-salesforce',
         images: ['/assets/web/og-image.png'],
     },
@@ -24,7 +24,7 @@ const page = () => {
             <ServiceLocalSchema
                 serviceName='SAP & Salesforce Integration'
                 serviceUrl='https://l2global.in/services/sap-link-by-salesforce'
-                description='Real-time SAP–Salesforce integration for UK, USA and Gulf enterprises. Free demo.'
+                description='Real-time SAP–Salesforce integration for USA, UK, Canada, Australia, Asia and Gulf enterprises. Free demo.'
                 cities={[
                     'London', 'Manchester', 'Birmingham', 'Edinburgh', 'Leeds', 'Bristol',
                     'New York', 'Texas', 'California', 'Chicago', 'Houston', 'Los Angeles',

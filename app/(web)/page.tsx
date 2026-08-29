@@ -251,12 +251,12 @@ import React from 'react'
 export const metadata: Metadata = {
     title: 'Salesforce, SAP & MuleSoft Experts',
     description:
-        'Expert Salesforce, SAP, MuleSoft and cloud integration consultants serving UK, USA,' +
-        ' UAE, Saudi Arabia and Gulf businesses. Free consultation today.',
+        'Expert Salesforce, SAP, MuleSoft and cloud integration consultants serving USA, UK,' +
+        ' Canada, Australia, Asia and Gulf businesses. Free consultation today.',
     alternates: { canonical: 'https://l2global.in' },
     openGraph: {
         title: 'Salesforce, SAP & MuleSoft Consultants | L2 Global Technologies',
-        description: 'Expert IT integration for UK, USA and Gulf businesses. Free consultation.',
+        description: 'Expert IT integration for USA, UK, Canada, Australia, Asia and Gulf businesses. Free consultation.',
         url: 'https://l2global.in',
         images: ['/assets/web/og-image.png'],
     },

@@ -106,9 +106,12 @@ export default function RootLayout({
         name: 'L2 Global Technologies — Dubai Office',
       },
     ],
-    areaServed: ['GB', 'US', 'AE', 'SA', 'QA', 'KW', 'BH', 'OM', 'IN'].map(c => ({
-      '@type': 'Country', name: c,
-    })),
+    areaServed: [
+      ...['GB', 'US', 'CA', 'AU', 'AE', 'SA', 'QA', 'KW', 'BH', 'OM', 'IN', 'SG'].map(c => ({
+        '@type': 'Country', name: c,
+      })),
+      { '@type': 'Place', name: 'Asia' },
+    ],
     knowsAbout: [
       'Salesforce Agentforce AI',
       'SAP S/4HANA Migration',
@@ -150,12 +153,16 @@ export default function RootLayout({
         {/* hreflang for international targeting */}
         <link rel="alternate" hrefLang="en-gb" href="https://l2global.in" />
         <link rel="alternate" hrefLang="en-us" href="https://l2global.in" />
+        <link rel="alternate" hrefLang="en-ca" href="https://l2global.in" />
+        <link rel="alternate" hrefLang="en-au" href="https://l2global.in" />
         <link rel="alternate" hrefLang="en-ae" href="https://l2global.in" />
         <link rel="alternate" hrefLang="en-sa" href="https://l2global.in" />
         <link rel="alternate" hrefLang="en-qa" href="https://l2global.in" />
         <link rel="alternate" hrefLang="en-kw" href="https://l2global.in" />
         <link rel="alternate" hrefLang="en-bh" href="https://l2global.in" />
         <link rel="alternate" hrefLang="en-om" href="https://l2global.in" />
+        <link rel="alternate" hrefLang="en-sg" href="https://l2global.in" />
+        <link rel="alternate" hrefLang="en-in" href="https://l2global.in" />
         <link rel="alternate" hrefLang="x-default" href="https://l2global.in" />
 
         <link rel="icon" href="/favicon.ico" sizes="any" />

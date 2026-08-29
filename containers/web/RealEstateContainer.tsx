@@ -21,7 +21,7 @@ import ServiceFAQ from '@/components/web/services/ServiceFAQ'
 const realEstateFaqs = [
     {
         q: 'Do you build Salesforce solutions for real estate businesses near me?',
-        a: 'Yes. L2 Global delivers real estate technology and Salesforce solutions across the UK, USA and Gulf (Dubai, Riyadh). Free consultation at l2global.in/contact-us.'
+        a: 'Yes. L2 Global delivers real estate technology and Salesforce solutions across the USA, UK, Canada, Australia, Asia and Gulf (Dubai, Riyadh). Free consultation at l2global.in/contact-us.'
     },
     {
         q: 'What real estate technology services does L2 Global offer?',

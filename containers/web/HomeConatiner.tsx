@@ -130,7 +130,7 @@ const HomeConatiner = () => {
             <div className='pt-10'>
                 <AboutSection
                     title="Who We Are. Learn About Us"
-                    subtitle="L2 Global Technologies is a specialist IT integration consultancy delivering Salesforce, SAP, MuleSoft and cloud solutions to businesses across the UK, USA, Gulf region and India."
+                    subtitle="L2 Global Technologies is a specialist IT integration consultancy delivering Salesforce, SAP, MuleSoft and cloud solutions to businesses across the USA, UK, Canada, Australia, Asia and Gulf, remotely worldwide."
                     imageSrc={aboutUsImage.src}
                     buttonText="Learn More About L2 Global"
                     contactLabel="Take a Quote"
@@ -190,9 +190,9 @@ const HomeConatiner = () => {
                     secondaryBtnLink="/demo"
                 /> */}
                 <HeroCTA
-                    tag='UK · USA · UAE · India'
-                    heading='Serving Businesses Across the UK, USA, UAE & India'
-                    description='From London to Dubai to Texas — L2 Global Technologies delivers expert Salesforce, SAP and MuleSoft solutions wherever you are.'
+                    tag='USA · UK · Canada · Australia · Asia · Gulf'
+                    heading='Serving Businesses Worldwide, Remotely'
+                    description='From London to Dubai to Texas to Sydney — L2 Global Technologies delivers expert Salesforce, SAP and MuleSoft solutions wherever you are.'
                     primaryBtnText='Book Free Consultation'
                     primaryBtnLink='/contact-us'
                     secondaryBtnText='View Our Services'

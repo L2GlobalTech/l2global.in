@@ -10,7 +10,7 @@ export const metadata = {
   alternates: { canonical: 'https://l2global.in/services/api-integration' },
   openGraph: {
     title: 'API Integration Services | L2 Global Technologies',
-    description: 'Enterprise API integration. UK · USA · UAE & Gulf. Free consultation.',
+    description: 'Enterprise API integration. UK · USA · Canada · Australia · Asia & Gulf. Free consultation.',
     url: 'https://l2global.in/services/api-integration',
     images: ['/assets/web/og-image.png'],
   },
@@ -23,7 +23,7 @@ const page = () => {
       <ServiceLocalSchema
         serviceName='API Integration Services'
         serviceUrl='https://l2global.in/services/api-integration'
-        description='Certified API integration consultants for UK, USA and Gulf enterprises.'
+        description='Certified API integration consultants for USA, UK, Canada, Australia, Asia and Gulf enterprises.'
         cities={[
           'London', 'Manchester', 'Birmingham', 'Edinburgh', 'Leeds', 'Bristol',
           'New York', 'Texas', 'California', 'Chicago', 'Houston', 'Los Angeles',

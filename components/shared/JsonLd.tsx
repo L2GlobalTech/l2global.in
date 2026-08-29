@@ -14,7 +14,7 @@ export function OrganizationSchema() {
     email: 'contactus@l2global.in',
     telephone: '+44-7442-586325',
     foundingDate: '2014',
-    description: 'Expert Salesforce, SAP, MuleSoft and cloud integration consultants serving UK, USA, UAE, Saudi Arabia and Gulf businesses.',
+    description: 'Expert Salesforce, SAP, MuleSoft and cloud integration consultants serving USA, UK, Canada, Australia, Asia and Gulf businesses.',
     address: [
       { '@type': 'PostalAddress', addressCountry: 'GB', streetAddress: 'Cheltenham Road, Gloucester', postalCode: 'GL2 0JR', addressRegion: 'England', name: 'L2 Global Technologies Ltd — UK Headquarters' },
       { '@type': 'PostalAddress', addressCountry: 'US', addressRegion: 'TX', addressLocality: 'Texas', name: 'L2 Global Technologies — Texas USA Office' },
@@ -44,9 +44,12 @@ export function ServiceLocalSchema({ serviceName, serviceUrl, description, citie
         priceRange: '££–££££',
         currenciesAccepted: 'GBP, USD, AED, SAR',
         openingHours: 'Mo-Fr 09:00-18:00',
-        areaServed: ['GB', 'US', 'AE', 'SA', 'QA', 'KW', 'BH', 'OM', 'IN'].map(c => (
-            { '@type': 'Country', name: c }
-        )),
+        areaServed: [
+            ...['GB', 'US', 'CA', 'AU', 'AE', 'SA', 'QA', 'KW', 'BH', 'OM', 'IN', 'SG'].map(c => (
+                { '@type': 'Country', name: c }
+            )),
+            { '@type': 'Place', name: 'Asia' },
+        ],
         serviceArea: cities.map(city => ({ '@type': 'City', name: city })),
         hasOfferCatalog: {
             '@type': 'OfferCatalog', name: serviceName,

@@ -102,7 +102,7 @@ const ServicesOverviewContainer = () => {
                 </h1>
                 <p className="text-[#494852] text-lg max-w-2xl mx-auto">
                     Salesforce, SAP, MuleSoft, cloud, data science and web development —
-                    all under one roof, serving UK, USA and Gulf businesses.
+                    all under one roof, serving USA, UK, Canada, Australia, Asia and Gulf businesses.
                 </p>
             </div>
 

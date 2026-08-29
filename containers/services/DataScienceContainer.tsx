@@ -126,7 +126,7 @@ const services = [
 const dataScienceFaqs = [
     {
         q: 'Where can I find data science and AI consultants near me?',
-        a: 'L2 Global provides data science, machine learning and AI consulting across UK, USA and Gulf (Dubai, Riyadh). 120+ models deployed. Free consultation at l2global.in/contact-us.'
+        a: 'L2 Global provides data science, machine learning and AI consulting across USA, UK, Canada, Australia, Asia and Gulf (Dubai, Riyadh). 120+ models deployed. Free consultation at l2global.in/contact-us.'
     },
     {
         q: 'How much does a machine learning project cost?',
@@ -152,7 +152,7 @@ const DataScienceContainer = () => {
                 titleBefore={'Turn Data Into'}
                 titleAfter={''}
                 linearText={'Decisions'}
-                description={'Data science, machine learning and generative AI experts serving UK, USA and Gulf businesses. Custom ML models, BI dashboards and AI assistants connected to Salesforce, SAP and your enterprise data in London, New York and Dubai. 120+ models deployed. Free consultation.'}
+                description={'Data science, machine learning and generative AI experts serving USA, UK, Canada, Australia, Asia and Gulf businesses. Custom ML models, BI dashboards and AI assistants connected to Salesforce, SAP and your enterprise data in London, New York and Dubai. 120+ models deployed. Free consultation.'}
                 tag1={'Certified Data Scientists'} tag2={'MLOps Ready'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />

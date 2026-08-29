@@ -10,7 +10,7 @@ export const metadata = {
   alternates: { canonical: 'https://l2global.in/services/aws-cloud-services' },
   openGraph: {
     title: 'AWS Cloud Services | L2 Global Technologies',
-    description: 'AWS cloud experts. UK · USA · UAE. Free assessment.',
+    description: 'AWS cloud experts. UK · USA · Canada · Australia · Asia · UAE. Free assessment.',
     url: 'https://l2global.in/services/aws-cloud-services',
     images: ['/assets/web/og-image.png'],
   },
@@ -24,7 +24,7 @@ const page = () => {
       <ServiceLocalSchema
         serviceName='AWS Cloud Services'
         serviceUrl='https://l2global.in/services/aws-cloud-services'
-        description='Certified AWS cloud consultants for UK, USA and Gulf enterprises.'
+        description='Certified AWS cloud consultants for USA, UK, Canada, Australia, Asia and Gulf enterprises.'
         cities={[
           'London', 'Manchester', 'Birmingham', 'Edinburgh', 'Leeds', 'Bristol',
           'New York', 'Texas', 'California', 'Chicago', 'Houston', 'Los Angeles',

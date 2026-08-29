@@ -21,7 +21,7 @@ import ServiceFAQ from '@/components/web/services/ServiceFAQ'
 const healthCareFaqs = [
     {
         q: 'Do you build Salesforce Health Cloud solutions near me?',
-        a: 'Yes. L2 Global delivers healthcare IT solutions across the UK, USA and Gulf (Dubai, Riyadh), including for NHS trusts. Free consultation at l2global.in/contact-us.'
+        a: 'Yes. L2 Global delivers healthcare IT solutions across the USA, UK, Canada, Australia, Asia and Gulf (Dubai, Riyadh), including for NHS trusts. Free consultation at l2global.in/contact-us.'
     },
     {
         q: 'What healthcare technology services does L2 Global offer?',

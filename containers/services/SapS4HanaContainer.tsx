@@ -127,7 +127,7 @@ const services = [
 const s4Faqs = [
     {
         q: 'Where can I find SAP S/4HANA migration consultants near me?',
-        a: 'L2 Global delivers SAP S/4HANA and RISE with SAP migrations across UK, USA and Gulf (Dubai, Riyadh). 40+ migrations delivered. Free consultation at l2global.in/contact-us.'
+        a: 'L2 Global delivers SAP S/4HANA and RISE with SAP migrations across USA, UK, Canada, Australia, Asia and Gulf (Dubai, Riyadh). 40+ migrations delivered. Free consultation at l2global.in/contact-us.'
     },
     {
         q: 'When does SAP ECC support end?',
@@ -153,7 +153,7 @@ const SapS4HanaContainer = () => {
                 titleBefore={'Migrate to'}
                 titleAfter={''}
                 linearText={'S/4HANA With Confidence'}
-                description={'SAP S/4HANA and RISE with SAP migration experts serving UK, USA and Gulf businesses. ECC mainstream support ends 2027 — plan your migration in London, New York and Dubai now. 40+ migrations delivered. Free consultation.'}
+                description={'SAP S/4HANA and RISE with SAP migration experts serving USA, UK, Canada, Australia, Asia and Gulf businesses. ECC mainstream support ends 2027 — plan your migration in London, New York and Dubai now. 40+ migrations delivered. Free consultation.'}
                 tag1={'SAP Gold Partner'} tag2={'RISE Certified'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />

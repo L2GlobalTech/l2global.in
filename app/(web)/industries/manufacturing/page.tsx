@@ -5,7 +5,7 @@ import React from 'react'
 
 export const metadata: Metadata = {
     title: 'SAP & MuleSoft for Manufacturing',
-    description: 'SAP S/4HANA migration and MuleSoft integration for discrete and process manufacturers across the UK, USA, Saudi Arabia and UAE.',
+    description: 'SAP S/4HANA migration and MuleSoft integration for discrete and process manufacturers across the USA, UK, Canada, Australia, Asia and Gulf.',
     alternates: { canonical: 'https://l2global.in/industries/manufacturing' },
     openGraph: {
         title: 'Manufacturing IT Solutions | L2 Global Technologies',

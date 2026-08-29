@@ -128,7 +128,7 @@ const services = [
 const apiFaqs = [
     {
         q: 'Where can I find API integration services near me?',
-        a: 'L2 Global provides API integration across UK, USA and Gulf (Dubai, Riyadh). 250+ APIs delivered. Free consultation at l2global.in/contact-us.'
+        a: 'L2 Global provides API integration across USA, UK, Canada, Australia, Asia and Gulf (Dubai, Riyadh). 250+ APIs delivered. Free consultation at l2global.in/contact-us.'
     },
     {
         q: 'How much does API integration cost in the UK?',
@@ -154,7 +154,7 @@ const ApiIntegrationContainer = () => {
                 titleBefore={'Seamless & Scalable'}
                 titleAfter={''}
                 linearText={'API Integration'}
-                description={'Enterprise API integration experts serving UK, USA and Gulf businesses. Connecting Salesforce, SAP, Oracle, AWS and legacy systems in London, New York and Dubai. 250+ APIs delivered with 99.9% uptime. Free consultation.'}
+                description={'Enterprise API integration experts serving USA, UK, Canada, Australia, Asia and Gulf businesses. Connecting Salesforce, SAP, Oracle, AWS and legacy systems in London, New York and Dubai. 250+ APIs delivered with 99.9% uptime. Free consultation.'}
                 tag1={'Enterprise Ready'} tag2={'ISO Certified'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />

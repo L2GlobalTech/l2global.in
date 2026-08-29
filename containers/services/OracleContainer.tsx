@@ -128,7 +128,7 @@ const services = [
 const oracleFaqs = [
     {
         q: 'Where can I find Oracle DBA services near me?',
-        a: 'L2 Global provides Oracle DBA and Oracle Cloud Infrastructure services across UK, USA and Gulf (Dubai, Riyadh). Free Oracle health check available.'
+        a: 'L2 Global provides Oracle DBA and Oracle Cloud Infrastructure services across USA, UK, Canada, Australia, Asia and Gulf (Dubai, Riyadh). Free Oracle health check available.'
     },
     {
         q: 'Do you offer Oracle migration services to OCI?',
