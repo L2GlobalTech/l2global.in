@@ -71,7 +71,7 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post }) => {
                     </div>
 
                     {/* Featured Image */}
-                    <div className="relative h-[300px] md:h-[500px] w-full mb-16 rounded-3xl overflow-hidden shadow-2xl">
+                    <div className="relative h-[220px] md:h-[340px] w-full mb-16 rounded-3xl overflow-hidden shadow-2xl">
                         <Image
                             src={post.image}
                             alt={post.title}
