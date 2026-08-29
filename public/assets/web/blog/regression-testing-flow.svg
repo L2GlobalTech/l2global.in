@@ -1,0 +1,38 @@
+<svg width="1000" height="300" viewBox="0 0 1000 300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1000" height="300" fill="#F6F5F8" rx="20"/>
+
+  <g>
+    <rect x="40" y="110" width="180" height="80" rx="14" fill="#ffffff" stroke="#F1EDFF" stroke-width="2"/>
+    <text x="130" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#0D1526">Read Release</text>
+    <text x="130" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#0D1526">Notes</text>
+  </g>
+  <path d="M220 150 L268 150" stroke="#8152E0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="270" y="110" width="180" height="80" rx="14" fill="#ffffff" stroke="#F1EDFF" stroke-width="2"/>
+    <text x="360" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#0D1526">Deploy to Pre-</text>
+    <text x="360" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#0D1526">Release Sandbox</text>
+  </g>
+  <path d="M450 150 L498 150" stroke="#8152E0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="500" y="110" width="180" height="80" rx="14" fill="#ffffff" stroke="#F1EDFF" stroke-width="2"/>
+    <text x="590" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#0D1526">Run Automated</text>
+    <text x="590" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#0D1526">Test Suite</text>
+  </g>
+  <path d="M680 150 L728 150" stroke="#8152E0" stroke-width="3" marker-end="url(#arrow)"/>
+
+  <g>
+    <rect x="730" y="110" width="230" height="80" rx="14" fill="#E5FBEF" stroke="#2DB470" stroke-width="2"/>
+    <text x="845" y="145" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#0D1526">Ship to Production</text>
+    <text x="845" y="165" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#0D1526">with Confidence</text>
+  </g>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L9,3 z" fill="#8152E0"/>
+    </marker>
+  </defs>
+
+  <text x="500" y="250" text-anchor="middle" font-family="Arial, sans-serif" font-size="16" fill="#6F6C90">Repeat every release — before the preview window closes</text>
+</svg>

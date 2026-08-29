@@ -1,0 +1,55 @@
+<svg width="1200" height="675" viewBox="0 0 1200 675" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="devBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#8152E0"/>
+      <stop offset="100%" stop-color="#195DF0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#devBg)"/>
+
+  <!-- code editor card -->
+  <rect x="120" y="100" width="560" height="470" rx="20" fill="#0D1526"/>
+  <circle cx="160" cy="140" r="8" fill="#F15A23"/>
+  <circle cx="186" cy="140" r="8" fill="#F49308"/>
+  <circle cx="212" cy="140" r="8" fill="#2DB470"/>
+
+  <rect x="160" y="180" width="120" height="14" rx="4" fill="#8152E0"/>
+  <rect x="290" y="180" width="200" height="14" rx="4" fill="#5A9BFF"/>
+  <rect x="160" y="212" width="60" height="14" rx="4" fill="#2DB470"/>
+  <rect x="230" y="212" width="280" height="14" rx="4" fill="#C9D6F5" opacity="0.6"/>
+  <rect x="180" y="244" width="240" height="14" rx="4" fill="#C9D6F5" opacity="0.4"/>
+  <rect x="180" y="276" width="300" height="14" rx="4" fill="#C9D6F5" opacity="0.4"/>
+  <rect x="160" y="308" width="90" height="14" rx="4" fill="#F49308"/>
+  <rect x="260" y="308" width="220" height="14" rx="4" fill="#C9D6F5" opacity="0.6"/>
+
+  <rect x="160" y="360" width="440" height="50" rx="10" fill="#1D2A4A"/>
+  <text x="180" y="392" font-family="monospace" font-size="18" fill="#7FE0A8">// API v64.0 -&gt; v65.0</text>
+
+  <rect x="160" y="424" width="440" height="50" rx="10" fill="#1D2A4A"/>
+  <text x="180" y="456" font-family="monospace" font-size="18" fill="#F49308">// Critical Update: enforced</text>
+
+  <rect x="160" y="488" width="440" height="50" rx="10" fill="#1D2A4A"/>
+  <text x="180" y="520" font-family="monospace" font-size="18" fill="#5A9BFF">// Run regression test suite</text>
+
+  <!-- floating badges -->
+  <g>
+    <rect x="740" y="130" width="230" height="64" rx="18" fill="#ffffff"/>
+    <circle cx="774" cy="162" r="14" fill="#195DF0"/>
+    <text x="800" y="168" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#0D1526">Apex &amp; LWC</text>
+  </g>
+  <g>
+    <rect x="900" y="260" width="220" height="64" rx="18" fill="#ffffff"/>
+    <circle cx="934" cy="292" r="14" fill="#F49308"/>
+    <text x="960" y="298" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#0D1526">API Versions</text>
+  </g>
+  <g>
+    <rect x="760" y="400" width="230" height="64" rx="18" fill="#ffffff"/>
+    <circle cx="794" cy="432" r="14" fill="#2DB470"/>
+    <text x="820" y="438" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#0D1526">CI / CD Pipeline</text>
+  </g>
+  <g>
+    <rect x="920" y="500" width="230" height="64" rx="18" fill="#ffffff"/>
+    <circle cx="954" cy="532" r="14" fill="#8152E0"/>
+    <text x="980" y="538" font-family="Arial, sans-serif" font-size="18" font-weight="600" fill="#0D1526">Scratch Orgs</text>
+  </g>
+</svg>
