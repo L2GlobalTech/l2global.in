@@ -47,6 +47,21 @@ export const asgardSeoConfig: Record<string, PageSeoConfig> = {
     description: 'Modify service details, update features list, edit CTA links, and manage media assets.',
     keywords: ['edit service', 'update service', 'asgard services'],
   },
+  faqs: {
+    title: 'FAQs Management',
+    description: 'Manage, search, filter, and organize all frequently asked questions in Asgard CMS.',
+    keywords: ['asgard faqs', 'faq management', 'questions', 'support cms'],
+  },
+  createFaq: {
+    title: 'Create FAQ Item',
+    description: 'Create and categorize a new frequently asked question and answer for the website.',
+    keywords: ['create faq', 'new faq', 'asgard faqs'],
+  },
+  editFaq: {
+    title: 'Edit FAQ Item',
+    description: 'Update question text, detailed answer, category, and display order for an existing FAQ.',
+    keywords: ['edit faq', 'update faq', 'asgard faqs'],
+  },
 };
 
 /**

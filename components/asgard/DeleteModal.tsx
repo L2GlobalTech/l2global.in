@@ -39,11 +39,11 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
         </div>
 
         <div className="mt-4">
-          <h3 className="text-lg font-semibold text-slate-900">{title}</h3>
-          <p className="text-sm text-slate-600 mt-2">
+          <h3 className="text-xl font-bold text-slate-900">{title}</h3>
+          <p className="text-sm sm:text-base text-slate-600 mt-2 leading-relaxed">
             Are you sure you want to delete{' '}
             {itemName ? (
-              <span className="font-semibold text-slate-800">"{itemName}"</span>
+              <span className="font-bold text-slate-900">"{itemName}"</span>
             ) : (
               `this ${itemType}`
             )}
@@ -56,7 +56,7 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
             type="button"
             onClick={onClose}
             disabled={isDeleting}
-            className="px-4 py-2 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-lg transition-colors cursor-pointer"
+            className="px-4.5 py-2.5 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
           >
             Cancel
           </button>
@@ -64,10 +64,10 @@ export const DeleteModal: React.FC<DeleteModalProps> = ({
             type="button"
             onClick={onConfirm}
             disabled={isDeleting}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl transition-colors shadow-xs disabled:opacity-50 cursor-pointer"
           >
             {isDeleting && <Loader2 className="w-4 h-4 animate-spin" />}
-            {isDeleting ? 'Deleting...' : 'Delete'}
+            {isDeleting ? 'Deleting...' : 'Delete Permanently'}
           </button>
         </div>
       </div>

@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import {
   FileText,
   Layers,
+  HelpCircle,
   LayoutDashboard,
   LogOut,
   ExternalLink,
@@ -57,6 +58,12 @@ export const AsgardSidebar: React.FC = () => {
       name: 'Services',
       href: '/asgard/services',
       icon: Layers,
+      exact: false,
+    },
+    {
+      name: 'FAQs',
+      href: '/asgard/faqs',
+      icon: HelpCircle,
       exact: false,
     },
   ];

@@ -51,24 +51,24 @@ export const DataTablePagination: React.FC<DataTablePaginationProps> = ({
   };
 
   return (
-    <div className="px-6 py-3.5 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs text-slate-500">
-      <div className="flex items-center gap-3">
+    <div className="px-5 py-3 border-t border-slate-200 bg-slate-50 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs sm:text-sm text-slate-600">
+      <div className="flex items-center gap-2.5">
         <span>
-          Showing <span className="font-semibold text-slate-700">{startItem}</span> to{' '}
-          <span className="font-semibold text-slate-700">{endItem}</span> of{' '}
-          <span className="font-semibold text-slate-700">{totalItems}</span> {itemName}
+          Showing <span className="font-bold text-slate-800">{startItem}</span> to{' '}
+          <span className="font-bold text-slate-800">{endItem}</span> of{' '}
+          <span className="font-bold text-slate-800">{totalItems}</span> {itemName}
         </span>
 
         {onItemsPerPageChange && (
           <div className="flex items-center gap-1.5 ml-2 border-l border-slate-200 pl-3">
-            <span className="text-slate-400">Rows:</span>
+            <span className="text-slate-500 font-medium">Rows:</span>
             <select
               value={itemsPerPage}
               onChange={(e) => {
                 onItemsPerPageChange(Number(e.target.value));
                 onPageChange(1);
               }}
-              className="bg-white border border-slate-200 rounded px-1.5 py-0.5 text-xs text-slate-700 cursor-pointer focus:outline-none"
+              className="bg-white border border-slate-200 rounded-lg px-2 py-0.5 text-xs text-slate-700 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500"
             >
               {pageSizeOptions.map((opt) => (
                 <option key={opt} value={opt}>
@@ -86,7 +86,7 @@ export const DataTablePagination: React.FC<DataTablePaginationProps> = ({
           type="button"
           onClick={() => onPageChange(1)}
           disabled={currentPage === 1}
-          className="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+          className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
           title="First Page"
         >
           <ChevronsLeft className="w-3.5 h-3.5" />
@@ -97,7 +97,7 @@ export const DataTablePagination: React.FC<DataTablePaginationProps> = ({
           type="button"
           onClick={() => onPageChange(Math.max(currentPage - 1, 1))}
           disabled={currentPage === 1}
-          className="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+          className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
           title="Previous Page"
         >
           <ChevronLeft className="w-3.5 h-3.5" />
@@ -108,7 +108,7 @@ export const DataTablePagination: React.FC<DataTablePaginationProps> = ({
           {getPageNumbers().map((p, idx) => {
             if (p === '...') {
               return (
-                <span key={`ellipsis-${idx}`} className="px-1.5 text-slate-400 select-none">
+                <span key={`ellipsis-${idx}`} className="px-1.5 text-slate-400 select-none text-xs">
                   ...
                 </span>
               );
@@ -120,9 +120,9 @@ export const DataTablePagination: React.FC<DataTablePaginationProps> = ({
                 key={`page-${pageNum}`}
                 type="button"
                 onClick={() => onPageChange(pageNum)}
-                className={`min-w-[28px] h-7 px-2 text-xs font-semibold rounded-md transition-colors cursor-pointer ${
+                className={`min-w-[30px] h-7 px-2 text-xs font-semibold rounded-lg transition-colors cursor-pointer ${
                   isActive
-                    ? 'bg-indigo-600 text-white shadow-xs'
+                    ? 'bg-indigo-600 text-white shadow-2xs'
                     : 'bg-white border border-slate-200 text-slate-700 hover:bg-slate-100'
                 }`}
               >
@@ -137,7 +137,7 @@ export const DataTablePagination: React.FC<DataTablePaginationProps> = ({
           type="button"
           onClick={() => onPageChange(Math.min(currentPage + 1, totalPages))}
           disabled={currentPage >= totalPages}
-          className="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+          className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
           title="Next Page"
         >
           <ChevronRight className="w-3.5 h-3.5" />
@@ -148,7 +148,7 @@ export const DataTablePagination: React.FC<DataTablePaginationProps> = ({
           type="button"
           onClick={() => onPageChange(totalPages)}
           disabled={currentPage >= totalPages}
-          className="p-1.5 rounded-md border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
+          className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:bg-slate-100 disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer transition-colors"
           title="Last Page"
         >
           <ChevronsRight className="w-3.5 h-3.5" />

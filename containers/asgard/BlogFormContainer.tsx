@@ -22,7 +22,7 @@ interface BlogFormContainerProps {
 }
 
 const inputClass =
-  'w-full px-3.5 py-2.5 text-sm text-slate-900 bg-slate-100 border-0 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-400';
+  'w-full px-3.5 py-2.5 text-xs sm:text-sm text-slate-900 bg-slate-100 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-400';
 
 export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
   const router = useRouter();
@@ -104,13 +104,11 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
   const handleInputChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
-    const { name, value, type } = e.target;
-    if (type === 'checkbox') {
-      const checked = (e.target as HTMLInputElement).checked;
-      setFormData((prev) => ({ ...prev, [name]: checked }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
-    }
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -118,34 +116,23 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
     const title = formData.title?.trim();
     if (!title) {
-      toast.error('Blog title is required');
+      toast.error('Please provide a title for the blog article.');
       return;
     }
 
     try {
       setIsSubmitting(true);
+      let mediaId = formData.media_id;
 
-      let resolvedMediaId: string | null = initialMediaIdRef.current;
-
-      // 1. If a new image was selected/cropped, upload to Supabase Storage 'media' bucket
+      // Handle Cover image upload if file selected
       if (file) {
-        const uploadToast = toast.loading('Uploading media image to storage...');
         const uploadRes = await uploadMedia(file, 'blogs');
-        toast.dismiss(uploadToast);
-
         if (!uploadRes.success || !uploadRes.storagePath) {
-          toast.error(uploadRes.error || 'Failed to upload blog image to media bucket.');
+          toast.error(uploadRes.error || 'Failed to upload blog image');
           setIsSubmitting(false);
           return;
         }
-
-        resolvedMediaId = uploadRes.storagePath; // e.g. "blogs/1725451234-uuid-name.webp"
-      } else if (!existingMediaUrl) {
-        // User explicitly removed the image
-        resolvedMediaId = null;
-      } else {
-        // User kept existing image
-        resolvedMediaId = initialMediaIdRef.current;
+        mediaId = uploadRes.storagePath;
       }
 
       const payloadData: BlogRecord = {
@@ -153,7 +140,7 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
         subtitle: formData.subtitle?.trim() || null,
         tag: formData.tag?.trim() || null,
         is_featured: Boolean(formData.is_featured),
-        media_id: resolvedMediaId,
+        media_id: mediaId,
         alt_text: formData.alt_text?.trim() || null,
         sub_description: formData.sub_description?.trim() || null,
         meta_description: formData.meta_description?.trim() || formData.meta_descriptior?.trim() || null,
@@ -170,11 +157,8 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
           return;
         }
 
-        // 2. Safe cleanup: Only delete old image after DB update succeeded AND image was replaced
-        if (
-          initialMediaIdRef.current &&
-          initialMediaIdRef.current !== resolvedMediaId
-        ) {
+        // Cleanup old media if replaced
+        if (file && initialMediaIdRef.current && initialMediaIdRef.current !== mediaId) {
           await deleteMedia(initialMediaIdRef.current);
         }
 
@@ -200,16 +184,16 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
   return (
     <AsgardLayout>
-      <div className="">
+      <div>
         {/* Top Header with Breadcrumbs & Action Buttons */}
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 pb-5">
+        <div className="mb-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 border-b border-slate-200 pb-4">
           <div>
-            <div className="flex items-center gap-2 text-xs text-slate-500 mb-1">
-              <Link href="/asgard/overview" className="hover:text-slate-900 transition-colors">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500 mb-1">
+              <Link href="/asgard/overview" className="hover:text-slate-900 transition-colors font-medium">
                 CMS
               </Link>
               <span>/</span>
-              <Link href="/asgard/blogs" className="hover:text-slate-900 transition-colors">
+              <Link href="/asgard/blogs" className="hover:text-slate-900 transition-colors font-medium">
                 Blogs
               </Link>
               <span>/</span>
@@ -217,21 +201,21 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
                 {isEditMode ? 'Edit Blog' : 'Create Blog'}
               </span>
             </div>
-            <h1 className="text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2.5">
+            <h1 className="text-xl sm:text-2xl font-bold tracking-tight text-slate-900 flex items-center gap-2.5">
               <FileText className="w-6 h-6 text-indigo-600" />
               <span>{isEditMode ? 'Edit Blog Article' : 'Create New Blog Article'}</span>
             </h1>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs sm:text-sm text-slate-500 mt-0.5">
               {isEditMode
                 ? 'Update your blog article fields, rich text content, and cover media.'
                 : 'Fill in the information below to author and publish a new blog article.'}
             </p>
           </div>
 
-          <div className="flex items-center gap-2.5 ">
+          <div className="flex items-center gap-2.5">
             <Link
               href="/asgard/blogs"
-              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 rounded-lg transition-colors cursor-pointer shadow-2xs"
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs sm:text-sm font-medium text-slate-700 bg-white hover:bg-slate-100 border border-slate-200 rounded-xl transition-colors cursor-pointer shadow-2xs"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Blogs</span>
@@ -243,18 +227,18 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
         {initialLoading ? (
           <LoadingState message="Loading blog article details..." rows={5} />
         ) : (
-          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-xs max-w-4xl">
-            <form onSubmit={handleFormSubmit} className="space-y-6 text-xs">
+          <div className="bg-white rounded-2xl p-5 sm:p-7 border border-slate-200 shadow-xs max-w-4xl">
+            <form onSubmit={handleFormSubmit} className="space-y-5 text-xs sm:text-sm">
               {/* Blog Title */}
               <div>
-                <label className="block text-xs font-semibold text-slate-900 mb-1.5">
-                  Blog Title*
+                <label className="block text-xs sm:text-sm font-semibold text-slate-900 mb-1.5">
+                  Blog Title <span className="text-rose-500">*</span>
                 </label>
                 <input
                   name="title"
                   type="text"
                   required
-                  placeholder="e.g. The Future of Event Management"
+                  placeholder="e.g. The Future of Cloud Integrations"
                   value={formData.title || ''}
                   onChange={handleInputChange}
                   className={inputClass}
@@ -263,13 +247,13 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
               {/* Subtitle */}
               <div>
-                <label className="block text-xs font-semibold text-slate-900 mb-1.5">
+                <label className="block text-xs sm:text-sm font-semibold text-slate-900 mb-1.5">
                   Subtitle
                 </label>
                 <input
                   name="subtitle"
                   type="text"
-                  placeholder="How technology is transforming modern events..."
+                  placeholder="How modern architectures are streamlining operations..."
                   value={formData.subtitle || ''}
                   onChange={handleInputChange}
                   className={inputClass}
@@ -277,15 +261,15 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
               </div>
 
               {/* Grid: Tag & Featured */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-900 mb-1.5">
+                  <label className="block text-xs sm:text-sm font-semibold text-slate-900 mb-1.5">
                     Tag / Category
                   </label>
                   <input
                     name="tag"
                     type="text"
-                    placeholder="e.g. Event Management, Cloud"
+                    placeholder="e.g. Cloud & DevOps, Integration"
                     value={formData.tag || ''}
                     onChange={handleInputChange}
                     className={inputClass}
@@ -293,7 +277,7 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-semibold text-slate-900 mb-1.5">
+                  <label className="block text-xs sm:text-sm font-semibold text-slate-900 mb-1.5">
                     Featured Article Status
                   </label>
                   <div className="relative">
@@ -321,7 +305,7 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
               {/* Global Image Uploader & Cropper */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                <label className="text-xs font-semibold text-gray-800 uppercase tracking-wider">
                   Blog Cover Image
                 </label>
                 <ImageUploader
@@ -344,13 +328,13 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
               {/* Alt Text Input */}
               <div>
-                <label className="block text-xs font-semibold text-slate-900 mb-1.5">
+                <label className="block text-xs sm:text-sm font-semibold text-slate-900 mb-1.5">
                   Image Alt Text / Caption
                 </label>
                 <input
                   name="alt_text"
                   type="text"
-                  placeholder="Future of Event Management"
+                  placeholder="e.g. Overview of cloud infrastructure"
                   value={formData.alt_text || ''}
                   onChange={handleInputChange}
                   className={inputClass}
@@ -359,7 +343,7 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
               {/* Short Description */}
               <div>
-                <label className="block text-xs font-semibold text-slate-900 mb-1.5">
+                <label className="block text-xs sm:text-sm font-semibold text-slate-900 mb-1.5">
                   Short Description / Summary
                 </label>
                 <textarea
@@ -374,7 +358,7 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
               {/* SEO Meta Description */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                <label className="text-xs font-semibold text-gray-800 uppercase tracking-wider">
                   SEO Meta Description
                 </label>
                 <textarea
@@ -389,7 +373,7 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
               {/* SEO Meta Keywords */}
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                <label className="text-xs font-semibold text-gray-800 uppercase tracking-wider">
                   SEO Meta Keywords
                 </label>
                 <input
@@ -404,7 +388,7 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
               {/* WYSIWYG Rich Text Editor for Content */}
               <div>
-                <label className="block text-xs font-semibold text-slate-900 mb-1.5">
+                <label className="block text-xs sm:text-sm font-semibold text-slate-900 mb-1.5">
                   Article Body / Content
                 </label>
                 <RichTextEditor
@@ -413,22 +397,22 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
                     setFormData((prev) => ({ ...prev, content: html }));
                   }}
                   placeholder="Start composing your article with headings, paragraphs, lists, formatting, and tables..."
-                  minHeight="340px"
+                  minHeight="300px"
                 />
               </div>
 
               {/* Footer Actions */}
-              <div className="pt-6 border-t border-slate-200 flex items-center justify-end gap-3">
+              <div className="pt-5 border-t border-slate-200 flex items-center justify-end gap-3">
                 <Link
                   href="/asgard/blogs"
-                  className="px-5 py-2.5 text-sm font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
+                  className="px-4 py-2 text-xs sm:text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 rounded-xl transition-colors cursor-pointer"
                 >
                   Cancel
                 </Link>
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="inline-flex items-center gap-2 px-6 py-2.5 text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-md shadow-indigo-600/20 hover:shadow-lg hover:shadow-indigo-600/30 disabled:opacity-60 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-xs hover:shadow-sm disabled:opacity-60 cursor-pointer"
                 >
                   {isSubmitting ? (
                     <>

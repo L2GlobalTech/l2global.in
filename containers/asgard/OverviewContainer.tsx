@@ -5,6 +5,7 @@ import Link from 'next/link';
 import {
   FileText,
   Layers,
+  HelpCircle,
   ArrowRight,
   Plus,
   Star,
@@ -27,8 +28,11 @@ export const OverviewContainer: React.FC = () => {
     featuredBlogs: 0,
     totalServices: 0,
     activeServices: 0,
+    totalFaqs: 0,
+    activeFaqs: 0,
     recentBlogs: [],
     recentServices: [],
+    recentFaqs: [],
   });
   const [loading, setLoading] = useState(true);
 
@@ -48,7 +52,16 @@ export const OverviewContainer: React.FC = () => {
     loadStats();
   }, []);
 
-  const { totalBlogs, featuredBlogs, totalServices, activeServices, recentBlogs, recentServices } = metrics;
+  const {
+    totalBlogs,
+    featuredBlogs,
+    totalServices,
+    activeServices,
+    totalFaqs,
+    activeFaqs,
+    recentBlogs,
+    recentServices,
+  } = metrics;
 
   return (
     <AsgardLayout>
@@ -56,73 +69,102 @@ export const OverviewContainer: React.FC = () => {
 
       <AsgardPageHeader
         title="Dashboard Overview"
-        description="Quick snapshot of your published articles and active service offerings."
+        description="Quick snapshot of your published articles, active services, and FAQs."
       />
 
       {/* Top High-Level Summary Cards */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
-          <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs h-20 animate-pulse" />
-          <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-xs h-20 animate-pulse" />
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
+          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
+          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
+          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-8">
           {/* Blogs Summary Card */}
           <Link
             href="/asgard/blogs"
-            className="group bg-white rounded-xl p-4 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
+            className="group bg-white rounded-2xl p-6 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
           >
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                   Blog Articles
                 </span>
                 {featuredBlogs > 0 && (
-                  <span className="inline-flex items-center gap-1 text-[10px] px-1.5 py-0.2 rounded-full bg-amber-50 text-amber-700 font-semibold border border-amber-200">
-                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-500" />
+                  <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 font-bold border border-amber-200">
+                    <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
                     {featuredBlogs} Featured
                   </span>
                 )}
               </div>
-              <div className="mt-1 flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              <div className="mt-1.5 flex items-baseline gap-1.5">
+                <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
                   {totalBlogs}
                 </span>
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-slate-500 font-medium">
                   {totalBlogs === 1 ? 'published' : 'published'}
                 </span>
               </div>
             </div>
-            <div className="w-9 h-9 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <FileText className="w-4.5 h-4.5" />
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <FileText className="w-5 h-5" />
             </div>
           </Link>
 
           {/* Services Summary Card */}
           <Link
             href="/asgard/services"
-            className="group bg-white rounded-xl p-4 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
+            className="group bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
           >
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
                   Service Offerings
                 </span>
-                <span className="inline-flex items-center text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-50 text-emerald-700 font-semibold border border-emerald-200">
+                <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
                   {activeServices} Active
                 </span>
               </div>
-              <div className="mt-1 flex items-baseline gap-2">
-                <span className="text-2xl font-bold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              <div className="mt-1.5 flex items-baseline gap-1.5">
+                <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
                   {totalServices}
                 </span>
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-slate-500 font-medium">
                   {totalServices === 1 ? 'total service' : 'total services'}
                 </span>
               </div>
             </div>
-            <div className="w-9 h-9 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <Layers className="w-4.5 h-4.5" />
+            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <Layers className="w-5 h-5" />
+            </div>
+          </Link>
+
+          {/* FAQs Summary Card */}
+          <Link
+            href="/asgard/faqs"
+            className="group bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
+          >
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  FAQ Items
+                </span>
+                <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-bold border border-indigo-200">
+                  {activeFaqs} Active
+                </span>
+              </div>
+              <div className="mt-1.5 flex items-baseline gap-1.5">
+                <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  {totalFaqs}
+                </span>
+                <span className="text-xs text-slate-500 font-medium">
+                  {totalFaqs === 1 ? 'total item' : 'total items'}
+                </span>
+              </div>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <HelpCircle className="w-5 h-5" />
             </div>
           </Link>
         </div>
@@ -134,37 +176,37 @@ export const OverviewContainer: React.FC = () => {
         <div className="bg-white rounded-2xl border border-slate-200 shadow-xs overflow-hidden flex flex-col justify-between">
           <div>
             {/* Header */}
-            <div className="p-4 border-b border-slate-100 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-md bg-blue-50 text-blue-600 flex items-center justify-center">
-                  <FileText className="w-3.5 h-3.5" />
+            <div className="p-5 border-b border-slate-100 flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center">
+                  <FileText className="w-4.5 h-4.5" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-sm">Recent Blogs</h3>
+                <h3 className="font-bold text-slate-900 text-base">Recent Blogs</h3>
               </div>
               <Link
                 href="/asgard/blogs"
-                className="inline-flex items-center gap-1 text-xs font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
+                className="inline-flex items-center gap-1.5 text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors"
               >
                 <span>View All</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
 
             {/* List Body */}
             {loading ? (
-              <div className="p-4 space-y-3">
+              <div className="p-5 space-y-3">
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <div key={i} className="h-14 bg-slate-50 rounded-xl animate-pulse" />
+                  <div key={i} className="h-16 bg-slate-50 rounded-xl animate-pulse" />
                 ))}
               </div>
             ) : recentBlogs.length === 0 ? (
               <div className="p-10 text-center">
-                <p className="text-xs text-slate-500 mb-3">No blog articles published yet.</p>
+                <p className="text-sm text-slate-500 mb-4">No blog articles published yet.</p>
                 <Link
                   href="/asgard/blogs/create"
-                  className="inline-flex items-center gap-1.5 px-3.5 py-1.5 text-xs font-medium text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-xl transition-colors"
                 >
-                  <Plus className="w-3.5 h-3.5" />
+                  <Plus className="w-4 h-4" />
                   <span>Create Blog</span>
                 </Link>
               </div>
@@ -173,42 +215,42 @@ export const OverviewContainer: React.FC = () => {
                 {recentBlogs.map((blog: any) => (
                   <div
                     key={blog.id}
-                    className="p-4 flex items-center justify-between hover:bg-slate-50/80 transition-colors group"
+                    className="p-4.5 flex items-center justify-between hover:bg-slate-50/80 transition-colors group"
                   >
-                    <div className="flex items-start gap-3 min-w-0 max-w-sm">
+                    <div className="flex items-start gap-3.5 min-w-0 max-w-sm">
                       <BlogImageThumbnail
                         mediaId={blog.media_id}
                         alt={blog.alt_text || blog.title || ''}
-                        className="w-10 h-10 shrink-0"
+                        className="w-12 h-12 rounded-xl shrink-0"
                       />
                       <div className="min-w-0">
-                        <div className="flex items-center gap-1.5 flex-wrap">
-                          <h4 className="text-xs font-semibold text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <h4 className="text-sm font-bold text-slate-900 group-hover:text-indigo-600 transition-colors line-clamp-1">
                             {blog.title}
                           </h4>
                           {blog.is_featured && (
-                            <span className="inline-flex items-center gap-0.5 px-1.5 py-0.2 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
-                              <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-500" />
+                            <span className="inline-flex items-center gap-1 px-2 py-0.2 rounded text-[11px] font-bold bg-amber-50 text-amber-700 border border-amber-200">
+                              <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
                               Featured
                             </span>
                           )}
                         </div>
                         {(blog.subtitle || blog.sub_description) && (
-                          <p className="text-[11px] text-slate-500 mt-0.5 line-clamp-1">
+                          <p className="text-xs sm:text-sm text-slate-500 mt-1 line-clamp-1">
                             {blog.subtitle || blog.sub_description}
                           </p>
                         )}
-                        <div className="flex items-center gap-2 mt-1 text-[10px] text-slate-400">
+                        <div className="flex items-center gap-2.5 mt-1.5 text-xs text-slate-400">
                           {blog.tag && (
-                            <span className="inline-flex items-center gap-0.5 text-slate-500 font-medium">
-                              <Tag className="w-2.5 h-2.5 text-slate-400" />
+                            <span className="inline-flex items-center gap-1 text-slate-600 font-medium">
+                              <Tag className="w-3 h-3 text-slate-400" />
                               {blog.tag}
                             </span>
                           )}
                           {blog.tag && blog.created_at && <span>&bull;</span>}
                           {blog.created_at && (
-                            <span className="inline-flex items-center gap-0.5">
-                              <Calendar className="w-2.5 h-2.5 text-slate-400" />
+                            <span className="inline-flex items-center gap-1">
+                              <Calendar className="w-3 h-3 text-slate-400" />
                               {new Date(blog.created_at).toLocaleDateString()}
                             </span>
                           )}
@@ -219,10 +261,10 @@ export const OverviewContainer: React.FC = () => {
                     <div className="shrink-0 ml-3">
                       <Link
                         href={`/asgard/blogs/edit?id=${blog.id}`}
-                        className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg transition-colors inline-flex items-center justify-center cursor-pointer"
+                        className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-xl transition-colors inline-flex items-center justify-center cursor-pointer"
                         title="Edit Article"
                       >
-                        <Edit2 className="w-4 h-4" />
+                        <Edit2 className="w-4.5 h-4.5" />
                       </Link>
                     </div>
                   </div>
@@ -232,17 +274,17 @@ export const OverviewContainer: React.FC = () => {
           </div>
 
           {/* Card Footer */}
-          <div className="p-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs">
+          <div className="p-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-sm">
             <Link
               href="/asgard/blogs/create"
-              className="text-xs font-medium text-slate-600 hover:text-indigo-600 inline-flex items-center gap-1"
+              className="text-sm font-medium text-slate-700 hover:text-indigo-600 inline-flex items-center gap-1.5"
             >
-              <Plus className="w-3.5 h-3.5 text-indigo-600" />
+              <Plus className="w-4 h-4 text-indigo-600" />
               <span>Add New Article</span>
             </Link>
             <Link
               href="/asgard/blogs"
-              className="font-semibold text-indigo-600 hover:text-indigo-700"
+              className="font-bold text-indigo-600 hover:text-indigo-700"
             >
               Manage All Blogs &rarr;
             </Link>
