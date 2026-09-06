@@ -82,7 +82,7 @@ const Footer: React.FC = () => {
                         </div>
 
                         <p className="mt-6 max-w-md leading-7 text-[#6F6C90]">
-                            UK-headquartered Salesforce Agentforce AI, SAP Gold Partner, MuleSoft,
+                            UK-headquartered Salesforce Agentforce AI, SAP, MuleSoft,
                             data science and website development consultants. UK · Texas USA · UAE · India.
                             182+ projects. Founded 2014. Free consultation.
                         </p>

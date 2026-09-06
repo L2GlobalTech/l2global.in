@@ -9,7 +9,7 @@ const Services = () => {
    const cards = [
   {
     title: "Salesforce Agentforce AI & CRM",
-    desc: "Deploy autonomous AI agents with Agentforce. CRM implementation, customisation and managed support. Salesforce Partner. 180+ deployments. UK · Texas · UAE.",
+    desc: "Deploy autonomous AI agents with Agentforce. CRM implementation, customisation and managed support. 180+ deployments. UK · Texas · UAE.",
     bg: "bg-[#E5ECFD]",
     icon: "/assets/web/home/services/digital.png",
     border: "border-[#C1C1FF]",
@@ -18,7 +18,7 @@ const Services = () => {
   },
   {
     title: "SAP S/4HANA & Joule AI",
-    desc: "SAP Gold Partner. S/4HANA migration, RISE with SAP, BTP, Joule AI deployment. ECC support ends 2027 — plan your migration now. UK · Texas · UAE.",
+    desc: "S/4HANA migration, RISE with SAP, BTP, Joule AI deployment. ECC support ends 2027 — plan your migration now. UK · Texas · UAE.",
     bg: "bg-[#FFEFE1]",
     icon: "/assets/web/home/services/data.png",
     border: "border-[#FFBCA5]",
@@ -27,7 +27,7 @@ const Services = () => {
   },
   {
     title: "MuleSoft & API Integration",
-    desc: "Certified MuleSoft Anypoint Partner. 250+ APIs delivered. Connect SAP, Salesforce, Oracle and every system. API-led connectivity. UK · Texas · UAE.",
+    desc: "MuleSoft Anypoint Platform integration. 250+ APIs delivered. Connect SAP, Salesforce, Oracle and every system. API-led connectivity. UK · Texas · UAE.",
     bg: "bg-[#FDE7EB]",
     icon: "/assets/web/home/services/web.png",
     border: "border-[#FAC3CC]",

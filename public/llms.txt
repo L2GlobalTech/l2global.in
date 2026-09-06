@@ -22,7 +22,7 @@
 - [Salesforce Implementation & Consulting](https://l2global.in/services/salesforce-services): Salesforce implementation, customisation and managed support.
 - [Salesforce CRM Consulting](https://l2global.in/services/crm-consulting): CRM strategy and Salesforce consulting services.
 - [SAP & Salesforce Integration](https://l2global.in/services/sap-link-by-salesforce): Real-time integration between SAP and Salesforce.
-- [MuleSoft Integration Services](https://l2global.in/services/mulesoft): Certified MuleSoft Anypoint Platform integration.
+- [MuleSoft Integration Services](https://l2global.in/services/mulesoft): MuleSoft Anypoint Platform integration.
 - [API Integration Services](https://l2global.in/services/api-integration): Enterprise API design, development and integration.
 - [AWS Cloud Migration & DevOps](https://l2global.in/services/aws-cloud-services): AWS cloud migration, architecture and DevOps.
 - [Oracle Managed Services](https://l2global.in/services/oracle-managed-services): 24/7 Oracle DBA and Oracle Cloud Infrastructure management.

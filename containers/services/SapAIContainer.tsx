@@ -153,7 +153,7 @@ const SapAIContainer = () => {
                 titleAfter={''}
                 linearText={'To Your SAP'}
                 description={'SAP Joule AI implementation experts serving USA, UK, Canada, Australia, Asia and Gulf businesses. Natural-language reporting and process automation embedded across S/4HANA in London, New York and Dubai. 50+ use cases deployed. Free consultation.'}
-                tag1={'SAP Gold Partner'} tag2={'BTP Certified'} tag3={'24/7 Support'} />
+                tag1={'SAP Joule AI Specialists'} tag2={'SAP BTP'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />
 

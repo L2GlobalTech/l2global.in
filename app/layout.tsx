@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     template: '%s | L2 Global Technologies',
   },
   description:
-    'UK-headquartered Salesforce Agentforce AI, SAP Gold Partner, MuleSoft and data science' +
+    'UK-headquartered Salesforce Agentforce AI, SAP, MuleSoft and data science' +
     ' consultants. UK, Texas USA, UAE & India. 182+ projects delivered. Free consultation.',
   // REMOVED: keywords array — Google ignores meta keywords since 2009
   openGraph: {
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
     url: 'https://l2global.in',
     siteName: 'L2 Global Technologies',
     title: 'Salesforce Agentforce AI & SAP Consultants | L2 Global Technologies',
-    description: 'UK, Texas USA & UAE IT consultants. Agentforce AI, SAP Gold Partner, MuleSoft. 182+ projects.',
+    description: 'UK, Texas USA & UAE IT consultants. Agentforce AI, SAP, MuleSoft. 182+ projects.',
     images: [{ url: '/assets/web/og-image.png', width: 1200, height: 630, alt: 'L2 Global Technologies — Salesforce Agentforce AI & SAP Consultants' }],
   },
   // No title/description/images here — every page below defines its own openGraph,
@@ -72,7 +72,7 @@ export default function RootLayout({
     foundingDate: '2014', // FIX: was incorrectly '2020'
     numberOfEmployees: { '@type': 'QuantitativeValue', value: 45 },
     description:
-      'UK-headquartered Salesforce Agentforce AI, SAP Gold Partner, MuleSoft, data science' +
+      'UK-headquartered Salesforce Agentforce AI, SAP, MuleSoft, data science' +
       ' and website development consultants. UK, Texas USA, UAE & India. 182+ projects. Founded 2014.',
     address: [
       {
@@ -125,13 +125,13 @@ export default function RootLayout({
       'Website Design and Development',
       'AWS Cloud Migration',
     ],
-    hasCredential: [
-      { '@type': 'EducationalOccupationalCredential', name: 'Salesforce Partner' },
-      { '@type': 'EducationalOccupationalCredential', name: 'SAP Gold Partner' },
-      { '@type': 'EducationalOccupationalCredential', name: 'MuleSoft Anypoint Partner' },
-      { '@type': 'EducationalOccupationalCredential', name: 'AWS Partner' },
-      { '@type': 'EducationalOccupationalCredential', name: 'Oracle Technology Partner' },
-    ],
+    // hasCredential: [ — commented out until an actual vendor partnership exists.
+    //   { '@type': 'EducationalOccupationalCredential', name: 'Salesforce Partner' },
+    //   { '@type': 'EducationalOccupationalCredential', name: 'SAP Gold Partner' },
+    //   { '@type': 'EducationalOccupationalCredential', name: 'MuleSoft Anypoint Partner' },
+    //   { '@type': 'EducationalOccupationalCredential', name: 'AWS Partner' },
+    //   { '@type': 'EducationalOccupationalCredential', name: 'Oracle Technology Partner' },
+    // ],
     sameAs: [
       'https://www.linkedin.com/company/l2-global-technologies',
       'https://www.facebook.com/l2globaltechnologies',

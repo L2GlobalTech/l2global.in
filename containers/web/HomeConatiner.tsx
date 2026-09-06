@@ -1,15 +1,19 @@
-import LogosCarousel from '@/components/web/LogosGrid';
-import img1 from '@/public/assets/web/partners/logo2.svg'
-import img2 from '@/public/assets/web/partners/logo3.svg'
-import img3 from '@/public/assets/web/partners/logo4.svg'
-import img4 from '@/public/assets/web/partners/logo5.svg'
-import img5 from '@/public/assets/web/partners/logo6.svg'
-import img6 from '@/public/assets/web/partners/logo7.svg'
-import img7 from '@/public/assets/web/partners/logo8.svg'
-import img8 from '@/public/assets/web/partners/logo9.svg'
-import img9 from '@/public/assets/web/partners/logo10.svg'
-import img10 from '@/public/assets/web/partners/logo11.svg'
-
+// Partner-logo carousel — commented out until an actual vendor partnership exists.
+// See git history for the original imports (logo2.svg - logo11.svg) and the
+// partnersLogos array / LogosCarousel block that rendered "Trusted Partners
+// Worldwide for Success" with Oracle/SAP/Salesforce/MuleSoft/AWS/Microsoft/
+// Google Cloud logos. Re-add only once formal partner status is confirmed.
+// import LogosCarousel from '@/components/web/LogosGrid';
+// import img1 from '@/public/assets/web/partners/logo2.svg'
+// import img2 from '@/public/assets/web/partners/logo3.svg'
+// import img3 from '@/public/assets/web/partners/logo4.svg'
+// import img4 from '@/public/assets/web/partners/logo5.svg'
+// import img5 from '@/public/assets/web/partners/logo6.svg'
+// import img6 from '@/public/assets/web/partners/logo7.svg'
+// import img7 from '@/public/assets/web/partners/logo8.svg'
+// import img8 from '@/public/assets/web/partners/logo9.svg'
+// import img9 from '@/public/assets/web/partners/logo10.svg'
+// import img10 from '@/public/assets/web/partners/logo11.svg'
 
 import AboutSection from '@/components/web/AboutSection';
 import { Building2, ClipboardPlus, Factory, GraduationCap, Headset, IdCardLanyard, Mail, MapPin, Rocket, Save, Trophy, UserRound } from 'lucide-react';
@@ -38,18 +42,16 @@ import ContactSection from '@/components/web/ContactSection';
 
 const HomeConatiner = () => {
 
-    const partnersLogos = [
-        { id: "partner-1", src: img1.src, alt: "Oracle Technology Partner" },
-        { id: "partner-2", src: img2.src, alt: "SAP Gold Partner" },
-        { id: "partner-3", src: img3.src, alt: "Salesforce Partner" },
-        { id: "partner-4", src: img4.src, alt: "MuleSoft Partner" },
-        { id: "partner-5", src: img5.src, alt: "AWS Partner" },
-        { id: "partner-6", src: img6.src, alt: "Microsoft Partner" },
-        { id: "partner-7", src: img7.src, alt: "Google Cloud Partner" },
-        { id: "partner-8", src: img8.src, alt: "Salesforce AppExchange" },
-
-    ];
-
+    // const partnersLogos = [
+    //     { id: "partner-1", src: img1.src, alt: "Oracle Technology Partner" },
+    //     { id: "partner-2", src: img2.src, alt: "SAP Gold Partner" },
+    //     { id: "partner-3", src: img3.src, alt: "Salesforce Partner" },
+    //     { id: "partner-4", src: img4.src, alt: "MuleSoft Partner" },
+    //     { id: "partner-5", src: img5.src, alt: "AWS Partner" },
+    //     { id: "partner-6", src: img6.src, alt: "Microsoft Partner" },
+    //     { id: "partner-7", src: img7.src, alt: "Google Cloud Partner" },
+    //     { id: "partner-8", src: img8.src, alt: "Salesforce AppExchange" },
+    // ];
 
     const industriesItems = [
         {
@@ -118,13 +120,14 @@ const HomeConatiner = () => {
                 <HeroCarousel />
             </div>
 
-            {/* trusted partners */}
+            {/* trusted partners — commented out until an actual vendor partnership exists
             <div className='bg-[#F6F5F8]'>
                 <LogosCarousel
                     items={partnersLogos}
                     label="Trusted Partners Worldwide for Success"
                 />
             </div>
+            */}
 
             {/* about */}
             <div className='pt-10'>
