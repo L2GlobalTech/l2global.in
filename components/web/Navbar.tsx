@@ -12,6 +12,7 @@ import { Menu as HeadlessMenu, Transition, Popover } from '@headlessui/react'
 import PrimaryButton from '../shared/PrimaryButton'
 import ContactPopup from '../shared/ContactPopup'
 import { trackEvent } from '@/lib/gtag'
+import { fetchServices } from '@/actions/servicesAction'
 
 /* data */
 const industries = [
@@ -22,15 +23,11 @@ const industries = [
   { label: 'Non Profit Organizations', href: '/industries/non-profit' },
 ]
 
-// Services
-const services = [
-  { label: 'Salesforce Consulting Services', href: '/services/salesforce-services' },
-  { label: 'SAP & Salesforce Integration', href: '/services/sap-link-by-salesforce' },
-  { label: 'MuleSoft Integration Services', href: '/services/mulesoft' },
-  { label: 'Oracle Managed Services', href: '/services/oracle-managed-services' },
-  { label: 'API Integration Services', href: '/services/api-integration' },
-  { label: 'AWS Cloud Migration & DevOps', href: '/services/aws-cloud-services' },
-  { label: 'Salesforce CRM Consulting', href: '/services/crm-consulting' },
+// Default Services fallback
+const defaultNavServices = [
+  { label: 'Salesforce Consulting & Implementation', href: '/services/salesforce-services' },
+  { label: 'Oracle Consulting & Managed Services', href: '/services/oracle-managed-services' },
+  { label: 'Cloud & DevOps Consulting', href: '/services/aws-cloud-services' },
 ];
 
 const companyLinks = [
@@ -43,10 +40,10 @@ const companyLinks = [
 
 const navLinks = [
   { href: '/', label: 'Home' },
-  { href: '/services/sap-link-by-salesforce', label: 'Services' },
+  { href: '/services', label: 'Services' },
   { href: '/industries/education', label: 'Industries' },
   { href: '/career', label: 'Career' },
-  // { href: '/team', label: 'Team' },
+  { href: '/blog', label: 'Blog' },
   { href: '/company', label: 'Company' },
 ]
 
@@ -54,12 +51,12 @@ const navLinks = [
 const isLinkActive = (label: string, href: string, path: string) => {
   if (label === 'Industries') return path.startsWith('/industries')
   if (label === 'Services') return path.startsWith('/services')
+  if (label === 'Blog') return path.startsWith('/blog')
   if (label === 'Company')
     return (
       path.startsWith('/about') ||
       path.startsWith('/contact') ||
       path.startsWith('/team') ||
-      path.startsWith('/blog') ||
       path.startsWith('/faq')
     )
   return path === href
@@ -69,6 +66,19 @@ const Navbar = () => {
   const pathName = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [isContactOpen, setIsContactOpen] = useState(false);
+  const [servicesList, setServicesList] = useState(defaultNavServices);
+
+  useEffect(() => {
+    let isMounted = true;
+    fetchServices().then((items) => {
+      if (isMounted && items && items.length > 0) {
+        setServicesList(items.map((s) => ({ label: s.title, href: s.href })));
+      }
+    }).catch((err) => {
+      console.warn('Failed to load dynamic services in Navbar:', err);
+    });
+    return () => { isMounted = false; };
+  }, []);
 
 
   useEffect(() => {
@@ -182,7 +192,7 @@ const Navbar = () => {
                   let dropdownItems: any[] = []
 
                   if (label === 'Industries') dropdownItems = industries
-                  if (label === 'Services') dropdownItems = services
+                  if (label === 'Services') dropdownItems = servicesList
                   if (label === 'Company') dropdownItems = companyLinks
 
                   return (

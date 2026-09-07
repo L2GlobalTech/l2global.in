@@ -7,15 +7,21 @@ import ServiceKPISection from '@/components/web/services/ServiceKPISection'
 import ServiceProcessSteps from '@/components/web/services/ServiceProcessSteps'
 import ServiceServedIndustries from '@/components/web/services/ServiceServedIndustries'
 import ServiceWhyChooseUs from '@/components/web/services/ServiceWhyChooseUs'
-import React from 'react'
-import { Server, Cloud, GitMerge, BarChart3, Shield, Zap, } from "lucide-react";
+import React, { useState, useEffect } from 'react'
+import { Server, Cloud, GitMerge, BarChart3, Shield, Zap } from "lucide-react";
 import awsImg from '../../public/assets/web/Service-detail/aws-service-img.png'
 import awsAbout from '../../public/assets/web/Service-detail/AWS-About.png'
 import ServiceRegions from '@/components/web/services/ServiceRegions'
 import ServiceFAQ from '@/components/web/services/ServiceFAQ'
+import { ServiceRecord } from '@/types/cms'
+import { getPublicServiceBySlug } from '@/app/(asgard)/asgard/services/action'
+import { getMediaPublicUrl } from '@/actions/mediaAction'
 
+interface AwsContainerProps {
+    initialData?: ServiceRecord | null
+}
 
-const stats = [
+const defaultStats = [
     {
         icon: (
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
@@ -65,7 +71,7 @@ const stats = [
     },
 ];
 
-const features = [
+const defaultFeatures = [
     "End-to-end cloud migration, modernization, and deployment",
     "Integration with SaaS applications, enterprise systems, and on-premises workloads",
     "Serverless architectures, EC2, Lambda, and container solutions",
@@ -73,8 +79,7 @@ const features = [
     "Scalable solutions with AWS cloud-native services and automation",
 ];
 
-
-const services = [
+const defaultServices = [
     {
         icon: Cloud,
         title: "Cloud Migration & Modernization",
@@ -125,34 +130,94 @@ const services = [
     },
 ];
 
-const awsFaqs = [
+const defaultFaqs = [
     { q: 'Where can I find AWS cloud services in the UK?', a: 'L2 Global has AWS certified cloud consultants serving London, Manchester and all UK regions. Free AWS assessment available.' },
     { q: 'Do you offer AWS migration services in Dubai?', a: 'Yes, we provide AWS cloud migration, DevOps and architecture services across Dubai and GCC. We have 99.9% success rate on migration projects.' },
     { q: 'What are your AWS service charges in the USA?', a: 'Pricing varies by project scope. A typical enterprise AWS migration ranges from $25,000–$200,000. Request free consultation at l2global.in/contact-us.' },
     { q: 'What is the typical timeline for an AWS migration?', a: 'Medium-sized migrations take 2–4 months. Large transformations: 6–12 months. Our team ensures 35%+ faster deployment through automation.' },
     { q: 'Do you provide 24/7 AWS support?', a: 'Yes. L2 Global provides 24/7 monitoring and managed cloud services for AWS environments in USA, UK, Canada, Australia, Asia and Gulf.' },
     { q: 'Can you help with AWS cost optimization?', a: 'Yes. Our AWS FinOps specialists identify savings up to 30% through rightsizing, reserved instances and automation. Free AWS cost assessment available.' },
-]
+];
 
+const AwsContainer: React.FC<AwsContainerProps> = ({ initialData }) => {
+    const [serviceData, setServiceData] = useState<ServiceRecord | null>(initialData || null)
 
-const AwsContainer = () => {
+    useEffect(() => {
+        let isMounted = true
+        getPublicServiceBySlug('cloud-devops-consulting').then((data) => {
+            if (isMounted && data) {
+                setServiceData(data)
+            }
+        }).catch(console.error)
+        return () => { isMounted = false }
+    }, [])
+
+    const mappedServices = serviceData?.capabilities && serviceData.capabilities.length > 0
+        ? serviceData.capabilities.map((cap: any, index: number) => {
+            const defaultItem = defaultServices[index % defaultServices.length]
+            return {
+                icon: defaultItem.icon,
+                title: cap.title || defaultItem.title,
+                description: cap.description || defaultItem.description,
+                iconBg: defaultItem.iconBg,
+                gradientBar: defaultItem.gradientBar,
+            }
+        })
+        : defaultServices
+
+    const mappedStats = serviceData?.results_stats && serviceData.results_stats.length > 0
+        ? serviceData.results_stats.map((stat: any, index: number) => {
+            const defaultStat = defaultStats[index % defaultStats.length]
+            return {
+                icon: defaultStat.icon,
+                number: stat.value || defaultStat.number,
+                title: stat.label || defaultStat.title,
+                subtitle: defaultStat.subtitle,
+                gradient: defaultStat.gradient,
+            }
+        })
+        : defaultStats
+
+    const mappedFaqs = serviceData?.faqs && serviceData.faqs.length > 0
+        ? serviceData.faqs.map((f: any) => ({
+            q: f.question || f.q,
+            a: f.answer || f.a,
+        }))
+        : defaultFaqs
+
+    const features = serviceData?.about_features && serviceData.about_features.length > 0
+        ? serviceData.about_features
+        : defaultFeatures
+
+    const heroImg = (serviceData?.hero_image_id ? getMediaPublicUrl(serviceData.hero_image_id, 'services') : null) || awsImg
+    const aboutImg = (serviceData?.about_image_id ? getMediaPublicUrl(serviceData.about_image_id, 'services') : null) || awsAbout
+
     return (
         <div>
             <ServiceHeroSection
-                image={awsImg}
-                sectionTitle={'Cloud Transformation'}
-                titleBefore={'Scalable & Secure'}
-                titleAfter={'Services'}
-                linearText={'AWS Cloud'}
-                description={'Certified AWS cloud consultants serving UK (London, Manchester), USA (New York, Texas) and Gulf (Dubai, Abu Dhabi, Riyadh). Cloud migration, DevOps, architecture design and managed cloud services. Free cloud assessment.'}
-                tag1={'ISO Certified'} tag2={'Enterprise Grade'} tag3={'24/7 Support'} />
+                image={heroImg}
+                sectionTitle={serviceData?.badge_text || 'Cloud Transformation'}
+                titleBefore={serviceData?.hero_title || 'Scalable & Secure'}
+                titleAfter={serviceData?.hero_logo_text || 'Services'}
+                linearText={serviceData?.hero_highlight || 'AWS Cloud'}
+                description={serviceData?.hero_description || 'Certified AWS cloud consultants serving UK (London, Manchester), USA (New York, Texas) and Gulf (Dubai, Abu Dhabi, Riyadh). Cloud migration, DevOps, architecture design and managed cloud services. Free cloud assessment.'}
+                tag1={serviceData?.hero_badges?.[0] || 'ISO Certified'}
+                tag2={serviceData?.hero_badges?.[1] || 'Enterprise Grade'}
+                tag3={serviceData?.hero_badges?.[2] || '24/7 Support'}
+            />
 
-            <ServiceKPISection stats={stats} />
+            <ServiceKPISection stats={mappedStats} />
 
-            <ServiceAboutSection image={awsAbout} titleBefore={'Why'} titleAfter={'Services Matter'} linearText={'AWS Cloud'}
-                description={'AWS provides the foundation for modern, scalable enterprises—enabling secure, flexible, and cost-efficient cloud infrastructure. Our certified AWS experts leverage deep industry knowledge and best-practice frameworks to help you accelerate cloud adoption, optimize performance, and drive digital transformation.'} features={features} />
+            <ServiceAboutSection
+                image={aboutImg}
+                titleBefore={serviceData?.about_title || 'Why'}
+                titleAfter={serviceData?.about_logo_text || 'Services Matter'}
+                linearText={serviceData?.about_highlight || 'AWS Cloud'}
+                description={serviceData?.about_description || 'AWS provides the foundation for modern, scalable enterprises—enabling secure, flexible, and cost-efficient cloud infrastructure. Our certified AWS experts leverage deep industry knowledge and best-practice frameworks to help you accelerate cloud adoption, optimize performance, and drive digital transformation.'}
+                features={features}
+            />
 
-            <ServiceExpertiseSection services={services} />
+            <ServiceExpertiseSection services={mappedServices} />
 
             <ServiceProcessSteps />
 
@@ -162,19 +227,18 @@ const AwsContainer = () => {
 
             <ServiceRegions serviceName='AWS Cloud Services' />
 
-            <ServiceFAQ faqs={awsFaqs} serviceName='AWS Cloud Services' />
+            <ServiceFAQ faqs={mappedFaqs} serviceName='AWS Cloud Services' />
 
-            <div className=' pt-2 md:pt-8 lg:pt-12'>
+            <div className='pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA
                     tag="Let's Grow Together"
-                    heading="Ready to Move to the Cloud?"
+                    heading={serviceData?.cta_text || "Ready to Move to the Cloud?"}
                     description="Partner with L2 Global for AWS migration, architecture and DevOps that keeps your infrastructure secure, scalable and cost-efficient."
                     primaryBtnText="Book an AWS Consultation"
-                    primaryBtnLink="/contact-us"
+                    primaryBtnLink={serviceData?.cta_url || "/contact-us"}
                     secondaryBtnText="View Services"
                     secondaryBtnLink="/services"
                 />
-
             </div>
         </div>
     )

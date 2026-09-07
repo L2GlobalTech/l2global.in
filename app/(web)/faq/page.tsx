@@ -9,10 +9,9 @@ export const metadata: Metadata = {
 
 const FaqPage = () => {
     return (
-
         <FaqContainer />
-
     )
 }
 
 export default FaqPage
+

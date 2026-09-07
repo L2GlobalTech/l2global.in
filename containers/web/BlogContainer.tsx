@@ -1,16 +1,16 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
-import { 
-    Calendar, 
-    ArrowRight, 
-    Search, 
-    Clock, 
-    Tag, 
-    BookOpen, 
-    Sparkles, 
-    Mail, 
+import {
+    Calendar,
+    ArrowRight,
+    Search,
+    Clock,
+    Tag,
+    BookOpen,
+    Sparkles,
+    Mail,
     Filter,
     X,
     Cpu,
@@ -20,20 +20,26 @@ import {
     Layers,
     LayoutGrid,
     List,
-    ChevronRight
+    ChevronRight,
+    Loader2
 } from 'lucide-react';
-import { blogPosts } from '@/constants/blogData';
+import { BlogPost } from '@/types';
+import { getPublicBlogs } from '@/app/(asgard)/asgard/blogs/action';
 
 // Helper to calculate read time
 const calculateReadTime = (content: string) => {
+    if (!content) return '1 min read';
     const words = content.replace(/<[^>]*>/g, '').trim().split(/\s+/).length;
-    const minutes = Math.ceil(words / 200);
+    const minutes = Math.max(1, Math.ceil(words / 200));
     return `${minutes} min read`;
 };
 
 // Custom Tech Category Icon Mapper (Replaces cringe stock photos with sleek tech iconography)
-const getCategoryIcon = (category: string, slug: string) => {
-    if (slug.includes('salesforce') || slug.includes('crm')) {
+const getCategoryIcon = (category?: string, slug?: string) => {
+    const cat = (category || '').toLowerCase();
+    const slg = (slug || '').toLowerCase();
+
+    if (slg.includes('salesforce') || slg.includes('crm') || cat.includes('salesforce') || cat.includes('crm')) {
         return {
             icon: Workflow,
             gradient: 'from-[#074FDA]/10 to-[#3B82F6]/10',
@@ -42,7 +48,7 @@ const getCategoryIcon = (category: string, slug: string) => {
             border: 'border-l-4 border-l-[#074FDA]'
         };
     }
-    if (slug.includes('mulesoft') || slug.includes('boomi') || category.includes('Integration')) {
+    if (slg.includes('mulesoft') || slg.includes('boomi') || cat.includes('integration')) {
         return {
             icon: Cpu,
             gradient: 'from-[#F15A23]/10 to-[#FF7E50]/10',
@@ -51,7 +57,7 @@ const getCategoryIcon = (category: string, slug: string) => {
             border: 'border-l-4 border-l-[#F15A23]'
         };
     }
-    if (slug.includes('aws') || slug.includes('cloud')) {
+    if (slg.includes('aws') || slg.includes('cloud') || cat.includes('cloud') || cat.includes('devops')) {
         return {
             icon: Cloud,
             gradient: 'from-sky-500/10 to-indigo-500/10',
@@ -60,7 +66,7 @@ const getCategoryIcon = (category: string, slug: string) => {
             border: 'border-l-4 border-l-sky-500'
         };
     }
-    if (slug.includes('oracle') || slug.includes('database')) {
+    if (slg.includes('oracle') || slg.includes('database') || cat.includes('database') || cat.includes('oracle')) {
         return {
             icon: Database,
             gradient: 'from-amber-500/10 to-red-500/10',
@@ -78,7 +84,13 @@ const getCategoryIcon = (category: string, slug: string) => {
     };
 };
 
-const BlogContainer = () => {
+interface BlogContainerProps {
+    initialBlogs?: BlogPost[];
+}
+
+const BlogContainer: React.FC<BlogContainerProps> = ({ initialBlogs }) => {
+    const [blogs, setBlogs] = useState<BlogPost[]>(initialBlogs || []);
+    const [loading, setLoading] = useState<boolean>(!initialBlogs || initialBlogs.length === 0);
     const [searchQuery, setSearchQuery] = useState('');
     const [activeCategory, setActiveCategory] = useState('All');
     const [selectedTag, setSelectedTag] = useState<string | null>(null);
@@ -86,42 +98,62 @@ const BlogContainer = () => {
     const [email, setEmail] = useState('');
     const [isSubscribed, setIsSubscribed] = useState(false);
 
-    // Extract categories & tags
-    const categories = useMemo(() => {
-        const cats = Array.from(new Set(blogPosts.map(p => p.category)));
-        return ['All', ...cats];
+    // Fetch latest blogs on client mount
+    useEffect(() => {
+        let isMounted = true;
+        getPublicBlogs().then((data) => {
+            if (isMounted) {
+                setBlogs(data || []);
+                setLoading(false);
+            }
+        }).catch((err) => {
+            console.error('Failed to load blogs from Supabase:', err);
+            if (isMounted) setLoading(false);
+        });
+        return () => { isMounted = false; };
     }, []);
+
+    // Extract categories & tags dynamically from blogs
+    const categories = useMemo(() => {
+        const cats = Array.from(new Set(blogs.map(p => p.category).filter(Boolean)));
+        return ['All', ...cats];
+    }, [blogs]);
 
     const allTags = useMemo(() => {
         const tagsSet = new Set<string>();
-        blogPosts.forEach(p => p.tags.forEach(t => tagsSet.add(t)));
+        blogs.forEach(p => (p.tags || []).forEach(t => {
+            if (t && typeof t === 'string' && t.trim()) {
+                tagsSet.add(t.trim());
+            }
+        }));
         return Array.from(tagsSet);
-    }, []);
+    }, [blogs]);
 
     // Filter posts
     const filteredPosts = useMemo(() => {
-        return blogPosts.filter(post => {
+        return blogs.filter(post => {
             const matchesCategory = activeCategory === 'All' || post.category === activeCategory;
-            const matchesTag = !selectedTag || post.tags.includes(selectedTag);
+            const matchesTag = !selectedTag || (post.tags && post.tags.includes(selectedTag));
             const query = searchQuery.toLowerCase().trim();
-            const matchesQuery = !query || 
-                post.title.toLowerCase().includes(query) ||
-                post.excerpt.toLowerCase().includes(query) ||
-                post.tags.some(t => t.toLowerCase().includes(query));
-            
+            const matchesQuery = !query ||
+                (post.title && post.title.toLowerCase().includes(query)) ||
+                (post.excerpt && post.excerpt.toLowerCase().includes(query)) ||
+                (post.tags && post.tags.some(t => t.toLowerCase().includes(query)));
+
             return matchesCategory && matchesTag && matchesQuery;
         });
-    }, [searchQuery, activeCategory, selectedTag]);
+    }, [blogs, searchQuery, activeCategory, selectedTag]);
 
     // Top featured article
     const featuredPost = useMemo(() => {
         if (filteredPosts.length === 0) return null;
-        return filteredPosts[0];
+        const explicitFeatured = filteredPosts.find(p => p.is_featured);
+        return explicitFeatured || filteredPosts[0];
     }, [filteredPosts]);
 
     const remainingPosts = useMemo(() => {
         if (!featuredPost) return [];
-        return filteredPosts.slice(1);
+        return filteredPosts.filter(p => p.id !== featuredPost.id);
     }, [filteredPosts, featuredPost]);
 
     const handleSubscribe = (e: React.FormEvent) => {
@@ -135,11 +167,11 @@ const BlogContainer = () => {
 
     return (
         <div className="bg-[#fcfcfd] min-h-screen text-slate-900 font-sans selection:bg-[#074FDA] selection:text-white">
-            
+
             {/* EDITORIAL PUBLICATION HEADER */}
             <header className="bg-white border-b border-slate-200/80 pt-32 pb-14 md:pt-40 md:pb-16">
                 <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
-                    
+
                     {/* Masthead Label */}
                     <div className="flex items-center justify-between border-b border-slate-100 pb-4 mb-8">
                         <div className="flex items-center gap-2 text-xs font-mono font-bold tracking-widest text-slate-500 uppercase">
@@ -178,7 +210,7 @@ const BlogContainer = () => {
                                         className="w-full py-2.5 px-3 bg-transparent text-slate-900 placeholder-slate-400 text-sm focus:outline-none font-medium"
                                     />
                                     {searchQuery && (
-                                        <button 
+                                        <button
                                             onClick={() => setSearchQuery('')}
                                             className="p-1 mr-1 text-slate-400 hover:text-slate-600 rounded-md hover:bg-slate-200/50"
                                             aria-label="Clear search"
@@ -198,7 +230,7 @@ const BlogContainer = () => {
             <div className="sticky top-20 z-30 bg-white/90 backdrop-blur-md border-b border-slate-200/80 shadow-xs">
                 <div className="container mx-auto px-4 lg:px-8 max-w-6xl">
                     <div className="flex items-center justify-between gap-4 py-3">
-                        
+
                         {/* Topic Tabs */}
                         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
                             <span className="hidden sm:inline text-xs font-mono text-slate-400 uppercase tracking-wider mr-2">Topics:</span>
@@ -208,11 +240,10 @@ const BlogContainer = () => {
                                     <button
                                         key={cat}
                                         onClick={() => { setActiveCategory(cat); setSelectedTag(null); }}
-                                        className={`px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${
-                                            isActive
-                                                ? 'bg-[#074FDA] text-white shadow-xs'
-                                                : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900'
-                                        }`}
+                                        className={`px-3.5 py-1.5 rounded-lg text-xs font-bold whitespace-nowrap transition-colors ${isActive
+                                            ? 'bg-[#074FDA] text-white shadow-xs'
+                                            : 'bg-slate-100 text-slate-600 hover:bg-slate-200/80 hover:text-slate-900'
+                                            }`}
                                     >
                                         {cat}
                                     </button>
@@ -224,18 +255,16 @@ const BlogContainer = () => {
                         <div className="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-lg border border-slate-200/60">
                             <button
                                 onClick={() => setViewMode('grid')}
-                                className={`p-1.5 rounded-md transition-colors ${
-                                    viewMode === 'grid' ? 'bg-white text-[#074FDA] shadow-xs' : 'text-slate-400 hover:text-slate-600'
-                                }`}
+                                className={`p-1.5 rounded-md transition-colors ${viewMode === 'grid' ? 'bg-white text-[#074FDA] shadow-xs' : 'text-slate-400 hover:text-slate-600'
+                                    }`}
                                 title="Grid View"
                             >
                                 <LayoutGrid className="w-4 h-4" />
                             </button>
                             <button
                                 onClick={() => setViewMode('list')}
-                                className={`p-1.5 rounded-md transition-colors ${
-                                    viewMode === 'list' ? 'bg-white text-[#074FDA] shadow-xs' : 'text-slate-400 hover:text-slate-600'
-                                }`}
+                                className={`p-1.5 rounded-md transition-colors ${viewMode === 'list' ? 'bg-white text-[#074FDA] shadow-xs' : 'text-slate-400 hover:text-slate-600'
+                                    }`}
                                 title="List View"
                             >
                                 <List className="w-4 h-4" />
@@ -248,7 +277,7 @@ const BlogContainer = () => {
 
             {/* MAIN CONTENT AREA */}
             <main className="container mx-auto px-4 lg:px-8 py-10 max-w-6xl">
-                
+
                 {/* Active Filter Bar if searching or filtering */}
                 {(searchQuery || activeCategory !== 'All' || selectedTag) && (
                     <div className="mb-8 flex items-center justify-between bg-slate-100/80 p-3.5 rounded-xl border border-slate-200 text-xs sm:text-sm font-medium">
@@ -268,33 +297,46 @@ const BlogContainer = () => {
                     </div>
                 )}
 
-                {/* NO RESULTS STATE */}
-                {filteredPosts.length === 0 && (
+                {/* LOADING / NO RESULTS STATE */}
+                {loading && blogs.length === 0 ? (
+                    <div className="text-center py-20 bg-white rounded-2xl border border-slate-200 max-w-md mx-auto p-8 shadow-xs">
+                        <Loader2 className="w-8 h-8 text-[#074FDA] animate-spin mx-auto mb-3" />
+                        <h3 className="text-base font-bold text-slate-900 mb-1">Loading Publications</h3>
+                        <p className="text-slate-500 text-xs">
+                            Fetching the latest insights and architecture blueprints...
+                        </p>
+                    </div>
+                ) : filteredPosts.length === 0 ? (
                     <div className="text-center py-20 bg-white rounded-2xl border border-slate-200 max-w-md mx-auto p-8 shadow-xs">
                         <div className="w-12 h-12 bg-slate-100 text-slate-400 rounded-xl flex items-center justify-center mx-auto mb-4">
                             <Search className="w-6 h-6" />
                         </div>
-                        <h3 className="text-base font-bold text-slate-900 mb-2">No matching publications</h3>
+                        <h3 className="text-base font-bold text-slate-900 mb-2">
+                            {searchQuery || activeCategory !== 'All' || selectedTag ? 'No matching publications' : 'No publications yet'}
+                        </h3>
                         <p className="text-slate-500 text-xs mb-6 leading-relaxed">
-                            No articles found matching your specified topic or query. Please check your keywords or reset filters.
+                            {searchQuery || activeCategory !== 'All' || selectedTag
+                                ? 'No articles found matching your specified topic or query. Please check your keywords or reset filters.'
+                                : 'Check back soon for new articles and architecture guides.'}
                         </p>
-                        <button
-                            onClick={() => { setSearchQuery(''); setActiveCategory('All'); setSelectedTag(null); }}
-                            className="px-4 py-2 rounded-lg bg-[#074FDA] text-white text-xs font-bold hover:bg-[#053aa4] transition-colors"
-                        >
-                            View All Publications
-                        </button>
+                        {(searchQuery || activeCategory !== 'All' || selectedTag) && (
+                            <button
+                                onClick={() => { setSearchQuery(''); setActiveCategory('All'); setSelectedTag(null); }}
+                                className="px-4 py-2 rounded-lg bg-[#074FDA] text-white text-xs font-bold hover:bg-[#053aa4] transition-colors"
+                            >
+                                View All Publications
+                            </button>
+                        )}
                     </div>
-                )}
+                ) : null}
 
                 {/* SPOTLIGHT FEATURED PUBLICATION */}
                 {featuredPost && (
                     <section className="mb-12">
-                        <article className={`bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:border-slate-300 transition-all ${
-                            getCategoryIcon(featuredPost.category, featuredPost.slug).border
-                        }`}>
+                        <article className={`bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-xs hover:border-slate-300 transition-all ${getCategoryIcon(featuredPost.category, featuredPost.slug).border
+                            }`}>
                             <div className="grid grid-cols-1 lg:grid-cols-12 gap-0">
-                                
+
                                 {/* Left Side: Tech Graphic & Header Banner */}
                                 <div className={`lg:col-span-5 bg-gradient-to-br ${getCategoryIcon(featuredPost.category, featuredPost.slug).gradient} p-8 sm:p-10 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-slate-200/60`}>
                                     <div>
@@ -366,7 +408,7 @@ const BlogContainer = () => {
                                             ))}
                                         </div>
 
-                                        <Link 
+                                        <Link
                                             href={`/blog/${featuredPost.slug}`}
                                             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-lg bg-[#074FDA] text-white font-bold text-xs hover:bg-[#053aa4] transition-colors shadow-xs"
                                         >
@@ -383,7 +425,7 @@ const BlogContainer = () => {
 
                 {/* MAIN CONTENT GRID & SIDEBAR LAYOUT */}
                 <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-                    
+
                     {/* Left: Articles Stream (8 cols) */}
                     <div className="lg:col-span-8">
                         <div className="flex items-center justify-between mb-6 pb-2 border-b border-slate-200">
@@ -401,8 +443,8 @@ const BlogContainer = () => {
                                     const CategoryIcon = styleInfo.icon;
 
                                     return (
-                                        <article 
-                                            key={post.id} 
+                                        <article
+                                            key={post.id}
                                             className={`bg-white rounded-xl border border-slate-200 p-6 flex flex-col justify-between hover:border-slate-300 hover:shadow-xs transition-all ${styleInfo.border}`}
                                         >
                                             <div>
@@ -445,7 +487,7 @@ const BlogContainer = () => {
                                                     ))}
                                                 </div>
 
-                                                <Link 
+                                                <Link
                                                     href={`/blog/${post.slug}`}
                                                     className="inline-flex items-center gap-1 text-xs font-bold text-[#074FDA] hover:text-[#053aa4] transition-colors"
                                                 >
@@ -465,8 +507,8 @@ const BlogContainer = () => {
                                     const CategoryIcon = styleInfo.icon;
 
                                     return (
-                                        <article 
-                                            key={post.id} 
+                                        <article
+                                            key={post.id}
                                             className={`bg-white rounded-xl border border-slate-200 p-5 hover:border-slate-300 hover:shadow-xs transition-all ${styleInfo.border}`}
                                         >
                                             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
@@ -495,7 +537,7 @@ const BlogContainer = () => {
                                                     </div>
                                                 </div>
 
-                                                <Link 
+                                                <Link
                                                     href={`/blog/${post.slug}`}
                                                     className="inline-flex items-center gap-1 text-xs font-bold text-[#074FDA] hover:text-[#053aa4] flex-shrink-0 self-end sm:self-center"
                                                 >
@@ -512,7 +554,7 @@ const BlogContainer = () => {
 
                     {/* Right Sidebar (4 cols) */}
                     <aside className="lg:col-span-4 space-y-6">
-                        
+
                         {/* Popular Tags Box */}
                         <div className="bg-white rounded-xl border border-slate-200 p-5 shadow-xs">
                             <h4 className="text-xs font-mono uppercase tracking-wider font-bold text-slate-500 mb-4 flex items-center gap-1.5">
@@ -525,11 +567,10 @@ const BlogContainer = () => {
                                         <button
                                             key={tag}
                                             onClick={() => setSelectedTag(isSelected ? null : tag)}
-                                            className={`px-2.5 py-1 rounded text-xs font-mono transition-colors ${
-                                                isSelected
-                                                    ? 'bg-[#074FDA] text-white font-bold'
-                                                    : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
-                                            }`}
+                                            className={`px-2.5 py-1 rounded text-xs font-mono transition-colors ${isSelected
+                                                ? 'bg-[#074FDA] text-white font-bold'
+                                                : 'bg-slate-100 hover:bg-slate-200 text-slate-700'
+                                                }`}
                                         >
                                             #{tag}
                                         </button>
@@ -574,7 +615,7 @@ const BlogContainer = () => {
                             <p className="text-xs text-slate-600 leading-relaxed mb-4">
                                 Talk directly with our senior integration leaders in London or Dubai.
                             </p>
-                            <Link 
+                            <Link
                                 href="/contact-us"
                                 className="inline-flex items-center gap-1.5 text-xs font-bold text-[#074FDA] hover:text-[#053aa4]"
                             >

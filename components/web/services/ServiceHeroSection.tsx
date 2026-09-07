@@ -13,11 +13,12 @@ interface IProps {
     tag1: string;
     tag2: string;
     tag3: string;
-    image: StaticImageData;
+    image: StaticImageData | string;
 }
 
 const ServiceHeroSection: React.FC<IProps> = ({ description, sectionTitle, tag1, tag2, tag3, titleAfter, titleBefore, linearText, image
 }) => {
+    const imgSrc = typeof image === 'string' ? image : image?.src || '';
     return (
         <div className={styles.backgroundMesh}>
             <div className='md:pt-48 pt-32 container mx-auto px-5 md:px-0'>
@@ -152,7 +153,7 @@ const ServiceHeroSection: React.FC<IProps> = ({ description, sectionTitle, tag1,
                         data-aos-delay="300"
                         data-aos-duration="1000"
                     >
-                        <img src={image.src} alt='sap-service' />
+                        {imgSrc && <img src={imgSrc} alt={linearText || 'service-hero'} />}
                     </div>
 
                 </div>

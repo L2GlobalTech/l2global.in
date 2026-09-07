@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Search, 
@@ -25,14 +25,19 @@ import {
     BookOpen
 } from 'lucide-react';
 import Link from 'next/link';
+import { getPublicFaqs, type FAQRecord } from '@/app/(asgard)/asgard/faqs/action';
 
 interface FaqItem {
-    id: number;
+    id: string | number;
     categoryId: string;
     categoryName: string;
     question: string;
     answer: string;
     popularTag?: string;
+}
+
+interface FaqContainerProps {
+    initialFaqs?: FAQRecord[];
 }
 
 const categoryMeta: Record<string, { title: string; icon: any; color: string; bg: string; desc: string }> = {
@@ -81,7 +86,7 @@ const faqCategories = [
     { id: 'security', name: 'Security & 24/7 Support', count: 3 },
 ];
 
-const popularSearches = [
+const defaultPopularSearches = [
     'Salesforce SAP',
     'MuleSoft vs Boomi',
     'Implementation Cost',
@@ -90,7 +95,7 @@ const popularSearches = [
     'AWS Migration'
 ];
 
-const faqs: FaqItem[] = [
+const defaultFaqs: FaqItem[] = [
     {
         id: 1,
         categoryId: 'general',
@@ -119,49 +124,49 @@ const faqs: FaqItem[] = [
         id: 4,
         categoryId: 'services',
         categoryName: 'Integration & Engineering',
-        question: "Do you offer custom Salesforce Lightning and SAP ERP integrations?",
-        answer: "Yes. We specialize in deep bidirectional synchronization between Salesforce CRM (Sales Cloud, Service Cloud, Industries) and SAP ERP (S/4HANA & ECC). We build automated workflows for Quote-to-Cash (Q2C), real-time inventory visibility, customer 360 virtual views via OData, and automated order processing.",
+        question: "How do you handle bidirectional data sync between Salesforce and SAP ERP?",
+        answer: "We implement API-led connectivity utilizing MuleSoft Anypoint Platform or Boomi. We architect Experience, Process, and System API tiers that enforce data validation, conflict resolution, message queuing (via Apache Kafka or AWS SQS), and idempotent transactional writes, preventing ERP system locks and ensuring real-time consistency.",
         popularTag: 'Salesforce SAP'
     },
     {
         id: 5,
         categoryId: 'services',
         categoryName: 'Integration & Engineering',
-        question: "Can you assist with iPaaS platform selection (MuleSoft vs Dell Boomi)?",
-        answer: "Absolutely. We conduct impartial technical audits to determine the right iPaaS architecture for your throughput, governance, and budget requirements. We implement API-led architectures on MuleSoft Anypoint Platform as well as rapid low-code integrations using Dell Boomi.",
+        question: "Which iPaaS platform should we choose: MuleSoft, Boomi, or AWS EventBridge?",
+        answer: "MuleSoft is ideal for complex, large-scale enterprise environments requiring full lifecycle API management and strict governance. Boomi is optimal for rapid, cost-effective hybrid integrations with low-code connectors. AWS EventBridge is best suited for event-driven serverless architectures natively built on AWS. We evaluate your transaction volumes and legacy constraints during discovery to recommend the right fit.",
         popularTag: 'MuleSoft vs Boomi'
     },
     {
         id: 6,
         categoryId: 'services',
         categoryName: 'Integration & Engineering',
-        question: "What AWS cloud architectural services do you provide?",
-        answer: "Our AWS Cloud practice offers full-lifecycle services: cloud migration checklists, multi-account Control Tower setup, microservices containerization (ECS/EKS), serverless APIs, cost optimization audits, and low-latency infrastructure deployment in the AWS London and UAE regions.",
+        question: "Can you modernize our legacy on-premise systems to AWS without downtime?",
+        answer: "Yes. We use the Strangler Fig migration pattern combined with phased API wrappers. This allows us to migrate monolithic datasets and legacy logic into containerized AWS microservices (EKS / ECS / Lambda) step-by-step with zero operational downtime to your primary business workflows.",
         popularTag: 'AWS Migration'
     },
     {
         id: 7,
         categoryId: 'pricing',
         categoryName: 'Pricing & Engagement',
-        question: "How do you structure project pricing and engagement models?",
-        answer: "We offer three transparent engagement models tailored to client procurement requirements: 1) Fixed-Price Deliverables for well-scoped milestones; 2) Time & Materials (T&M) for agile product development; and 3) Dedicated Engineering Teams / Retainers for long-term strategic support.",
-        popularTag: 'Implementation Cost'
+        question: "What pricing models does L2 Global Tech offer?",
+        answer: "We offer flexible engagement models tailored to client needs: (1) Fixed-Price Milestone Contracts for well-defined transformation projects; (2) Time & Materials (T&M) for agile product engineering; and (3) Dedicated Monthly Managed Retainers for continuous 24/7 architectural oversight and SLA support.",
+        popularTag: 'Pricing Model'
     },
     {
         id: 8,
         categoryId: 'pricing',
         categoryName: 'Pricing & Engagement',
-        question: "What are the typical consulting rates for UK and Gulf projects?",
-        answer: "Our rates are highly competitive compared to Tier-1 global consultancies while offering senior enterprise architect leadership. We provide clear upfront scoping docs with zero hidden fees. Detailed cost breakdowns are provided during initial discovery calls.",
-        popularTag: 'Pricing'
+        question: "How do you structure implementation costs for enterprise projects?",
+        answer: "Our project scoping begins with a deep-dive Architecture Discovery Sprint. We establish fixed milestone-based billing against clear deliverables (Design Sign-off, Core Build, Integration Testing, User Acceptance Testing, and Go-Live Cutover), eliminating hidden costs or scope creep.",
+        popularTag: 'Implementation Cost'
     },
     {
         id: 9,
         categoryId: 'pricing',
         categoryName: 'Pricing & Engagement',
-        question: "Are there ongoing support or post-launch maintenance packages?",
-        answer: "Yes. We offer tiered Managed Services packages (Bronze, Silver, Gold, Enterprise SLA) covering proactive monitoring, security patching, API health checks, version upgrades, and ongoing functional enhancements.",
-        popularTag: 'Retainers'
+        question: "Do you offer post-go-live managed support retainers?",
+        answer: "Yes. We offer tier-based Enterprise Managed Support Retainers that cover 24/7 proactive system monitoring, quarterly health checks, security patch management, performance tuning, and on-demand architectural change requests.",
+        popularTag: 'Managed Retainers'
     },
     {
         id: 10,
@@ -189,16 +194,78 @@ const faqs: FaqItem[] = [
     }
 ];
 
-const FaqContainer = () => {
+const FaqContainer = ({ initialFaqs }: FaqContainerProps) => {
+    const [faqRecords, setFaqRecords] = useState<FAQRecord[] | undefined>(initialFaqs);
+
+    useEffect(() => {
+        if (!initialFaqs || initialFaqs.length === 0) {
+            getPublicFaqs().then((res) => {
+                if (res && res.length > 0) {
+                    setFaqRecords(res);
+                }
+            }).catch(() => {});
+        } else {
+            setFaqRecords(initialFaqs);
+        }
+    }, [initialFaqs]);
+
+    // Map initialFaqs from Supabase backend or fallback to defaultFaqs
+    const faqsList: FaqItem[] = useMemo(() => {
+        const recordsToUse = faqRecords && faqRecords.length > 0 ? faqRecords : initialFaqs;
+        if (recordsToUse && recordsToUse.length > 0) {
+            return recordsToUse.map((record, index) => {
+                const rawCat = record.category?.trim() || 'General & Strategy';
+                const catLower = rawCat.toLowerCase();
+                let categoryId = 'general';
+
+                if (catLower.includes('service') || catLower.includes('integration') || catLower.includes('engineering') || catLower.includes('tech')) {
+                    categoryId = 'services';
+                } else if (catLower.includes('pricing') || catLower.includes('price') || catLower.includes('cost') || catLower.includes('engagement') || catLower.includes('billing')) {
+                    categoryId = 'pricing';
+                } else if (catLower.includes('security') || catLower.includes('support') || catLower.includes('sla') || catLower.includes('compliance')) {
+                    categoryId = 'security';
+                } else if (catLower.includes('general') || catLower.includes('strategy')) {
+                    categoryId = 'general';
+                } else {
+                    categoryId = catLower.replace(/[^a-z0-9]/g, '_') || 'general';
+                }
+
+                return {
+                    id: record.id || index + 1,
+                    categoryId,
+                    categoryName: rawCat,
+                    question: record.question || '',
+                    answer: record.answer || '',
+                    popularTag: record.tag?.trim() || undefined
+                };
+            });
+        }
+        return defaultFaqs;
+    }, [faqRecords, initialFaqs]);
+
+    // Compute dynamic popular searches from available FAQ tags
+    const popularSearches = useMemo(() => {
+        const tagSet = new Set<string>();
+        faqsList.forEach(item => {
+            if (item.popularTag) {
+                tagSet.add(item.popularTag);
+            }
+        });
+        if (tagSet.size > 0) {
+            return Array.from(tagSet).slice(0, 8);
+        }
+        return defaultPopularSearches;
+    }, [faqsList]);
+
     const [activeCategory, setActiveCategory] = useState('all');
     const [searchQuery, setSearchQuery] = useState('');
-    const [openFaqId, setOpenFaqId] = useState<number | null>(1);
-    const [helpfulVotes, setHelpfulVotes] = useState<Record<number, 'yes' | 'no'>>({});
-    const [copiedId, setCopiedId] = useState<number | null>(null);
+    const [openFaqId, setOpenFaqId] = useState<string | number | null>(() => faqsList[0]?.id ?? 1);
+    const [helpfulVotes, setHelpfulVotes] = useState<Record<string | number, 'yes' | 'no'>>({});
+    const [copiedId, setCopiedId] = useState<string | number | null>(null);
 
     // Filtered questions
     const filteredFaqs = useMemo(() => {
-        return faqs.filter(faq => {
+        return faqsList.filter(faq => {
             const query = searchQuery.toLowerCase().trim();
             const matchesQuery = !query || 
                 faq.question.toLowerCase().includes(query) ||
@@ -209,13 +276,13 @@ const FaqContainer = () => {
             
             return matchesQuery && matchesCategory;
         });
-    }, [searchQuery, activeCategory]);
+    }, [faqsList, searchQuery, activeCategory]);
 
-    const handleFeedback = (id: number, type: 'yes' | 'no') => {
+    const handleFeedback = (id: string | number, type: 'yes' | 'no') => {
         setHelpfulVotes(prev => ({ ...prev, [id]: type }));
     };
 
-    const handleCopyLink = (id: number, e: React.MouseEvent) => {
+    const handleCopyLink = (id: string | number, e: React.MouseEvent) => {
         e.stopPropagation();
         const url = `${window.location.origin}/faq#faq-${id}`;
         navigator.clipboard.writeText(url);
@@ -299,7 +366,7 @@ const FaqContainer = () => {
                         {Object.entries(categoryMeta).filter(([id]) => id !== 'all').map(([id, meta]) => {
                             const IconComponent = meta.icon;
                             const isActive = activeCategory === id && !searchQuery;
-                            const count = faqs.filter(f => f.categoryId === id).length;
+                            const count = faqsList.filter(f => f.categoryId === id).length;
 
                             return (
                                 <button
