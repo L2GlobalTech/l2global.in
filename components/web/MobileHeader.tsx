@@ -15,6 +15,8 @@ import GradientButton from "../shared/GradientButton"
 import ContactPopup from "../shared/ContactPopup"
 
 
+import { fetchServices } from "@/actions/servicesAction"
+
 const industries = [
     { label: "Education", href: "/industries/education" },
     { label: "Healthcare", href: "/industries/health-care" },
@@ -30,14 +32,10 @@ const companyLinks = [
     { label: "FAQ", href: "/faq" },
 ]
 
-const services = [
-    { label: 'Salesforce Consulting Services', href: '/services/salesforce-services' },
-    { label: 'SAP & Salesforce Integration', href: '/services/sap-link-by-salesforce' },
-    { label: 'MuleSoft Integration Services', href: '/services/mulesoft' },
-    { label: 'Oracle Managed Services', href: '/services/oracle-managed-services' },
-    { label: 'API Integration Services', href: '/services/api-integration' },
-    { label: 'AWS Cloud Migration & DevOps', href: '/services/aws-cloud-services' },
-    { label: 'Salesforce CRM Consulting', href: '/services/crm-consulting' },
+const defaultMobileServices = [
+    { label: 'Salesforce Consulting & Implementation', href: '/services/salesforce-services' },
+    { label: 'Oracle Consulting & Managed Services', href: '/services/oracle-managed-services' },
+    { label: 'Cloud & DevOps Consulting', href: '/services/aws-cloud-services' },
 ]
 
 type ViewType = "MENU" | "INDUSTRIES" | "COMPANY" | "SERVICES"
@@ -46,6 +44,19 @@ const MobileHeader = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [view, setView] = useState<ViewType>("MENU")
     const [isContactOpen, setIsContactOpen] = useState(false);
+    const [servicesList, setServicesList] = useState(defaultMobileServices)
+
+    useEffect(() => {
+        let isMounted = true;
+        fetchServices().then((items) => {
+            if (isMounted && items && items.length > 0) {
+                setServicesList(items.map((s) => ({ label: s.title, href: s.href })));
+            }
+        }).catch((err) => {
+            console.warn('Failed to load dynamic services in MobileHeader:', err);
+        });
+        return () => { isMounted = false; };
+    }, []);
 
     useEffect(() => {
         const handleScroll = () => setIsSidebarOpen(false)
@@ -179,6 +190,10 @@ const MobileHeader = () => {
                                 Career
                             </Link>
 
+                            <Link href="/blog" onClick={onNavigate} className={linkClass}>
+                                Blog
+                            </Link>
+
                             <Link href="/team" onClick={onNavigate} className={linkClass}>
                                 Team
                             </Link>
@@ -229,7 +244,7 @@ const MobileHeader = () => {
                         ))}
 
                     {view === "SERVICES" &&
-                        services.map(item => (
+                        servicesList.map(item => (
                             <Link
                                 key={item.href}
                                 href={item.href}

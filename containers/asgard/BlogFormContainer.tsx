@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Loader2, FileText, ChevronDown } from 'lucide-react';
+import { ArrowLeft, Save, Loader2, FileText, ChevronDown, Sparkles } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { AsgardLayout } from '@/components/asgard/AsgardLayout';
 import { LoadingState } from '@/components/asgard/LoadingState';
@@ -14,6 +14,7 @@ import {
   getBlogById,
   createBlog,
   updateBlog,
+  slugify,
   BlogRecord,
 } from '@/app/(asgard)/asgard/blogs/action';
 
@@ -33,6 +34,7 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
   // Controlled form state
   const [formData, setFormData] = useState<BlogRecord>({
     title: '',
+    slug: '',
     subtitle: '',
     tag: '',
     is_featured: false,
@@ -77,6 +79,7 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
         setFormData({
           title: blog.title || '',
+          slug: blog.slug || '',
           subtitle: blog.subtitle || '',
           tag: blog.tag || '',
           is_featured: Boolean(blog.is_featured),
@@ -105,10 +108,31 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => {
+      const updated = {
+        ...prev,
+        [name]: value,
+      };
+
+      // Auto-populate slug from title in create mode if slug is untouched
+      if (name === 'title' && !isEditMode) {
+        if (!prev.slug || prev.slug === slugify(prev.title || '')) {
+          updated.slug = slugify(value);
+        }
+      }
+
+      return updated;
+    });
+  };
+
+  const handleGenerateSlug = () => {
+    if (formData.title) {
+      setFormData((prev) => ({
+        ...prev,
+        slug: slugify(prev.title || ''),
+      }));
+      toast.success('Slug generated from title');
+    }
   };
 
   const handleFormSubmit = async (e: React.FormEvent) => {
@@ -137,6 +161,7 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
 
       const payloadData: BlogRecord = {
         title,
+        slug: formData.slug?.trim() || null,
         subtitle: formData.subtitle?.trim() || null,
         tag: formData.tag?.trim() || null,
         is_featured: Boolean(formData.is_featured),
@@ -243,6 +268,36 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
                   onChange={handleInputChange}
                   className={inputClass}
                 />
+              </div>
+
+              {/* URL Slug */}
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs sm:text-sm font-semibold text-slate-900">
+                    URL Slug <span className="text-xs font-normal text-slate-400">(Optional — auto-generated from title if left blank)</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={handleGenerateSlug}
+                    className="inline-flex items-center gap-1 text-[11px] font-medium text-indigo-600 hover:text-indigo-700 cursor-pointer"
+                  >
+                    <Sparkles className="w-3 h-3" />
+                    <span>Generate from Title</span>
+                  </button>
+                </div>
+                <div className="relative flex items-center">
+                  <span className="absolute left-3.5 text-xs text-slate-400 font-mono select-none">
+                    /blog/
+                  </span>
+                  <input
+                    name="slug"
+                    type="text"
+                    placeholder="e.g. the-future-of-cloud-integrations"
+                    value={formData.slug || ''}
+                    onChange={handleInputChange}
+                    className={`${inputClass} pl-16 font-mono text-xs`}
+                  />
+                </div>
               </div>
 
               {/* Subtitle */}

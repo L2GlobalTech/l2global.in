@@ -1,6 +1,7 @@
 import BlogContainer from '@/containers/web/BlogContainer'
 import { Metadata } from 'next'
 import React from 'react'
+import { getPublicBlogs } from '@/app/(asgard)/asgard/blogs/action'
 
 export const metadata: Metadata = {
     title: 'Blog & Insights',
@@ -14,9 +15,10 @@ export const metadata: Metadata = {
     },
 }
 
-const BlogPage = () => {
+const BlogPage = async () => {
+    const initialBlogs = await getPublicBlogs();
     return (
-        <BlogContainer />
+        <BlogContainer initialBlogs={initialBlogs} />
     )
 }
 

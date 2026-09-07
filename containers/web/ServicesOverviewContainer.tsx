@@ -1,96 +1,33 @@
 'use client'
+
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ArrowUpRight, Bot, Sparkles, Cloud, Workflow, Database, Server, Users, BarChart3, Code2, GitMerge, RefreshCw, Wrench, CheckCircle2 } from 'lucide-react'
+import { ArrowUpRight } from 'lucide-react'
 import HeroCTA from '@/components/web/HeroCTA'
+import { FrontendService } from '@/types'
+import { fetchServices, defaultServices, getServiceIcon } from '@/actions/servicesAction'
 
-const services = [
-    {
-        icon: Bot,
-        title: 'Salesforce Agentforce AI',
-        desc: 'Autonomous AI agents for sales and service, grounded in your Salesforce Data Cloud.',
-        href: '/services/agentforce-ai',
-    },
-    {
-        icon: Sparkles,
-        title: 'SAP Joule AI Implementation',
-        desc: 'Generative AI copilot embedded natively across S/4HANA, SuccessFactors and Ariba.',
-        href: '/services/sap-ai',
-    },
-    {
-        icon: RefreshCw,
-        title: 'SAP S/4HANA & RISE with SAP',
-        desc: 'ECC to S/4HANA migration and RISE with SAP cloud transition, managed end-to-end.',
-        href: '/services/sap',
-    },
-    {
-        icon: Users,
-        title: 'Salesforce Consulting Services',
-        desc: 'Salesforce implementation, customisation and managed support. 180+ deployments.',
-        href: '/services/salesforce-services',
-    },
-    {
-        icon: GitMerge,
-        title: 'SAP & Salesforce Integration',
-        desc: 'Real-time sync and process automation connecting SAP and Salesforce.',
-        href: '/services/sap-link-by-salesforce',
-    },
-    {
-        icon: Workflow,
-        title: 'MuleSoft Integration Services',
-        desc: 'Certified MuleSoft Anypoint Platform consultants. 250+ APIs delivered.',
-        href: '/services/mulesoft',
-    },
-    {
-        icon: Database,
-        title: 'API Integration Services',
-        desc: 'Enterprise API integration connecting Salesforce, SAP, Oracle, AWS and legacy systems.',
-        href: '/services/api-integration',
-    },
-    {
-        icon: Cloud,
-        title: 'AWS Cloud Migration & DevOps',
-        desc: 'Cloud migration, DevOps, architecture design and managed cloud services.',
-        href: '/services/aws-cloud-services',
-    },
-    {
-        icon: Server,
-        title: 'Oracle Managed Services',
-        desc: '24/7 Oracle DBA and Oracle Cloud Infrastructure specialists.',
-        href: '/services/oracle-managed-services',
-    },
-    {
-        icon: Users,
-        title: 'Salesforce CRM Consulting',
-        desc: 'CRM strategy, implementation and optimisation across sales, service and marketing.',
-        href: '/services/crm-consulting',
-    },
-    {
-        icon: BarChart3,
-        title: 'Data Science & Machine Learning',
-        desc: 'Custom ML models, generative AI and BI dashboards connected to your business data.',
-        href: '/services/data-science',
-    },
-    {
-        icon: Code2,
-        title: 'Website Design & Development',
-        desc: 'Fixed-price B2B websites — modern, SEO-built-in, delivered on a fixed timeline.',
-        href: '/services/web-development',
-    },
-    {
-        icon: Wrench,
-        title: 'Application Support & Maintenance',
-        desc: 'Ongoing enhancement, bug fixes and support across Salesforce, SAP, MuleSoft, AWS and websites.',
-        href: '/services/support-maintenance',
-    },
-    {
-        icon: CheckCircle2,
-        title: 'Software Testing & QA',
-        desc: 'Manual and automated testing, regression and QA for Salesforce, SAP, MuleSoft, AWS and web apps.',
-        href: '/services/software-testing',
-    },
-]
+interface ServicesOverviewContainerProps {
+    initialServices?: FrontendService[]
+}
 
-const ServicesOverviewContainer = () => {
+const ServicesOverviewContainer: React.FC<ServicesOverviewContainerProps> = ({ initialServices }) => {
+    const [servicesList, setServicesList] = useState<FrontendService[]>(
+        initialServices && initialServices.length > 0 ? initialServices : defaultServices
+    )
+
+    useEffect(() => {
+        let isMounted = true
+        fetchServices().then((data) => {
+            if (isMounted && data && data.length > 0) {
+                setServicesList(data)
+            }
+        }).catch((err) => {
+            console.error('Failed to fetch services from Supabase:', err)
+        })
+        return () => { isMounted = false }
+    }, [])
+
     return (
         <div>
             <div className="container mx-auto px-5 md:px-0 pt-40 pb-16 md:pt-52 md:pb-20 text-center">
@@ -108,8 +45,8 @@ const ServicesOverviewContainer = () => {
 
             <div className="container mx-auto px-5 md:px-0 pb-24">
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                    {services.map((service) => {
-                        const Icon = service.icon
+                    {servicesList.map((service) => {
+                        const Icon = getServiceIcon(service.slug || service.title)
                         return (
                             <Link
                                 key={service.href}

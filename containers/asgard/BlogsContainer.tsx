@@ -265,6 +265,11 @@ export const BlogsContainer: React.FC = () => {
                           <h4 className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors text-xs sm:text-sm line-clamp-1">
                             {blog.title}
                           </h4>
+                          {blog.slug && (
+                            <p className="text-[11px] font-mono text-indigo-600 line-clamp-1">
+                              /blog/{blog.slug}
+                            </p>
+                          )}
                           {blog.subtitle && (
                             <p className="text-xs text-slate-600 line-clamp-1 mt-0.5">
                               {blog.subtitle}

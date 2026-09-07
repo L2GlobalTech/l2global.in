@@ -7,19 +7,9 @@ import React from "react";
 import { ArrowUp, Heart } from "lucide-react";
 import logo from '@/public/assets/web/home/footer-logo.png'
 
-
 const year = new Date().getFullYear();
 
 const footerLinks = {
-    // Expertise: [
-    //     { label: "Salesforce", href: "/salesforce" },
-    //     { label: "Devops", href: "/devops" },
-    //     { label: "SAP", href: "/sap" },
-    //     { label: "AWS", href: "/aws" },
-    //     { label: "Web Development", href: "/web-development" },
-    //     { label: "Testing & Development", href: "/testing-development" },
-    // ],
-
     Company: [
         { label: "About", href: "/about-us" },
         { label: "Contact us", href: "/contact-us" },
@@ -44,7 +34,6 @@ const footerLinks = {
         { label: 'Software Testing & QA', href: '/services/software-testing' },
     ],
 
-
     Industries: [
         { label: "Education", href: "/industries/education" },
         { label: "Healthcare", href: "/industries/health-care" },
@@ -53,14 +42,11 @@ const footerLinks = {
         { label: "Non Profit Organizations", href: "/industries/non-profit" },
     ],
 
-
     Content: [
         { label: "Terms & Conditions", href: "/terms-and-conditions" },
         { label: "Privacy Policy", href: "/privacy-policy" },
     ],
 };
-
-
 
 const Footer: React.FC = () => {
     return (
@@ -153,6 +139,12 @@ const Footer: React.FC = () => {
                                 <Link href="/team"
                                     className="hover:text-[#F15A23] text-[#6F6C90] transition-colors duration-500 tracking-[-0.5px]">
                                     Team
+                                </Link>
+                            </li>
+                            <li>
+                                <Link href="/blog"
+                                    className="hover:text-[#F15A23] text-[#6F6C90] transition-colors duration-500 tracking-[-0.5px]">
+                                    Blog & Insights
                                 </Link>
                             </li>
                         </ul>

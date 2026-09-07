@@ -35,6 +35,7 @@ import ind4 from '../../public/assets/web/home/industriesSection/manufacturing-i
 import ind5 from '../../public/assets/web/home/industriesSection/ngo-icon.svg';
 import AwardsSection from '@/components/web/home/AwardsSection';
 import ContactSection from '@/components/web/ContactSection';
+import LatestBlogsSection from '@/components/web/home/LatestBlogsSection';
 
 const HomeConatiner = () => {
 
@@ -169,6 +170,10 @@ const HomeConatiner = () => {
                 <div>
                     <MemberLogosSection />
                 </div>
+            </div>
+
+            <div>
+                <LatestBlogsSection />
             </div>
 
             <div>

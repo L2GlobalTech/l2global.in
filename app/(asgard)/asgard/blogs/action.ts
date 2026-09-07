@@ -1,8 +1,11 @@
 import { supabase, isSupabaseConfigured } from '@/configs/supabase';
+import { BlogPost } from '@/types';
+import { getMediaPublicUrl } from '@/actions/mediaAction';
 
 export interface BlogRecord {
   id?: string;
   title: string | null;
+  slug?: string | null;
   media_id?: string | null;
   alt_text?: string | null;
   is_featured?: boolean | null;
@@ -180,8 +183,11 @@ export async function createBlog(blogData: BlogRecord) {
 
     const metaDesc = blogData.meta_descriptior?.trim() || blogData.meta_description?.trim() || null;
 
+    const rawSlug = blogData.slug?.trim() ? slugify(blogData.slug.trim()) : (blogData.title ? slugify(blogData.title) : null);
+
     const payload: any = {
       title: blogData.title?.trim() || null,
+      slug: rawSlug || null,
       subtitle: blogData.subtitle?.trim() || null,
       tag: blogData.tag?.trim() || null,
       is_featured: Boolean(blogData.is_featured),
@@ -241,6 +247,7 @@ export async function updateBlog(id: string, updates: Partial<BlogRecord>) {
     };
 
     if (updates.title !== undefined) payload.title = updates.title?.trim() || null;
+    if (updates.slug !== undefined) payload.slug = updates.slug?.trim() ? slugify(updates.slug.trim()) : (updates.title ? slugify(updates.title) : null);
     if (updates.subtitle !== undefined) payload.subtitle = updates.subtitle?.trim() || null;
     if (updates.tag !== undefined) payload.tag = updates.tag?.trim() || null;
     if (updates.is_featured !== undefined) payload.is_featured = Boolean(updates.is_featured);
@@ -345,3 +352,194 @@ export const getBlogByIdAction = async (id: string) => {
 export const createBlogAction = createBlog;
 export const updateBlogAction = updateBlog;
 export const deleteBlogAction = deleteBlog;
+
+export const slugify = (text: string): string => {
+  return text
+    .toString()
+    .toLowerCase()
+    .trim()
+    .replace(/\s+/g, '-')
+    .replace(/[^\w-]+/g, '')
+    .replace(/--+/g, '-');
+};
+
+const inferRelatedService = (tag?: string | null, title?: string | null): { link: string; name: string } => {
+  const combined = `${tag || ''} ${title || ''}`.toLowerCase();
+  if (combined.includes('agentforce')) return { link: '/services/agentforce-ai', name: 'Salesforce Agentforce AI' };
+  if (combined.includes('sap joule') || combined.includes('sap ai')) return { link: '/services/sap-ai', name: 'SAP Joule AI Implementation' };
+  if (combined.includes('mulesoft') || combined.includes('boomi') || combined.includes('ipaas')) return { link: '/services/mulesoft', name: 'MuleSoft Consulting' };
+  if (combined.includes('sap link') || (combined.includes('salesforce') && combined.includes('sap'))) return { link: '/services/sap-link-by-salesforce', name: 'SAP Link by Salesforce' };
+  if (combined.includes('sap')) return { link: '/services/sap', name: 'SAP S/4HANA Services' };
+  if (combined.includes('aws') || combined.includes('cloud migration')) return { link: '/services/aws-cloud-services', name: 'AWS Cloud Services' };
+  if (combined.includes('oracle') || combined.includes('dba')) return { link: '/services/oracle-managed-services', name: 'Oracle Managed Services' };
+  if (combined.includes('crm') || combined.includes('salesforce implementation')) return { link: '/services/crm-consulting', name: 'CRM Consulting' };
+  if (combined.includes('salesforce')) return { link: '/services/salesforce-services', name: 'Salesforce Services' };
+  if (combined.includes('data science') || combined.includes('machine learning')) return { link: '/services/data-science', name: 'Data Science & ML' };
+  if (combined.includes('testing') || combined.includes('qa')) return { link: '/services/software-testing', name: 'Software Testing & QA' };
+  if (combined.includes('support') || combined.includes('maintenance')) return { link: '/services/support-maintenance', name: 'Application Support' };
+  return { link: '/services', name: 'Enterprise Services' };
+};
+
+export const mapBlogRecordToBlogPost = (record: BlogRecord): BlogPost => {
+  const rawTitle = record.title?.trim() || 'Untitled Article';
+  const computedSlug = (record.slug && record.slug.trim()) ? record.slug.trim() : (slugify(rawTitle) || record.id || 'article');
+  const mediaUrl = record.media_id ? getMediaPublicUrl(record.media_id, 'blogs') : null;
+  const fallbackImage = '/assets/web/blog/salesforce-sap.png';
+  const image = mediaUrl || fallbackImage;
+
+  const tagString = record.tag?.trim() || '';
+  const keywordsString = record.meta_keywords?.trim() || '';
+  const parsedTags: string[] = [];
+
+  if (tagString) {
+    tagString.split(',').forEach((t) => {
+      const clean = t.trim();
+      if (clean && !parsedTags.includes(clean)) parsedTags.push(clean);
+    });
+  }
+  if (keywordsString) {
+    keywordsString.split(',').forEach((k) => {
+      const clean = k.trim();
+      if (clean && !parsedTags.includes(clean)) parsedTags.push(clean);
+    });
+  }
+  if (parsedTags.length === 0) {
+    parsedTags.push('Enterprise Tech');
+  }
+
+  const category = parsedTags[0] || 'Enterprise Tech';
+  const related = inferRelatedService(record.tag, record.title);
+
+  // Format content: convert plain text newlines to html paragraphs if raw text
+  let rawContent = record.content || '';
+  if (!rawContent && record.sub_description) {
+    rawContent = `<p>${record.sub_description}</p>`;
+  } else if (rawContent && !rawContent.includes('<') && !rawContent.includes('>')) {
+    rawContent = rawContent
+      .split(/\n\n+/)
+      .map((para) => `<p>${para.replace(/\n/g, '<br/>')}</p>`)
+      .join('');
+  }
+
+  return {
+    id: record.id || computedSlug,
+    slug: computedSlug,
+    title: rawTitle,
+    metaTitle: rawTitle,
+    metaDescription: record.meta_description || record.meta_descriptior || record.sub_description || rawTitle,
+    excerpt: record.sub_description || record.subtitle || 'Read full insights from L2 Global Technology enterprise integration architects.',
+    content: rawContent || '<p>Content coming soon.</p>',
+    author: 'L2 Global Tech Editorial',
+    authorRole: 'Enterprise Integration Experts',
+    datePublished: record.created_at || new Date().toISOString(),
+    image,
+    category,
+    tags: parsedTags,
+    serviceLink: related.link,
+    serviceName: related.name,
+    is_featured: Boolean(record.is_featured),
+  };
+};
+
+import { blogPosts } from '@/constants/blogData';
+
+/**
+ * READ: Fetch all published blogs from Supabase for the public website
+ */
+export async function getPublicBlogs(): Promise<BlogPost[]> {
+  try {
+    if (!isSupabaseConfigured()) {
+      return blogPosts;
+    }
+
+    const { data, error } = await supabase
+      .from('blogs')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      console.error('Error fetching public blogs from Supabase:', error);
+      return [];
+    }
+
+    const dbBlogs = (data || []).map((row: any) => mapBlogRecordToBlogPost(row as BlogRecord));
+    return dbBlogs;
+  } catch (error) {
+    console.error('Failed to query public blogs from Supabase:', error);
+    return [];
+  }
+}
+
+/**
+ * READ: Fetch a single public blog by slug (or ID) from Supabase
+ */
+export async function getPublicBlogBySlug(slug: string): Promise<BlogPost | null> {
+  try {
+    if (!slug) return null;
+
+    const cleanSlug = slug.trim().toLowerCase().replace(/^\/+|\/+$/g, '');
+    const decodedSlug = decodeURIComponent(cleanSlug);
+
+    // 1. Direct database query for exact slug column in Supabase
+    if (isSupabaseConfigured()) {
+      const { data: slugMatch } = await supabase
+        .from('blogs')
+        .select('*')
+        .eq('slug', cleanSlug)
+        .maybeSingle();
+
+      if (slugMatch) return mapBlogRecordToBlogPost(slugMatch as BlogRecord);
+
+      if (decodedSlug !== cleanSlug) {
+        const { data: decodedMatch } = await supabase
+          .from('blogs')
+          .select('*')
+          .eq('slug', decodedSlug)
+          .maybeSingle();
+        if (decodedMatch) return mapBlogRecordToBlogPost(decodedMatch as BlogRecord);
+      }
+
+      // Check UUID match
+      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cleanSlug);
+      if (isUUID) {
+        const { data } = await supabase.from('blogs').select('*').eq('id', cleanSlug).maybeSingle();
+        if (data) return mapBlogRecordToBlogPost(data as BlogRecord);
+      }
+    }
+
+    // 2. Search in all blogs list from Supabase
+    const allBlogs = await getPublicBlogs();
+    const found = allBlogs.find(
+      (b) =>
+        (b.slug && b.slug.toLowerCase() === cleanSlug) ||
+        (b.slug && b.slug.toLowerCase() === decodedSlug) ||
+        (b.title && slugify(b.title) === cleanSlug) ||
+        (b.title && slugify(b.title) === decodedSlug) ||
+        b.id === slug ||
+        String(b.id) === slug ||
+        String(b.id) === cleanSlug
+    );
+    if (found) return found;
+
+    // 3. Match by title ilike in database
+    if (isSupabaseConfigured()) {
+      const titleQueryText = decodedSlug.replace(/-/g, ' ');
+      const { data: titleMatches } = await supabase
+        .from('blogs')
+        .select('*')
+        .ilike('title', `%${titleQueryText}%`)
+        .limit(1);
+
+      if (titleMatches && titleMatches.length > 0) {
+        return mapBlogRecordToBlogPost(titleMatches[0] as BlogRecord);
+      }
+    }
+
+    return null;
+  } catch (error) {
+    console.error('Failed to fetch public blog by slug:', error);
+    return null;
+  }
+}
+
+

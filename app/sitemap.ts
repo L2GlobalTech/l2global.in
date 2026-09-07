@@ -1,10 +1,10 @@
 // app/sitemap.ts
 import { MetadataRoute } from 'next';
-import { blogPosts } from '@/constants/blogData';
+import { getPublicBlogs } from '@/app/(asgard)/asgard/blogs/action';
 
 export const dynamic = 'force-static';
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const BASE = 'https://l2global.in';
   const urls = [
     // Core pages
@@ -45,7 +45,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { path: '/industries/non-profit', freq: 'monthly', pri: 0.7 },
   ];
 
-  const blogUrls = blogPosts.map((post) => ({
+  const blogs = await getPublicBlogs();
+  const blogUrls = blogs.map((post) => ({
     path: `/blog/${post.slug}`,
     freq: 'monthly' as const,
     pri: 0.6,

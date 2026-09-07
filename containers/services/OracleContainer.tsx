@@ -7,15 +7,21 @@ import ServiceKPISection from '@/components/web/services/ServiceKPISection'
 import ServiceProcessSteps from '@/components/web/services/ServiceProcessSteps'
 import ServiceServedIndustries from '@/components/web/services/ServiceServedIndustries'
 import ServiceWhyChooseUs from '@/components/web/services/ServiceWhyChooseUs'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { Database, Settings, Cloud, ShieldCheck, Activity, HardDrive } from "lucide-react";
 import oracleImg from '../../public/assets/web/Service-detail/oracle-service-img.png'
 import OracleAbout from '../../public/assets/web/Service-detail/oracle-about.png'
 import ServiceRegions from '@/components/web/services/ServiceRegions'
 import ServiceFAQ from '@/components/web/services/ServiceFAQ'
+import { ServiceRecord } from '@/types/cms'
+import { getPublicServiceBySlug } from '@/app/(asgard)/asgard/services/action'
+import { getMediaPublicUrl } from '@/actions/mediaAction'
 
+interface OracleContainerProps {
+    initialData?: ServiceRecord | null
+}
 
-const stats = [
+const defaultStats = [
     {
         icon: (
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" viewBox="0 0 16 16">
@@ -65,7 +71,7 @@ const stats = [
     },
 ];
 
-const features = [
+const defaultFeatures = [
     "24/7 monitoring and proactive issue resolution",
     "Database performance tuning and optimization",
     "Patch management and system upgrades",
@@ -73,8 +79,7 @@ const features = [
     "Cloud and on-premise operational management",
 ];
 
-
-const services = [
+const defaultServices = [
     {
         icon: Database,
         title: "Database Administration",
@@ -125,7 +130,7 @@ const services = [
     },
 ];
 
-const oracleFaqs = [
+const defaultFaqs = [
     {
         q: 'Where can I find Oracle DBA services near me?',
         a: 'L2 Global provides Oracle DBA and Oracle Cloud Infrastructure services across USA, UK, Canada, Australia, Asia and Gulf (Dubai, Riyadh). Free Oracle health check available.'
@@ -146,27 +151,87 @@ const oracleFaqs = [
         q: 'How can you reduce our Oracle costs?',
         a: 'We optimise Oracle licensing, automate routine tasks, rightsise cloud resources, and implement proactive maintenance to reduce TCO by up to 40%.'
     },
-]
+];
 
+const OracleContainer: React.FC<OracleContainerProps> = ({ initialData }) => {
+    const [serviceData, setServiceData] = useState<ServiceRecord | null>(initialData || null)
 
-const OracleContainer = () => {
+    useEffect(() => {
+        let isMounted = true
+        getPublicServiceBySlug('oracle-consulting-managed-services').then((data) => {
+            if (isMounted && data) {
+                setServiceData(data)
+            }
+        }).catch(console.error)
+        return () => { isMounted = false }
+    }, [])
+
+    const mappedServices = serviceData?.capabilities && serviceData.capabilities.length > 0
+        ? serviceData.capabilities.map((cap: any, index: number) => {
+            const defaultItem = defaultServices[index % defaultServices.length]
+            return {
+                icon: defaultItem.icon,
+                title: cap.title || defaultItem.title,
+                description: cap.description || defaultItem.description,
+                iconBg: defaultItem.iconBg,
+                gradientBar: defaultItem.gradientBar,
+            }
+        })
+        : defaultServices
+
+    const mappedStats = serviceData?.results_stats && serviceData.results_stats.length > 0
+        ? serviceData.results_stats.map((stat: any, index: number) => {
+            const defaultStat = defaultStats[index % defaultStats.length]
+            return {
+                icon: defaultStat.icon,
+                number: stat.value || defaultStat.number,
+                title: stat.label || defaultStat.title,
+                subtitle: defaultStat.subtitle,
+                gradient: defaultStat.gradient,
+            }
+        })
+        : defaultStats
+
+    const mappedFaqs = serviceData?.faqs && serviceData.faqs.length > 0
+        ? serviceData.faqs.map((f: any) => ({
+            q: f.question || f.q,
+            a: f.answer || f.a,
+        }))
+        : defaultFaqs
+
+    const features = serviceData?.about_features && serviceData.about_features.length > 0
+        ? serviceData.about_features
+        : defaultFeatures
+
+    const heroImg = (serviceData?.hero_image_id ? getMediaPublicUrl(serviceData.hero_image_id, 'services') : null) || oracleImg
+    const aboutImg = (serviceData?.about_image_id ? getMediaPublicUrl(serviceData.about_image_id, 'services') : null) || OracleAbout
+
     return (
         <div>
             <ServiceHeroSection
-                image={oracleImg}
-                sectionTitle={'Our Managed Services'}
-                titleBefore={'Reliable Operations'}
-                titleAfter={`Proactive Performance`}
-                linearText={'Oracle'}
-                description={'24/7 Oracle DBA and Oracle Cloud Infrastructure specialists near you. Serving London, New York, Dubai and all GCC countries remotely. Performance optimisation, security, OCI migration. Free Oracle health check.'}
-                tag1={'Oracle Monitoring'} tag2={'Secure Operations'} tag3={'24/7 Support'} />
+                image={heroImg}
+                sectionTitle={serviceData?.badge_text || 'Our Managed Services'}
+                titleBefore={serviceData?.hero_title || 'Reliable Operations'}
+                titleAfter={serviceData?.hero_logo_text || 'Proactive Performance'}
+                linearText={serviceData?.hero_highlight || 'Oracle'}
+                description={serviceData?.hero_description || '24/7 Oracle DBA and Oracle Cloud Infrastructure specialists near you. Serving London, New York, Dubai and all GCC countries remotely. Performance optimisation, security, OCI migration. Free Oracle health check.'}
+                tag1={serviceData?.hero_badges?.[0] || 'Oracle Monitoring'}
+                tag2={serviceData?.hero_badges?.[1] || 'Secure Operations'}
+                tag3={serviceData?.hero_badges?.[2] || '24/7 Support'}
+            />
 
-            <ServiceKPISection stats={stats} />
+            <ServiceKPISection stats={mappedStats} />
 
-            <ServiceAboutSection image={OracleAbout} titleBefore={'Why'} titleAfter={'Managed Services Matter'} linearText={'Oracle'}
-                description={'Oracle environments power mission-critical business operations. Our managed services ensure your Oracle databases, applications, and cloud infrastructure operate securely, efficiently, and without disruption.'} features={features} />
+            <ServiceAboutSection
+                image={aboutImg}
+                titleBefore={serviceData?.about_title || 'Why'}
+                titleAfter={serviceData?.about_logo_text || 'Managed Services Matter'}
+                linearText={serviceData?.about_highlight || 'Oracle'}
+                description={serviceData?.about_description || 'Oracle environments power mission-critical business operations. Our managed services ensure your Oracle databases, applications, and cloud infrastructure operate securely, efficiently, and without disruption.'}
+                features={features}
+            />
 
-            <ServiceExpertiseSection services={services} />
+            <ServiceExpertiseSection services={mappedServices} />
 
             <ServiceProcessSteps />
 
@@ -176,19 +241,18 @@ const OracleContainer = () => {
 
             <ServiceRegions serviceName='Oracle Managed Services' />
 
-            <ServiceFAQ faqs={oracleFaqs} serviceName='Oracle Managed Services' />
+            <ServiceFAQ faqs={mappedFaqs} serviceName='Oracle Managed Services' />
 
-            <div className=' pt-2 md:pt-8 lg:pt-12'>
+            <div className='pt-2 md:pt-8 lg:pt-12'>
                 <HeroCTA
                     tag="Let's Grow Together"
-                    heading="Ready for Reliable Oracle Support?"
+                    heading={serviceData?.cta_text || "Ready for Reliable Oracle Support?"}
                     description="Partner with L2 Global for 24/7 Oracle DBA and Oracle Cloud Infrastructure support that keeps your systems running."
                     primaryBtnText="Book an Oracle Consultation"
-                    primaryBtnLink="/contact-us"
+                    primaryBtnLink={serviceData?.cta_url || "/contact-us"}
                     secondaryBtnText="View Services"
                     secondaryBtnLink="/services"
                 />
-
             </div>
         </div>
     )

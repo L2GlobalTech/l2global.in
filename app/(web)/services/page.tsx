@@ -16,10 +16,14 @@ export const metadata = {
   },
 };
 
-const page = () => {
+import { fetchServices } from '@/actions/servicesAction';
+
+const page = async () => {
+  const initialServices = await fetchServices();
+
   return (
     <div>
-      <ServicesOverviewContainer />
+      <ServicesOverviewContainer initialServices={initialServices} />
       <ServiceLocalSchema
         serviceName='IT Consulting Services'
         serviceUrl='https://l2global.in/services'

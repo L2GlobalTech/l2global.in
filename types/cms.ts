@@ -50,6 +50,8 @@ export interface ServiceFAQItem {
   answer: string;
 }
 
+export type ServiceRecord = ServiceItem;
+
 export interface ServiceItem {
   id?: string;
   title: string | null;

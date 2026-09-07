@@ -36,8 +36,13 @@ export const BlogPreviewModal: React.FC<BlogPreviewModalProps> = ({ blog, onClos
               )}
             </div>
             <h3 className="text-lg font-bold text-slate-900 mt-2">{blog.title}</h3>
+            {blog.slug && (
+              <span className="inline-block font-mono text-[11px] text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded mt-1">
+                /blog/{blog.slug}
+              </span>
+            )}
             {blog.subtitle && (
-              <p className="text-xs text-slate-500 font-medium mt-0.5">{blog.subtitle}</p>
+              <p className="text-xs text-slate-500 font-medium mt-1">{blog.subtitle}</p>
             )}
           </div>
           <button

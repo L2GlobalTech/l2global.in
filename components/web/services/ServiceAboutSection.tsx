@@ -11,8 +11,7 @@ interface IProps {
     linearText: string;
     description: string;
     features: string[];
-    image: StaticImageData;
-
+    image: StaticImageData | string;
 }
 
 const ServiceAboutSection: React.FC<IProps> = ({
@@ -23,6 +22,7 @@ const ServiceAboutSection: React.FC<IProps> = ({
     titleBefore,
     image
 }) => {
+    const imgSrc = typeof image === 'string' ? image : image?.src || '';
 
     useEffect(() => {
         AOS.init({
@@ -119,7 +119,7 @@ const ServiceAboutSection: React.FC<IProps> = ({
                     </div>
 
                     <div data-aos="fade-up" data-aos-delay="300" >
-                        <img src={image.src} alt='sap-service' className='rounded-xl border border-blue-100'  />
+                        {imgSrc && <img src={imgSrc} alt={linearText || 'service-about'} className='rounded-xl border border-blue-100' />}
                     </div>
 
                 </div>
