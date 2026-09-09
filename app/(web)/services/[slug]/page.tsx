@@ -9,7 +9,6 @@ interface PageProps {
     params: Promise<{ slug: string }>
 }
 
-export const dynamicParams = false;
 
 const knownStaticSlugs = [
     'salesforce-consulting-implementation',
