@@ -4,11 +4,13 @@ import 'aos/dist/aos.css'
 import styles from './ServiceHeroSection.module.css'
 import PrimaryButton from '@/components/shared/PrimaryButton'
 import { StaticImageData } from 'next/image'
+import { renderFormattedTitle } from '@/utils/highlightText'
 
 interface IProps {
-    titleBefore: string;
-    titleAfter: string;
-    linearText: string;
+    title?: string;
+    titleBefore?: string;
+    titleAfter?: string;
+    linearText?: string;
     description: string;
     features: string[];
     image: StaticImageData | string;
@@ -17,6 +19,7 @@ interface IProps {
 const ServiceAboutSection: React.FC<IProps> = ({
     description,
     features,
+    title,
     linearText,
     titleAfter,
     titleBefore,
@@ -55,9 +58,13 @@ const ServiceAboutSection: React.FC<IProps> = ({
                                 data-aos="fade-up"
                                 data-aos-delay="100"
                             >
-                                {titleBefore}{" "}
-                                <span className={styles.gradientText}>{linearText}</span>{" "}
-                                {titleAfter}
+                                {renderFormattedTitle({
+                                    title,
+                                    titleBefore,
+                                    linearText,
+                                    titleAfter,
+                                    customClassName: styles.gradientText,
+                                })}
                             </h2>
 
                             <p
@@ -68,34 +75,38 @@ const ServiceAboutSection: React.FC<IProps> = ({
                                 {description}
                             </p>
                             <ul className="space-y-3.5 my-10">
-                                {features.map((item, index) => (
-                                    <li
-                                        key={index}
-                                        className="flex items-start gap-3.5"
-                                        data-aos="fade-up"
-                                        data-aos-delay={300 + index * 100}
-                                    >
-                                        <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-linear-to-br from-[#195DF0] to-[#8152E0]">
-                                            <svg
-                                                xmlns="http://www.w3.org/2000/svg"
-                                                viewBox="0 0 24 24"
-                                                fill="none"
-                                                stroke="currentColor"
-                                                strokeWidth="2"
-                                                strokeLinecap="round"
-                                                strokeLinejoin="round"
-                                                className="w-3 h-3 text-white"
-                                            >
-                                                <circle cx="12" cy="12" r="10" />
-                                                <path d="m9 12 2 2 4-4" />
-                                            </svg>
-                                        </div>
+                                {Array.isArray(features) && features.map((item: any, index: number) => {
+                                    const featureText = typeof item === 'string' ? item : item?.text ?? item?.title ?? item?.label ?? '';
+                                    if (!featureText) return null;
+                                    return (
+                                        <li
+                                            key={index}
+                                            className="flex items-start gap-3.5"
+                                            data-aos="fade-up"
+                                            data-aos-delay={300 + index * 100}
+                                        >
+                                            <div className="w-5 h-5 rounded-full flex items-center justify-center shrink-0 mt-0.5 bg-linear-to-br from-[#195DF0] to-[#8152E0]">
+                                                <svg
+                                                    xmlns="http://www.w3.org/2000/svg"
+                                                    viewBox="0 0 24 24"
+                                                    fill="none"
+                                                    stroke="currentColor"
+                                                    strokeWidth="2"
+                                                    strokeLinecap="round"
+                                                    strokeLinejoin="round"
+                                                    className="w-3 h-3 text-white"
+                                                >
+                                                    <circle cx="12" cy="12" r="10" />
+                                                    <path d="m9 12 2 2 4-4" />
+                                                </svg>
+                                            </div>
 
-                                        <span className="text-sm text-gray-700 leading-relaxed">
-                                            {item}
-                                        </span>
-                                    </li>
-                                ))}
+                                            <span className="text-sm text-gray-700 leading-relaxed">
+                                                {featureText}
+                                            </span>
+                                        </li>
+                                    );
+                                })}
                             </ul>
 
                             <div

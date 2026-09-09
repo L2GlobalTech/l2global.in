@@ -29,9 +29,9 @@ export default function ImageUploader({
   label = 'Upload Image',
   description = 'PNG, JPG, WebP, GIF, or SVG (max 50MB)',
   folder = 'blogs',
-  width = 800,
-  height = 500,
-  aspectRatio = 1.6,
+  width,
+  height,
+  aspectRatio,
   showGrid = true,
   accept = 'image/jpeg,image/png,image/webp,image/gif,image/svg+xml',
   maxSizeMB = 50,
@@ -140,11 +140,12 @@ export default function ImageUploader({
       const response = await fetch(croppedBlobUrl);
       const blob = await response.blob();
 
-      const originalName = rawFileRef.current?.name || 'image.jpg';
+      const originalName = rawFileRef.current?.name || 'image.png';
       const cleanBaseName = originalName.replace(/\.[^/.]+$/, '').replace(/[^a-zA-Z0-9_-]/g, '_');
-      const finalFileName = `${cleanBaseName}-cropped-${Date.now()}.jpg`;
+      const fileExt = blob.type === 'image/jpeg' ? 'jpg' : blob.type === 'image/webp' ? 'webp' : 'png';
+      const finalFileName = `${cleanBaseName}-cropped-${Date.now()}.${fileExt}`;
 
-      const finalFile = new File([blob], finalFileName, { type: 'image/jpeg' });
+      const finalFile = new File([blob], finalFileName, { type: blob.type || 'image/png' });
 
       // Clean up previous preview blob if local
       if (previewUrl && previewUrl.startsWith('blob:')) {
@@ -219,7 +220,13 @@ export default function ImageUploader({
             Click to upload or drag & drop &bull; {description}
           </p>
           <p className="text-[11px] text-gray-400 mt-1">
-            Aspect Ratio: {width} × {height} ({aspectRatio.toFixed(2)})
+            {width && height
+              ? `Aspect Ratio: ${width} × ${height}${aspectRatio ? ` (${aspectRatio.toFixed(2)})` : ''}`
+              : width
+              ? `Target Width: ${width}px (Dynamic Height)`
+              : height
+              ? `Target Height: ${height}px (Dynamic Width)`
+              : 'Original Image Dimensions (Dynamic Cropper)'}
           </p>
         </div>
       ) : (
@@ -227,13 +234,17 @@ export default function ImageUploader({
         <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-xs">
           {/* Image Canvas Container */}
           <div
-            style={{ aspectRatio: `${aspectRatio}` }}
-            className="w-full max-h-[360px] bg-gray-900 relative flex items-center justify-center overflow-hidden group"
+            style={
+              aspectRatio || (width && height)
+                ? { aspectRatio: `${aspectRatio || (width && height ? width / height : 1.6)}` }
+                : undefined
+            }
+            className={`w-full ${!aspectRatio && !(width && height) ? 'h-60' : 'max-h-[360px]'} bg-slate-100 [background-image:linear-gradient(45deg,#e2e8f0_25%,transparent_25%),linear-gradient(-45deg,#e2e8f0_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#e2e8f0_75%),linear-gradient(-45deg,transparent_75%,#e2e8f0_75%)] [background-size:16px_16px] [background-position:0_0,0_8px,8px_-8px,-8px_0px] relative flex items-center justify-center overflow-hidden group`}
           >
             <img
               src={previewUrl}
               alt="Media preview"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-contain"
               onError={() => {
                 setPreviewUrl(null);
               }}
@@ -268,8 +279,22 @@ export default function ImageUploader({
             <div className="flex items-center gap-2 text-xs text-gray-500">
               <ImageIcon size={14} className="text-emerald-800" />
               <span className="font-medium text-gray-700">Image Ready</span>
-              <span>&bull;</span>
-              <span>{width}×{height}</span>
+              {width && height ? (
+                <>
+                  <span>&bull;</span>
+                  <span>{width}×{height}</span>
+                </>
+              ) : width ? (
+                <>
+                  <span>&bull;</span>
+                  <span>Width: {width}px</span>
+                </>
+              ) : height ? (
+                <>
+                  <span>&bull;</span>
+                  <span>Height: {height}px</span>
+                </>
+              ) : null}
             </div>
 
             <div className="flex items-center gap-2">
@@ -308,6 +333,7 @@ export default function ImageUploader({
           }
         }}
         image={selectedRawBlobUrl}
+        mimeType={rawFileRef.current?.type || 'image/png'}
         width={width}
         height={height}
         aspectRatio={aspectRatio}

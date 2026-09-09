@@ -3,22 +3,41 @@ import styles from './ServiceHeroSection.module.css'
 import SectionHeader from '../SectionHeader'
 import PrimaryButton from '@/components/shared/PrimaryButton'
 import { StaticImageData } from 'next/image';
+import { renderFormattedTitle } from '@/utils/highlightText';
 
 interface IProps {
-    sectionTitle: string;
-    titleBefore: string;
-    titleAfter: string;
-    linearText: string;
+    sectionTitle?: string;
+    title?: string;
+    titleBefore?: string;
+    titleAfter?: string;
+    linearText?: string;
     description: string;
-    tag1: string;
-    tag2: string;
-    tag3: string;
+    tag1?: string;
+    tag2?: string;
+    tag3?: string;
     image: StaticImageData | string;
 }
 
-const ServiceHeroSection: React.FC<IProps> = ({ description, sectionTitle, tag1, tag2, tag3, titleAfter, titleBefore, linearText, image
+const ServiceHeroSection: React.FC<IProps> = ({
+    description,
+    sectionTitle,
+    tag1,
+    tag2,
+    tag3,
+    title,
+    titleAfter,
+    titleBefore,
+    linearText,
+    image
 }) => {
     const imgSrc = typeof image === 'string' ? image : image?.src || '';
+    const renderTag = (tag: any) => {
+        if (!tag) return '';
+        if (typeof tag === 'string') return tag;
+        if (typeof tag === 'object') return tag.text ?? tag.label ?? tag.title ?? '';
+        return String(tag);
+    };
+
     return (
         <div className={styles.backgroundMesh}>
             <div className='md:pt-48 pt-32 container mx-auto px-5 md:px-0'>
@@ -34,7 +53,7 @@ const ServiceHeroSection: React.FC<IProps> = ({ description, sectionTitle, tag1,
                                 className="text-lg font-medium bg-white px-4 py-1 rounded-full flex items-center gap-2 text-black tracking-[-1px]"
                             >
                                 <span className="w-2 h-2 bg-orange-500 rounded-full" />
-                                {sectionTitle}
+                                {typeof sectionTitle === 'string' ? sectionTitle : (sectionTitle as any)?.text ?? (sectionTitle as any)?.title ?? ''}
                                 <span className="w-2 h-2 bg-orange-500 rounded-full" />
                             </div>
                         </div>
@@ -42,11 +61,14 @@ const ServiceHeroSection: React.FC<IProps> = ({ description, sectionTitle, tag1,
                         <h1
                             data-aos="fade-up"
                             data-aos-delay="200"
-                            className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-[#0D1526] tracking-[-1px] md:tracking-[-2px] lg:tracking-[-3px]leading-tight">
-                            {titleBefore}
-                            <br className="hidden md:block" />
-                            <span className={styles.gradientText}>{" "}{linearText}</span>{" "}
-                            {titleAfter}
+                            className="text-4xl sm:text-4xl md:text-5xl lg:text-6xl font-semibold text-[#0D1526] tracking-[-1px] md:tracking-[-2px] lg:tracking-[-3px] leading-tight">
+                            {renderFormattedTitle({
+                                title,
+                                titleBefore,
+                                linearText,
+                                titleAfter,
+                                customClassName: styles.gradientText,
+                            })}
                         </h1>
 
                         <p
@@ -54,46 +76,52 @@ const ServiceHeroSection: React.FC<IProps> = ({ description, sectionTitle, tag1,
                             data-aos-delay="300"
                             className='text-[#707A8F] mt-3 font-normal'
                         >
-                            {description}
+                            {typeof description === 'string' ? description : (description as any)?.text ?? ''}
                         </p>
 
                         <div className="flex flex-wrap mt-3 items-center gap-3 sm:gap-5">
 
-                            <div
-                                data-aos="fade-up"
-                                data-aos-delay="400"
-                                className={`${styles.badge} flex items-center gap-2`}
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
-                                    <path d="m9 11 3 3L22 4"></path>
-                                </svg>
-                                {tag1}
-                            </div>
+                            {renderTag(tag1) && (
+                                <div
+                                    data-aos="fade-up"
+                                    data-aos-delay="400"
+                                    className={`${styles.badge} flex items-center gap-2`}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                                        <path d="m9 11 3 3L22 4"></path>
+                                    </svg>
+                                    {renderTag(tag1)}
+                                </div>
+                            )}
 
-                            <div
-                                data-aos="fade-up"
-                                data-aos-delay="500"
-                                className={`${styles.badge} flex items-center gap-2`}
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
-                                    <path d="m9 11 3 3L22 4"></path>
-                                </svg>
-                                {tag2}
-                            </div>
+                            {renderTag(tag2) && (
+                                <div
+                                    data-aos="fade-up"
+                                    data-aos-delay="500"
+                                    className={`${styles.badge} flex items-center gap-2`}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                                        <path d="m9 11 3 3L22 4"></path>
+                                    </svg>
+                                    {renderTag(tag2)}
+                                </div>
+                            )}
 
-                            <div
-                                data-aos="fade-up"
-                                data-aos-delay="600"
-                                className={`${styles.badge} flex items-center gap-2`}
-                            >
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" stroke="currentColor" strokeWidth="2">
-                                    <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
-                                    <path d="m9 11 3 3L22 4"></path>
-                                </svg>
-                                {tag3}
-                            </div>
+                            {renderTag(tag3) && (
+                                <div
+                                    data-aos="fade-up"
+                                    data-aos-delay="600"
+                                    className={`${styles.badge} flex items-center gap-2`}
+                                >
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="none" stroke="currentColor" strokeWidth="2">
+                                        <path d="M21.801 10A10 10 0 1 1 17 3.335"></path>
+                                        <path d="m9 11 3 3L22 4"></path>
+                                    </svg>
+                                    {renderTag(tag3)}
+                                </div>
+                            )}
 
                         </div>
                         <div

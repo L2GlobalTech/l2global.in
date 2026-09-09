@@ -1,7 +1,6 @@
 import { supabase, isSupabaseConfigured } from '@/configs/supabase';
 import { BlogPost } from '@/types';
 import { getMediaPublicUrl } from '@/actions/mediaAction';
-import { blogPosts } from '@/constants/blogData';
 import {
   getBlogs,
   getBlogById,

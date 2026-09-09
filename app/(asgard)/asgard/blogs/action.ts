@@ -239,8 +239,8 @@ export async function updateBlog(id: string, updates: Partial<BlogRecord>) {
     const metaDesc = updates.meta_descriptior !== undefined
       ? (updates.meta_descriptior?.trim() || null)
       : updates.meta_description !== undefined
-      ? (updates.meta_description?.trim() || null)
-      : undefined;
+        ? (updates.meta_description?.trim() || null)
+        : undefined;
 
     const payload: any = {
       updated_at: new Date().toISOString(),
@@ -441,15 +441,13 @@ export const mapBlogRecordToBlogPost = (record: BlogRecord): BlogPost => {
   };
 };
 
-import { blogPosts } from '@/constants/blogData';
-
 /**
  * READ: Fetch all published blogs from Supabase for the public website
  */
 export async function getPublicBlogs(): Promise<BlogPost[]> {
   try {
     if (!isSupabaseConfigured()) {
-      return blogPosts;
+      return [];
     }
 
     const { data, error } = await supabase
@@ -471,75 +469,88 @@ export async function getPublicBlogs(): Promise<BlogPost[]> {
 }
 
 /**
- * READ: Fetch a single public blog by slug (or ID) from Supabase
+ * READ: Fetch a single public blog by ID or Slug directly from Supabase
  */
-export async function getPublicBlogBySlug(slug: string): Promise<BlogPost | null> {
+export async function getPublicBlogByIdOrSlug(idOrSlug: string): Promise<BlogPost | null> {
   try {
-    if (!slug) return null;
+    if (!idOrSlug || !isSupabaseConfigured()) return null;
 
-    const cleanSlug = slug.trim().toLowerCase().replace(/^\/+|\/+$/g, '');
-    const decodedSlug = decodeURIComponent(cleanSlug);
+    const cleanInput = idOrSlug.trim().replace(/^\/+|\/+$/g, '');
+    const decodedInput = decodeURIComponent(cleanInput).trim().toLowerCase();
+    const normalizedSlug = slugify(decodedInput);
 
-    // 1. Direct database query for exact slug column in Supabase
-    if (isSupabaseConfigured()) {
-      const { data: slugMatch } = await supabase
+    // 1. Direct database query by UUID `id`
+    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cleanInput);
+    if (isUUID) {
+      const { data: idMatch, error: idError } = await supabase
         .from('blogs')
         .select('*')
-        .eq('slug', cleanSlug)
+        .eq('id', cleanInput)
         .maybeSingle();
 
-      if (slugMatch) return mapBlogRecordToBlogPost(slugMatch as BlogRecord);
-
-      if (decodedSlug !== cleanSlug) {
-        const { data: decodedMatch } = await supabase
-          .from('blogs')
-          .select('*')
-          .eq('slug', decodedSlug)
-          .maybeSingle();
-        if (decodedMatch) return mapBlogRecordToBlogPost(decodedMatch as BlogRecord);
-      }
-
-      // Check UUID match
-      const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cleanSlug);
-      if (isUUID) {
-        const { data } = await supabase.from('blogs').select('*').eq('id', cleanSlug).maybeSingle();
-        if (data) return mapBlogRecordToBlogPost(data as BlogRecord);
+      if (!idError && idMatch) {
+        return mapBlogRecordToBlogPost(idMatch as BlogRecord);
       }
     }
 
-    // 2. Search in all blogs list from Supabase
-    const allBlogs = await getPublicBlogs();
-    const found = allBlogs.find(
-      (b) =>
-        (b.slug && b.slug.toLowerCase() === cleanSlug) ||
-        (b.slug && b.slug.toLowerCase() === decodedSlug) ||
-        (b.title && slugify(b.title) === cleanSlug) ||
-        (b.title && slugify(b.title) === decodedSlug) ||
-        b.id === slug ||
-        String(b.id) === slug ||
-        String(b.id) === cleanSlug
-    );
-    if (found) return found;
+    // 2. Direct database query by `slug` (exact match, with or without leading slash, case-insensitive)
+    const { data: slugMatches, error: slugError } = await supabase
+      .from('blogs')
+      .select('*')
+      .or(`slug.eq.${decodedInput},slug.eq./${decodedInput},slug.ilike.${decodedInput},slug.ilike./${decodedInput}`)
+      .limit(1);
 
-    // 3. Match by title ilike in database
-    if (isSupabaseConfigured()) {
-      const titleQueryText = decodedSlug.replace(/-/g, ' ');
-      const { data: titleMatches } = await supabase
-        .from('blogs')
-        .select('*')
-        .ilike('title', `%${titleQueryText}%`)
-        .limit(1);
+    if (!slugError && slugMatches && slugMatches.length > 0) {
+      return mapBlogRecordToBlogPost(slugMatches[0] as BlogRecord);
+    }
 
-      if (titleMatches && titleMatches.length > 0) {
-        return mapBlogRecordToBlogPost(titleMatches[0] as BlogRecord);
+    // 3. Fallback: Fetch all blogs from database and match against slug, title slugify, or ID
+    const { data: allRows, error: allErr } = await supabase
+      .from('blogs')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (!allErr && allRows && allRows.length > 0) {
+      const matched = allRows.find((row: any) => {
+        if (!row) return false;
+        const rowId = String(row.id || '').trim();
+        const rowSlug = String(row.slug || '').trim().replace(/^\/+|\/+$/g, '').toLowerCase();
+        const rowTitleSlug = slugify(String(row.title || ''));
+
+        return (
+          rowId === cleanInput ||
+          rowSlug === decodedInput ||
+          rowSlug === normalizedSlug ||
+          slugify(rowSlug) === normalizedSlug ||
+          rowTitleSlug === normalizedSlug ||
+          rowTitleSlug === decodedInput
+        );
+      });
+
+      if (matched) {
+        return mapBlogRecordToBlogPost(matched as BlogRecord);
       }
+    }
+
+    // 4. Final attempt by ID
+    const { data: fallbackIdMatch } = await supabase
+      .from('blogs')
+      .select('*')
+      .eq('id', cleanInput)
+      .maybeSingle();
+
+    if (fallbackIdMatch) {
+      return mapBlogRecordToBlogPost(fallbackIdMatch as BlogRecord);
     }
 
     return null;
   } catch (error) {
-    console.error('Failed to fetch public blog by slug:', error);
+    console.error('Failed to fetch public blog by ID or slug:', error);
     return null;
   }
 }
+
+export const getPublicBlogBySlug = getPublicBlogByIdOrSlug;
+export const getPublicBlogById = getPublicBlogByIdOrSlug;
 
 
