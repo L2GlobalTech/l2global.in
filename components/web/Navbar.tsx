@@ -43,7 +43,6 @@ const navLinks = [
   { href: '/services', label: 'Services' },
   { href: '/industries/education', label: 'Industries' },
   { href: '/career', label: 'Career' },
-  { href: '/blog', label: 'Blog' },
   { href: '/company', label: 'Company' },
 ]
 
@@ -51,12 +50,13 @@ const navLinks = [
 const isLinkActive = (label: string, href: string, path: string) => {
   if (label === 'Industries') return path.startsWith('/industries')
   if (label === 'Services') return path.startsWith('/services')
-  if (label === 'Blog') return path.startsWith('/blog')
   if (label === 'Company')
     return (
       path.startsWith('/about') ||
       path.startsWith('/contact') ||
       path.startsWith('/team') ||
+      path.startsWith('/blog') ||
+      path.startsWith('/blogs') ||
       path.startsWith('/faq')
     )
   return path === href

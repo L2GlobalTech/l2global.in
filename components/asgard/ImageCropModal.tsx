@@ -19,6 +19,7 @@ export interface ImageCropModalProps {
   isVisible: boolean;
   onClose: () => void;
   image: string;
+  mimeType?: string;
   width?: number;
   height?: number;
   aspectRatio?: number;
@@ -48,14 +49,15 @@ function createLoadedImage(url: string): Promise<HTMLImageElement> {
   });
 }
 
-// Two-stage rotation-safe crop pixel extraction
+// Two-stage rotation-safe crop pixel extraction with full alpha transparency preservation
 async function getCroppedImg(
   imageSrc: string,
   crop: { x: number; y: number },
   zoom: number,
   rotation: number,
   cropBoxSize: { width: number; height: number },
-  exportSize: { width: number; height: number }
+  exportSize: { width: number; height: number },
+  mimeType: string = 'image/png'
 ): Promise<string> {
   const image = await createLoadedImage(imageSrc);
   const naturalWidth = image.naturalWidth;
@@ -78,6 +80,8 @@ async function getCroppedImg(
     throw new Error('Failed to create intermediate canvas context');
   }
 
+  // Clear rect to guarantee transparent alpha background
+  rotCtx.clearRect(0, 0, rotatedSize.width, rotatedSize.height);
   rotCtx.imageSmoothingEnabled = true;
   rotCtx.imageSmoothingQuality = 'high';
 
@@ -114,6 +118,8 @@ async function getCroppedImg(
     throw new Error('Failed to create final canvas context');
   }
 
+  // Clear final canvas to maintain full alpha transparency
+  finalCtx.clearRect(0, 0, exportSize.width, exportSize.height);
   finalCtx.imageSmoothingEnabled = true;
   finalCtx.imageSmoothingQuality = 'high';
 
@@ -129,6 +135,10 @@ async function getCroppedImg(
     exportSize.height
   );
 
+  // Determine export MIME type (default to image/png to strictly preserve transparency)
+  const isJpeg = mimeType === 'image/jpeg' || mimeType === 'image/jpg';
+  const targetMime = isJpeg ? 'image/jpeg' : 'image/png';
+
   return new Promise((resolve, reject) => {
     finalCanvas.toBlob(
       (blob) => {
@@ -139,8 +149,8 @@ async function getCroppedImg(
         const blobUrl = URL.createObjectURL(blob);
         resolve(blobUrl);
       },
-      'image/jpeg',
-      0.92
+      targetMime,
+      0.95
     );
   });
 }
@@ -149,8 +159,9 @@ export default function ImageCropModal({
   isVisible,
   onClose,
   image,
-  width = 800,
-  height = 500,
+  mimeType,
+  width,
+  height,
   aspectRatio,
   showGrid = true,
   onConfirm,
@@ -167,11 +178,31 @@ export default function ImageCropModal({
   const pointerStartRef = useRef<{ x: number; y: number; cropX: number; cropY: number } | null>(null);
   const touchDistanceRef = useRef<number | null>(null);
 
-  const targetAspectRatio = aspectRatio || (width && height ? width / height : 1.6);
-  const exportWidth = width || 1200;
-  const exportHeight = height || Math.round(exportWidth / targetAspectRatio);
+  // Dynamic dimension calculations:
+  // If width is defined -> use width, otherwise full image natural width (fallback 1200)
+  // If height is defined -> use height, otherwise full image natural height (fallback 800)
+  const effectiveNaturalWidth = naturalSize.width || 1200;
+  const effectiveNaturalHeight = naturalSize.height || 800;
 
-  // Measure crop box dimensions on mount & resize
+  const exportWidth = useMemo(() => {
+    if (width) return width;
+    if (aspectRatio && height) return Math.round(height * aspectRatio);
+    return effectiveNaturalWidth;
+  }, [width, height, aspectRatio, effectiveNaturalWidth]);
+
+  const exportHeight = useMemo(() => {
+    if (height) return height;
+    if (aspectRatio && width) return Math.round(width / aspectRatio);
+    return effectiveNaturalHeight;
+  }, [height, width, aspectRatio, effectiveNaturalHeight]);
+
+  const targetAspectRatio = useMemo(() => {
+    if (aspectRatio) return aspectRatio;
+    if (exportWidth && exportHeight) return exportWidth / exportHeight;
+    return 1.6;
+  }, [aspectRatio, exportWidth, exportHeight]);
+
+  // Measure crop box dimensions on mount, image load, and window resize
   const updateCropBoxSize = useCallback(() => {
     if (!containerRef.current) return;
     const rect = containerRef.current.getBoundingClientRect();
@@ -179,6 +210,19 @@ export default function ImageCropModal({
       setCropBoxDimensions({ width: rect.width, height: rect.height });
     }
   }, []);
+
+  // ResizeObserver to always keep cropBoxDimensions in sync with DOM
+  useEffect(() => {
+    if (!isVisible || !containerRef.current) return;
+    updateCropBoxSize();
+
+    const observer = new ResizeObserver(() => {
+      updateCropBoxSize();
+    });
+    observer.observe(containerRef.current);
+
+    return () => observer.disconnect();
+  }, [isVisible, updateCropBoxSize, targetAspectRatio]);
 
   // Reset state when modal opens or new image is selected
   useEffect(() => {
@@ -193,6 +237,7 @@ export default function ImageCropModal({
       const img = new Image();
       img.onload = () => {
         setNaturalSize({ width: img.naturalWidth, height: img.naturalHeight });
+        setTimeout(updateCropBoxSize, 50);
       };
       img.src = image;
 
@@ -325,7 +370,8 @@ export default function ImageCropModal({
         zoom,
         rotation,
         cropBoxDimensions,
-        { width: exportWidth, height: exportHeight }
+        { width: exportWidth, height: exportHeight },
+        mimeType
       );
 
       await onConfirm(croppedBlobUrl);
@@ -364,7 +410,7 @@ export default function ImageCropModal({
         </div>
 
         {/* Crop Viewport Canvas Area */}
-        <div className="flex-1 bg-[#111] p-6 flex items-center justify-center overflow-hidden min-h-[380px] relative">
+        <div className="flex-1 bg-slate-900 p-6 flex items-center justify-center overflow-hidden min-h-[380px] relative">
           <div
             ref={containerRef}
             onWheel={handleWheel}
@@ -376,8 +422,16 @@ export default function ImageCropModal({
             onTouchEnd={handleTouchEnd}
             style={{
               aspectRatio: `${targetAspectRatio}`,
+              width:
+                targetAspectRatio >= 620 / 420
+                  ? 'min(100%, 620px)'
+                  : `min(100%, ${Math.round(420 * targetAspectRatio)}px)`,
+              height:
+                targetAspectRatio >= 620 / 420
+                  ? `min(420px, calc(min(100%, 620px) / ${targetAspectRatio}))`
+                  : 'min(420px, 100%)',
             }}
-            className="w-full max-w-[620px] max-h-[440px] relative border-2 border-dashed border-white/80 shadow-2xl overflow-hidden cursor-grab active:cursor-grabbing bg-black flex items-center justify-center rounded-lg touch-none"
+            className="relative border-2 border-dashed border-indigo-400 shadow-2xl overflow-hidden cursor-grab active:cursor-grabbing bg-slate-800 [background-image:linear-gradient(45deg,#334155_25%,transparent_25%),linear-gradient(-45deg,#334155_25%,transparent_25%),linear-gradient(45deg,transparent_75%,#334155_75%),linear-gradient(-45deg,transparent_75%,#334155_75%)] [background-size:16px_16px] [background-position:0_0,0_8px,8px_-8px,-8px_0px] flex items-center justify-center rounded-lg touch-none"
           >
             {/* Centered Image with accurate transformation */}
             <img

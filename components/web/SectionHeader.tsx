@@ -1,4 +1,5 @@
 import React, { FC } from 'react'
+import { renderHighlightedText } from '@/utils/highlightText'
 
 interface ISectionHeader {
     title: string
@@ -31,7 +32,7 @@ const SectionHeader: FC<ISectionHeader> = ({
                     data-aos-duration={aosDuration}
                     data-aos-once="true"
                 >
-                    {title}
+                    {renderHighlightedText(title)}
                 </h2>
 
                 {/* Description */}

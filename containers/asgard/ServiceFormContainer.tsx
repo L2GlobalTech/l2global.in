@@ -48,7 +48,7 @@ interface ServiceFormContainerProps {
 const inputClass =
   'w-full px-3.5 py-2 text-xs sm:text-sm text-slate-900 bg-slate-100 border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:bg-white transition-all placeholder:text-slate-400';
 
-type FormTab = 'hero' | 'capabilities' | 'about' | 'results' | 'solutions' | 'faq_seo';
+type FormTab = 'hero' | 'results' | 'about' | 'capabilities' | 'solutions' | 'faq_seo';
 
 export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }) => {
   const router = useRouter();
@@ -140,29 +140,50 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
           return;
         }
 
+        const extractString = (val: any, fallback: string = ''): string => {
+          if (val === null || val === undefined) return fallback;
+          if (typeof val === 'string') return val;
+          if (typeof val === 'number') return String(val);
+          if (typeof val === 'object') {
+            return val.text ?? val.label ?? val.title ?? val.name ?? val.value ?? fallback;
+          }
+          return fallback;
+        };
+
+        const normalizeStringList = (arr: any): string[] => {
+          if (!Array.isArray(arr)) return [];
+          return arr.map((item: any) => extractString(item)).filter((s: string) => s.length > 0);
+        };
+
         setFormData({
           id: service.id,
-          title: service.title || '',
-          slug: service.slug || '',
-          badge_text: service.badge_text || '',
-          hero_title: service.hero_title || '',
-          hero_highlight: service.hero_highlight || '',
-          hero_description: service.hero_description || '',
+          title: extractString(service.title, ''),
+          slug: extractString(service.slug, ''),
+          badge_text: extractString(service.badge_text, ''),
+          hero_title: extractString(service.hero_title, ''),
+          hero_highlight: extractString(service.hero_highlight, ''),
+          hero_description: extractString(service.hero_description, ''),
           hero_image_id: service.hero_image_id || null,
-          hero_logo_text: service.hero_logo_text || '',
-          hero_cta_text: service.hero_cta_text || 'Get Started Free',
-          hero_cta_url: service.hero_cta_url || '#',
-          hero_badges: Array.isArray(service.hero_badges) ? [...service.hero_badges] : [],
-          capabilities_badge: service.capabilities_badge || '',
-          capabilities_title: service.capabilities_title || '',
-          capabilities_highlight: service.capabilities_highlight || '',
-          capabilities_description: service.capabilities_description || '',
-          capabilities: Array.isArray(service.capabilities) ? [...service.capabilities] : [],
+          hero_logo_text: extractString(service.hero_logo_text, ''),
+          hero_cta_text: extractString(service.hero_cta_text, 'Get Started Free'),
+          hero_cta_url: extractString(service.hero_cta_url, '#'),
+          hero_badges: normalizeStringList(service.hero_badges),
+          capabilities_badge: extractString(service.capabilities_badge, ''),
+          capabilities_title: extractString(service.capabilities_title, ''),
+          capabilities_highlight: extractString(service.capabilities_highlight, ''),
+          capabilities_description: extractString(service.capabilities_description, ''),
+          capabilities: Array.isArray(service.capabilities)
+            ? service.capabilities.map((c: any) => ({
+                title: typeof c?.title === 'object' ? (c.title?.text ?? '') : (c?.title || ''),
+                description: typeof c?.description === 'object' ? (c.description?.text ?? '') : (c?.description || ''),
+                icon: typeof c?.icon === 'object' ? (c.icon?.text ?? '') : (c?.icon || ''),
+              }))
+            : [],
           about_badge: service.about_badge || '',
           about_title: service.about_title || '',
           about_highlight: service.about_highlight || '',
           about_description: service.about_description || '',
-          about_features: Array.isArray(service.about_features) ? [...service.about_features] : [],
+          about_features: normalizeStringList(service.about_features),
           about_image_id: service.about_image_id || null,
           about_logo_text: service.about_logo_text || '',
           about_cta_text: service.about_cta_text || 'Get a Quote',
@@ -171,18 +192,29 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
           results_title: service.results_title || '',
           results_highlight: service.results_highlight || '',
           results_description: service.results_description || '',
-          results_stats: Array.isArray(service.results_stats) ? [...service.results_stats] : [],
+          results_stats: Array.isArray(service.results_stats)
+            ? service.results_stats.map((s: any) => ({
+                value: typeof s?.value === 'object' ? (s.value?.text ?? '') : (s?.value || ''),
+                label: typeof s?.label === 'object' ? (s.label?.text ?? '') : (s?.label || ''),
+                sub_label: typeof s?.sub_label === 'object' ? (s.sub_label?.text ?? '') : (s?.sub_label || ''),
+              }))
+            : [],
           solutions_badge: service.solutions_badge || '',
           solutions_title: service.solutions_title || '',
           solutions_highlight: service.solutions_highlight || '',
           solutions_description: service.solutions_description || '',
           solutions_image_id: service.solutions_image_id || null,
           solutions_logo_text: service.solutions_logo_text || '',
-          solutions_badges: Array.isArray(service.solutions_badges) ? [...service.solutions_badges] : [],
+          solutions_badges: normalizeStringList(service.solutions_badges),
           faq_badge: service.faq_badge || '',
           faq_title: service.faq_title || '',
           faq_description: service.faq_description || '',
-          faqs: Array.isArray(service.faqs) ? [...service.faqs] : [],
+          faqs: Array.isArray(service.faqs)
+            ? service.faqs.map((f: any) => ({
+                question: typeof f?.question === 'object' ? (f.question?.text ?? '') : (f?.question || f?.q || ''),
+                answer: typeof f?.answer === 'object' ? (f.answer?.text ?? '') : (f?.answer || f?.a || ''),
+              }))
+            : [],
           cta_text: service.cta_text || '',
           cta_url: service.cta_url || '',
           sort_order: typeof service.sort_order === 'number' ? service.sort_order : 0,
@@ -306,7 +338,7 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
   const handleAddResultStat = () => {
     setFormData((prev) => ({
       ...prev,
-      results_stats: [...(prev.results_stats || []), { value: '', label: '' }],
+      results_stats: [...(prev.results_stats || []), { value: '', label: '', sub_label: '' }],
     }));
   };
   const handleResultStatChange = (index: number, field: keyof ServiceResultStat, value: string) => {
@@ -460,10 +492,10 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
       icon: Layers,
     },
     {
-      id: 'capabilities' as FormTab,
-      label: 'Capabilities',
-      desc: 'Modular features & deliverables',
-      icon: Sparkles,
+      id: 'results' as FormTab,
+      label: 'Results & Stats',
+      desc: 'Quantitative metrics & counters',
+      icon: BarChart3,
     },
     {
       id: 'about' as FormTab,
@@ -472,10 +504,10 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
       icon: FileText,
     },
     {
-      id: 'results' as FormTab,
-      label: 'Results & Stats',
-      desc: 'Quantitative metrics & counters',
-      icon: BarChart3,
+      id: 'capabilities' as FormTab,
+      label: 'Capabilities',
+      desc: 'Modular features & deliverables',
+      icon: Sparkles,
     },
     {
       id: 'solutions' as FormTab,
@@ -575,16 +607,14 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
                     key={tab.id}
                     type="button"
                     onClick={() => setActiveTab(tab.id)}
-                    className={`w-full text-left p-3 rounded-xl transition-all flex items-start gap-3 cursor-pointer ${
-                      isActive
-                        ? 'bg-indigo-600 text-white shadow-xs'
-                        : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200/80 hover:border-slate-300'
-                    }`}
+                    className={`w-full text-left p-3 rounded-xl transition-all flex items-start gap-3 cursor-pointer ${isActive
+                      ? 'bg-indigo-600 text-white shadow-xs'
+                      : 'bg-white text-slate-700 hover:bg-slate-100 border border-slate-200/80 hover:border-slate-300'
+                      }`}
                   >
                     <div
-                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${
-                        isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-indigo-600'
-                      }`}
+                      className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 mt-0.5 ${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-indigo-600'
+                        }`}
                     >
                       <Icon className="w-4 h-4" />
                     </div>
@@ -593,17 +623,15 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
                       <div className="flex items-center justify-between">
                         <h4 className="text-xs sm:text-sm font-bold truncate">{tab.label}</h4>
                         <span
-                          className={`text-xs font-mono font-semibold ${
-                            isActive ? 'text-indigo-200' : 'text-slate-400'
-                          }`}
+                          className={`text-xs font-mono font-semibold ${isActive ? 'text-indigo-200' : 'text-slate-400'
+                            }`}
                         >
                           0{idx + 1}
                         </span>
                       </div>
                       <p
-                        className={`text-xs mt-0.5 line-clamp-1 ${
-                          isActive ? 'text-indigo-100' : 'text-slate-500'
-                        }`}
+                        className={`text-xs mt-0.5 line-clamp-1 ${isActive ? 'text-indigo-100' : 'text-slate-500'
+                          }`}
                       >
                         {tab.desc}
                       </p>
@@ -711,35 +739,19 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
 
                     <hr className="border-slate-200" />
 
-                    {/* Hero Title & Highlight */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                          Hero Headline Title
-                        </label>
-                        <input
-                          name="hero_title"
-                          type="text"
-                          placeholder="e.g. Accelerate Growth with"
-                          value={formData.hero_title || ''}
-                          onChange={handleInputChange}
-                          className={inputClass}
-                        />
-                      </div>
-
-                      <div>
-                        <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                          Hero Highlight Text
-                        </label>
-                        <input
-                          name="hero_highlight"
-                          type="text"
-                          placeholder="e.g. Cloud Transformation"
-                          value={formData.hero_highlight || ''}
-                          onChange={handleInputChange}
-                          className={inputClass}
-                        />
-                      </div>
+                    {/* Hero Title */}
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                        Hero Headline Title <span className="text-slate-400 font-normal">(Use <code className="text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded font-mono">{'{text}'}</code> for highlighted gradient text)</span>
+                      </label>
+                      <input
+                        name="hero_title"
+                        type="text"
+                        placeholder="e.g. Scalable & Intelligent {Salesforce} Solutions"
+                        value={formData.hero_title || ''}
+                        onChange={handleInputChange}
+                        className={inputClass}
+                      />
                     </div>
 
                     {/* Hero Description */}
@@ -771,9 +783,9 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
                           setFormData((prev) => ({ ...prev, hero_image_id: null }));
                         }}
                         folder="services"
-                        width={800}
-                        height={500}
-                        aspectRatio={1.6}
+                        // width={800}
+                        // height={500}
+                        // aspectRatio={1.6}
                         label="Upload Hero Graphic"
                         description="SVG, PNG, or WebP illustration"
                       />
@@ -853,21 +865,24 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
                         </button>
                       </div>
                       <div className="flex flex-wrap gap-2 pt-1">
-                        {(formData.hero_badges || []).map((badge, idx) => (
-                          <span
-                            key={idx}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs bg-indigo-100 text-indigo-800 font-medium"
-                          >
-                            {badge}
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveHeroBadge(idx)}
-                              className="text-indigo-600 hover:text-rose-600 cursor-pointer font-bold"
+                        {(formData.hero_badges || []).map((badge, idx) => {
+                          const badgeText = typeof badge === 'string' ? badge : (badge as any)?.text ?? (badge as any)?.label ?? '';
+                          return (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs bg-indigo-100 text-indigo-800 font-medium"
                             >
-                              &times;
-                            </button>
-                          </span>
-                        ))}
+                              {badgeText}
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveHeroBadge(idx)}
+                                className="text-indigo-600 hover:text-rose-600 cursor-pointer font-bold"
+                              >
+                                &times;
+                              </button>
+                            </span>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -902,31 +917,17 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
 
                       <div>
                         <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                          Capabilities Title
+                          Capabilities Title <span className="text-slate-400 font-normal">(Use <code className="text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded font-mono">{'{text}'}</code> for highlight)</span>
                         </label>
                         <input
                           name="capabilities_title"
                           type="text"
-                          placeholder="e.g. Enterprise Capabilities"
+                          placeholder="e.g. Your Needs, {Our Expertise}"
                           value={formData.capabilities_title || ''}
                           onChange={handleInputChange}
                           className={inputClass}
                         />
                       </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                        Capabilities Highlight Text
-                      </label>
-                      <input
-                        name="capabilities_highlight"
-                        type="text"
-                        placeholder="e.g. Built for Scale & Reliability"
-                        value={formData.capabilities_highlight || ''}
-                        onChange={handleInputChange}
-                        className={inputClass}
-                      />
                     </div>
 
                     <div>
@@ -1034,31 +1035,17 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
 
                       <div>
                         <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                          About Title
+                          About Title <span className="text-slate-400 font-normal">(Use <code className="text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded font-mono">{'{text}'}</code> for highlight)</span>
                         </label>
                         <input
                           name="about_title"
                           type="text"
-                          placeholder="e.g. Architected for Resilience"
+                          placeholder="e.g. Why {AWS Cloud} Services Matter"
                           value={formData.about_title || ''}
                           onChange={handleInputChange}
                           className={inputClass}
                         />
                       </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                        About Highlight Text
-                      </label>
-                      <input
-                        name="about_highlight"
-                        type="text"
-                        placeholder="e.g. Proven Methodologies"
-                        value={formData.about_highlight || ''}
-                        onChange={handleInputChange}
-                        className={inputClass}
-                      />
                     </div>
 
                     <div>
@@ -1165,25 +1152,28 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
                       </div>
 
                       <div className="space-y-2">
-                        {(formData.about_features || []).map((feature, idx) => (
-                          <div key={idx} className="flex items-center gap-2">
-                            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                            <input
-                              type="text"
-                              placeholder={`Feature Point #${idx + 1}`}
-                              value={feature || ''}
-                              onChange={(e) => handleAboutFeatureChange(idx, e.target.value)}
-                              className={inputClass}
-                            />
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveAboutFeature(idx)}
-                              className="p-2 text-slate-400 hover:text-rose-600 rounded cursor-pointer"
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </button>
-                          </div>
-                        ))}
+                        {(formData.about_features || []).map((feature, idx) => {
+                          const featureVal = typeof feature === 'string' ? feature : (feature as any)?.text ?? (feature as any)?.title ?? '';
+                          return (
+                            <div key={idx} className="flex items-center gap-2">
+                              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                              <input
+                                type="text"
+                                placeholder={`Feature Point #${idx + 1}`}
+                                value={featureVal || ''}
+                                onChange={(e) => handleAboutFeatureChange(idx, e.target.value)}
+                                className={inputClass}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveAboutFeature(idx)}
+                                className="p-2 text-slate-400 hover:text-rose-600 rounded cursor-pointer"
+                              >
+                                <Trash2 className="w-4 h-4" />
+                              </button>
+                            </div>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>
@@ -1218,31 +1208,17 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
 
                       <div>
                         <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                          Results Title
+                          Results Title <span className="text-slate-400 font-normal">(Use <code className="text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded font-mono">{'{text}'}</code> for highlight)</span>
                         </label>
                         <input
                           name="results_title"
                           type="text"
-                          placeholder="e.g. Real Business Impact"
+                          placeholder="e.g. Real {Business Impact}"
                           value={formData.results_title || ''}
                           onChange={handleInputChange}
                           className={inputClass}
                         />
                       </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                        Results Highlight Text
-                      </label>
-                      <input
-                        name="results_highlight"
-                        type="text"
-                        placeholder="e.g. Measured in Scale & ROI"
-                        value={formData.results_highlight || ''}
-                        onChange={handleInputChange}
-                        className={inputClass}
-                      />
                     </div>
 
                     <div>
@@ -1282,26 +1258,34 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                         {(formData.results_stats || []).map((stat, idx) => (
-                          <div key={idx} className="p-3 bg-white rounded-xl border border-slate-200 space-y-2 relative shadow-2xs">
+                          <div key={idx} className="p-3.5 bg-white rounded-xl border border-slate-200 space-y-2 relative shadow-2xs">
                             <button
                               type="button"
                               onClick={() => handleRemoveResultStat(idx)}
-                              className="absolute right-2 top-2 p-1 text-slate-400 hover:text-rose-600 rounded cursor-pointer"
+                              className="absolute right-2.5 top-2.5 p-1 text-slate-400 hover:text-rose-600 rounded cursor-pointer"
+                              title="Remove stat card"
                             >
                               <Trash2 className="w-3.5 h-3.5" />
                             </button>
                             <input
                               type="text"
-                              placeholder="Stat Value (e.g. 99.9%, 4.8x, $2.4M)"
+                              placeholder="Stat Value (e.g. 180+, 99.9%, 35%, 24/7)"
                               value={stat.value || ''}
                               onChange={(e) => handleResultStatChange(idx, 'value', e.target.value)}
                               className={`${inputClass} font-bold text-indigo-600`}
                             />
                             <input
                               type="text"
-                              placeholder="Stat Label (e.g. SLA Uptime Guaranteed)"
+                              placeholder="Stat Label (e.g. Cloud Migrations Completed)"
                               value={stat.label || ''}
                               onChange={(e) => handleResultStatChange(idx, 'label', e.target.value)}
+                              className={inputClass}
+                            />
+                            <input
+                              type="text"
+                              placeholder="Stat Description / Subtitle (e.g. Seamless AWS adoption across enterprises)"
+                              value={stat.sub_label || stat.description || ''}
+                              onChange={(e) => handleResultStatChange(idx, 'sub_label', e.target.value)}
                               className={inputClass}
                             />
                           </div>
@@ -1340,31 +1324,17 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
 
                       <div>
                         <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                          Solutions Title
+                          Solutions Title <span className="text-slate-400 font-normal">(Use <code className="text-indigo-600 bg-indigo-50 px-1 py-0.5 rounded font-mono">{'{text}'}</code> for highlight)</span>
                         </label>
                         <input
                           name="solutions_title"
                           type="text"
-                          placeholder="e.g. Scalable Enterprise Solutions"
+                          placeholder="e.g. Scalable {Enterprise Solutions}"
                           value={formData.solutions_title || ''}
                           onChange={handleInputChange}
                           className={inputClass}
                         />
                       </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-slate-700 mb-1.5">
-                        Solutions Highlight Text
-                      </label>
-                      <input
-                        name="solutions_highlight"
-                        type="text"
-                        placeholder="e.g. Built for Modern Workloads"
-                        value={formData.solutions_highlight || ''}
-                        onChange={handleInputChange}
-                        className={inputClass}
-                      />
                     </div>
 
                     <div>
@@ -1446,21 +1416,24 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
                         </button>
                       </div>
                       <div className="flex flex-wrap gap-2 pt-1">
-                        {(formData.solutions_badges || []).map((badge, idx) => (
-                          <span
-                            key={idx}
-                            className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs bg-sky-100 text-sky-800 font-medium"
-                          >
-                            {badge}
-                            <button
-                              type="button"
-                              onClick={() => handleRemoveSolutionsBadge(idx)}
-                              className="text-sky-600 hover:text-rose-600 cursor-pointer font-bold"
+                        {(formData.solutions_badges || []).map((badge, idx) => {
+                          const badgeText = typeof badge === 'string' ? badge : (badge as any)?.text ?? (badge as any)?.label ?? '';
+                          return (
+                            <span
+                              key={idx}
+                              className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs bg-sky-100 text-sky-800 font-medium"
                             >
-                              &times;
-                            </button>
-                          </span>
-                        ))}
+                              {badgeText}
+                              <button
+                                type="button"
+                                onClick={() => handleRemoveSolutionsBadge(idx)}
+                                className="text-sky-600 hover:text-rose-600 cursor-pointer font-bold"
+                              >
+                                &times;
+                              </button>
+                            </span>
+                          );
+                        })}
                       </div>
                     </div>
                   </div>

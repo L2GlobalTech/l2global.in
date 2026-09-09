@@ -29,7 +29,8 @@ import {
     Loader2
 } from 'lucide-react';
 import { BlogPost } from '@/types';
-import { getPublicBlogBySlug, getPublicBlogs } from '@/app/(asgard)/asgard/blogs/action';
+import { getPublicBlogByIdOrSlug, getPublicBlogById, getPublicBlogBySlug, getPublicBlogs } from '@/app/(asgard)/asgard/blogs/action';
+import { usePathname } from 'next/navigation';
 
 // Helper to calculate read time
 const calculateReadTime = (content: string) => {
@@ -101,22 +102,45 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost
     const [loading, setLoading] = useState<boolean>(!initialPost && Boolean(propSlug));
     const [copied, setCopied] = useState(false);
 
-    // Dynamic client-side fetch on slug change
+    const pathname = usePathname();
+    const blogSlug = propSlug || (pathname ? pathname.split('/').filter(Boolean).pop() : '');
+
+    console.log('Blog Slug from page:', blogSlug);
+
+    // Client-side fetch by Slug or ID on change and log fetched data
     useEffect(() => {
         let isMounted = true;
-        if (propSlug) {
-            getPublicBlogBySlug(propSlug).then((data) => {
-                if (isMounted && data) {
-                    setPost(data);
-                    setLoading(false);
-                }
-            }).catch((err) => {
-                console.error('Error fetching blog post:', err);
-                if (isMounted) setLoading(false);
-            });
+        const currentSlug = blogSlug;
+
+        if (currentSlug) {
+            if (!initialPost) {
+                setLoading(true);
+            }
+            getPublicBlogByIdOrSlug(currentSlug)
+                .then((data) => {
+                    if (isMounted) {
+                        console.log('Fetched Blog Details using Slug/ID:', currentSlug, data);
+                        if (data) {
+                            setPost(data);
+                        } else if (!initialPost) {
+                            setPost(null);
+                        }
+                        setLoading(false);
+                    }
+                })
+                .catch((err) => {
+                    console.error('Error fetching blog details by slug/id:', err);
+                    if (isMounted) setLoading(false);
+                });
+        } else if (initialPost) {
+            setPost(initialPost);
+            setLoading(false);
         }
-        return () => { isMounted = false; };
-    }, [propSlug]);
+
+        return () => {
+            isMounted = false;
+        };
+    }, [blogSlug, initialPost]);
 
     // Fetch related articles if none provided
     useEffect(() => {
@@ -177,7 +201,7 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost
     const styleInfo = getCategoryIcon(post.category, post.slug);
     const CategoryIcon = styleInfo.icon;
 
-    const pageUrl = typeof window !== 'undefined' ? window.location.href : `https://l2global.in/blog/${post.slug}`;
+    const pageUrl = typeof window !== 'undefined' ? window.location.href : `https://l2global.in/blog/${post.slug || post.id}`;
 
     const handleCopyLink = () => {
         if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -227,7 +251,7 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost
         'description': post.excerpt,
         'mainEntityOfPage': {
             '@type': 'WebPage',
-            '@id': `https://l2global.in/blog/${post.slug}`
+            '@id': `https://l2global.in/blog/${post.slug || post.id}`
         }
     };
 

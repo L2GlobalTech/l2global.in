@@ -44,62 +44,58 @@
 
 /* Gradient Backgrounds */
 .blue {
-    background: linear-gradient(135deg, rgb(25, 93, 240), rgb(102, 147, 245));
+    background: #2563eb;
 }
 
 .purple {
-    background: linear-gradient(135deg, rgb(113, 60, 221), rgb(161, 125, 232));
+    background: #8b5cf6;
 }
 
 .orange {
-    background: linear-gradient(135deg, rgb(255, 133, 26), rgb(255, 173, 102));
+    background: #f97316;
 }
 
 .green {
-    background: linear-gradient(135deg, rgb(46, 184, 115), rgb(92, 214, 153));
+    background: #10b981;
 }
 
-/* Gradient Text */
+/* Number Text Colors */
 .number {
-    font-size: 36px;
-    font-weight: 900;
-    margin-bottom: 4px;
+    font-size: 38px;
+    font-weight: 800;
+    margin-bottom: 6px;
+    letter-spacing: -0.5px;
+    line-height: 1;
 }
 
 .blueText {
-    background: linear-gradient(135deg, rgb(25, 93, 240), rgb(102, 147, 245));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #2563eb;
 }
 
 .purpleText {
-    background: linear-gradient(135deg, rgb(113, 60, 221), rgb(161, 125, 232));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #7c3aed;
 }
 
 .orangeText {
-    background: linear-gradient(135deg, rgb(255, 133, 26), rgb(255, 173, 102));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #f97316;
 }
 
 .greenText {
-    background: linear-gradient(135deg, rgb(46, 184, 115), rgb(92, 214, 153));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+    color: #10b981;
 }
 
 .title {
-    font-size: 16px;
-    font-weight: 600;
-    color: #111827;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
     margin-bottom: 4px;
+    line-height: 1.35;
 }
 
 .subtitle {
     font-size: 12px;
-    color: #6b7280;
+    color: #64748b;
+    line-height: 1.45;
 }
 
 .card:before {

@@ -43,6 +43,8 @@ export interface ServiceCapabilityItem {
 export interface ServiceResultStat {
   value: string;
   label: string;
+  sub_label?: string;
+  description?: string;
 }
 
 export interface ServiceFAQItem {
