@@ -3,11 +3,18 @@
 import Link from "next/link";
 import Image from "next/image";
 // import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn, FaYoutube } from "react-icons/fa"; // react-icons for social symbols [web:13]
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { ArrowUp, Heart } from "lucide-react";
 import logo from '@/public/assets/web/home/footer-logo.png'
+import { fetchServices } from "@/actions/servicesAction";
 
 const year = new Date().getFullYear();
+
+const defaultFooterServices = [
+    { label: 'Salesforce Consulting & Implementation', href: '/services/salesforce-consulting-implementation' },
+    { label: 'Oracle Consulting & Managed Services', href: '/services/oracle-consulting-managed-services' },
+    { label: 'Cloud & DevOps Consulting', href: '/services/cloud-devops-consulting' },
+];
 
 const footerLinks = {
     Company: [
@@ -17,21 +24,6 @@ const footerLinks = {
         { label: "Team", href: "/team" },
         { label: "Blog", href: "/blog" },
         { label: "FAQ", href: "/faq" },
-    ],
-
-    Services: [
-        { label: 'Salesforce Agentforce AI', href: '/services/agentforce-ai' },
-        { label: 'SAP Joule AI', href: '/services/sap-ai' },
-        { label: 'SAP S/4HANA & RISE with SAP', href: '/services/sap' },
-        { label: 'SAP & Salesforce Integration', href: '/services/sap-link-by-salesforce' },
-        { label: 'MuleSoft Integration', href: '/services/mulesoft' },
-        { label: 'Salesforce CRM Consulting', href: '/services/crm-consulting' },
-        { label: 'Data Science & AI/ML', href: '/services/data-science' },
-        { label: 'Website Development', href: '/services/web-development' },
-        { label: 'API Integration', href: '/services/api-integration' },
-        { label: 'AWS Cloud', href: '/services/aws-cloud-services' },
-        { label: 'Application Support & Maintenance', href: '/services/support-maintenance' },
-        { label: 'Software Testing & QA', href: '/services/software-testing' },
     ],
 
     Industries: [
@@ -49,6 +41,19 @@ const footerLinks = {
 };
 
 const Footer: React.FC = () => {
+    const [servicesList, setServicesList] = useState(defaultFooterServices);
+
+    useEffect(() => {
+        let isMounted = true;
+        fetchServices().then((items) => {
+            if (isMounted && items && items.length > 0) {
+                setServicesList(items.map((s) => ({ label: s.title, href: s.href })));
+            }
+        }).catch((err) => {
+            console.warn('Failed to load dynamic services in Footer:', err);
+        });
+        return () => { isMounted = false; };
+    }, []);
     return (
         <footer className="bg-white text-slate-600  border-t border-t-gray-100">
             <div className="mx-auto w-full container px-4 sm:px-6 lg:px-8 pt-12">
@@ -156,8 +161,8 @@ const Footer: React.FC = () => {
                             Services
                         </p>
                         <ul className="mt-4 space-y-3">
-                            {footerLinks.Services.map((link) => (
-                                <li key={link.label}>
+                            {servicesList.map((link) => (
+                                <li key={link.href + link.label}>
                                     <Link href={link.href}
                                         className="hover:text-[#F15A23] text-[#6F6C90] transition-colors duration-500 tracking-[-0.5px]">
                                         {link.label}

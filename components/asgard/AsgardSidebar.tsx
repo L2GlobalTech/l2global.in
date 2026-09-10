@@ -14,7 +14,7 @@ import {
   X,
   User as UserIcon,
   ChevronRight,
-  Sparkles,
+  ShieldCheck,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useAsgardAuth } from '@/context/AsgardAuthContext';
@@ -64,6 +64,12 @@ export const AsgardSidebar: React.FC = () => {
       name: 'FAQs',
       href: '/asgard/faqs',
       icon: HelpCircle,
+      exact: false,
+    },
+    {
+      name: 'Admins',
+      href: '/asgard/admins',
+      icon: ShieldCheck,
       exact: false,
     },
   ];
@@ -172,22 +178,11 @@ export const AsgardSidebar: React.FC = () => {
           </div>
         )}
 
-        <div className="rounded-xl bg-slate-800/40 p-2.5 border border-slate-700/40 text-[11px] text-slate-400 flex items-center justify-between">
-          <span className="flex items-center gap-1.5 text-slate-300">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
-            Supabase DB
-          </span>
-          <span
-            className={`w-2 h-2 rounded-full ${
-              isConfigured ? 'bg-emerald-400' : 'bg-amber-400'
-            }`}
-          />
-        </div>
-
+        {/* Public Website Link */}
         <Link
           href="/"
           target="_blank"
-          className="flex items-center justify-center gap-2 w-full py-2 px-3 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
+          className="flex items-center justify-center gap-2 w-full py-2.5 px-3 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700/80 rounded-xl border border-slate-700/50 transition-colors"
         >
           <ExternalLink className="w-3.5 h-3.5" />
           <span>View Public Website</span>

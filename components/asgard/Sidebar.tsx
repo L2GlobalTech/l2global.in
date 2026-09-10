@@ -10,8 +10,9 @@ import {
   ExternalLink,
   Menu,
   X,
-  Sparkles,
   ChevronRight,
+  HelpCircle,
+  ShieldCheck,
 } from 'lucide-react';
 import { isSupabaseConfigured } from '@/configs/supabase';
 
@@ -37,6 +38,18 @@ export const Sidebar: React.FC = () => {
       name: 'Services',
       href: '/asgard/services',
       icon: Layers,
+      exact: false,
+    },
+    {
+      name: 'FAQs',
+      href: '/asgard/faqs',
+      icon: HelpCircle,
+      exact: false,
+    },
+    {
+      name: 'Admins',
+      href: '/asgard/admins',
+      icon: ShieldCheck,
       exact: false,
     },
   ];
@@ -115,22 +128,10 @@ export const Sidebar: React.FC = () => {
 
       {/* Footer / Public Link */}
       <div className="p-4 border-t border-slate-800 space-y-3">
-        <div className="rounded-xl bg-slate-800/50 p-3 border border-slate-700/50 text-xs text-slate-300">
-          <div className="flex items-center gap-2 font-medium text-white mb-1">
-            <Sparkles className="w-4 h-4 text-amber-400" />
-            <span>Supabase Connected</span>
-          </div>
-          <p className="text-[11px] text-slate-400">
-            {isConfigured
-              ? 'Realtime database backend active.'
-              : 'Add credentials to .env.local'}
-          </p>
-        </div>
-
         <Link
           href="/"
           target="_blank"
-          className="flex items-center justify-center gap-2 w-full py-2 px-3 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition-colors"
+          className="flex items-center justify-center gap-2 w-full py-2.5 px-3 text-xs font-medium text-slate-300 hover:text-white bg-slate-800 hover:bg-slate-700/80 rounded-xl border border-slate-700/50 transition-colors"
         >
           <ExternalLink className="w-3.5 h-3.5" />
           <span>View Public Website</span>

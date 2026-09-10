@@ -62,6 +62,21 @@ export const asgardSeoConfig: Record<string, PageSeoConfig> = {
     description: 'Update question text, detailed answer, category, and display order for an existing FAQ.',
     keywords: ['edit faq', 'update faq', 'asgard faqs'],
   },
+  admins: {
+    title: 'Administrators Management',
+    description: 'Manage authorized CMS administrators, assign roles, and configure user permissions.',
+    keywords: ['asgard admins', 'admin management', 'users', 'permissions'],
+  },
+  createAdmin: {
+    title: 'Add New Administrator',
+    description: 'Register a new authorized CMS administrator and configure access roles.',
+    keywords: ['create admin', 'new user', 'asgard admins'],
+  },
+  editAdmin: {
+    title: 'Edit Administrator',
+    description: 'Update administrator profile, contact info, access role, and permissions.',
+    keywords: ['edit admin', 'update user', 'asgard admins'],
+  },
 };
 
 /**
