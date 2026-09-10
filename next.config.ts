@@ -2,7 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
+  async redirects() {
+    return [
+      {
+        source: '/industries/healthcare',
+        destination: '/industries/health-care',
+        permanent: true,
+      },
+    ];
+  },
   images: {
     formats: ["image/webp"],
     unoptimized: true,   // <<— important
