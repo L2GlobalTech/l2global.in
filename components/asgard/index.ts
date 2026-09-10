@@ -1,4 +1,3 @@
-export { AdminFormModal } from './AdminFormModal';
 export { AsgardAuthGuard } from './AsgardAuthGuard';
 export { AsgardHeader } from './AsgardHeader';
 export { AsgardLayout } from './AsgardLayout';
