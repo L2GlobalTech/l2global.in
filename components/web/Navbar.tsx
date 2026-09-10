@@ -5,7 +5,6 @@ import React, { useEffect, useState, Fragment } from 'react'
 import webLogo from '@/public/assets/web/l2-svg.svg'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { observer } from 'mobx-react-lite'
 import GradientButton from '../shared/GradientButton'
 import { MoveRight, Dot, Menu, Phone, ChevronDown } from 'lucide-react'
 import { Menu as HeadlessMenu, Transition, Popover } from '@headlessui/react'
@@ -290,4 +289,4 @@ const Navbar = () => {
   )
 }
 
-export default observer(Navbar)
+export default Navbar
