@@ -5,6 +5,8 @@ export interface OverviewMetrics {
   featuredBlogs: number;
   totalServices: number;
   activeServices: number;
+  totalTeamMembers?: number;
+  activeTeamMembers?: number;
   totalFaqs: number;
   activeFaqs: number;
   totalAdmins: number;
@@ -23,6 +25,8 @@ export async function getOverviewStats(): Promise<OverviewMetrics> {
     featuredBlogs: 0,
     totalServices: 0,
     activeServices: 0,
+    totalTeamMembers: 0,
+    activeTeamMembers: 0,
     totalFaqs: 0,
     activeFaqs: 0,
     totalAdmins: 2,
@@ -89,11 +93,26 @@ export async function getOverviewStats(): Promise<OverviewMetrics> {
       // Use fallback
     }
 
+    let totalTeamMembers = 0;
+    let activeTeamMembers = 0;
+
+    try {
+      const { data: teamData } = await supabase.from('team_members').select('id, is_active');
+      if (teamData && teamData.length > 0) {
+        totalTeamMembers = teamData.length;
+        activeTeamMembers = teamData.filter((t: any) => t.is_active !== false).length;
+      }
+    } catch {
+      // Use fallback
+    }
+
     return {
       totalBlogs,
       featuredBlogs,
       totalServices,
       activeServices,
+      totalTeamMembers,
+      activeTeamMembers,
       totalFaqs,
       activeFaqs,
       totalAdmins,

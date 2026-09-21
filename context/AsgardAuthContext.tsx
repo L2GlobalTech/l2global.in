@@ -29,14 +29,26 @@ export const AsgardAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const [loading, setLoading] = useState<boolean>(true);
   const router = useRouter();
 
-  // Initialize Auth State from Cookies / LocalStorage or Supabase
+  // Initialize Auth State from Supabase
   useEffect(() => {
     let isMounted = true;
 
     async function initAuth() {
       try {
         if (isSupabaseConfigured()) {
-          const { data: { session }, error } = await supabase.auth.getSession();
+          const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+          console.log("SUPABASE SESSION:", session);
+          console.log("SUPABASE USER:", session?.user);
+
+          const { data: { user: supabaseUser }, error: userError } = await supabase.auth.getUser();
+          console.log("SUPABASE USER (getUser):", supabaseUser);
+
+          console.log({
+            authenticated: !!session,
+            userId: session?.user?.id,
+            email: session?.user?.email,
+          });
+
           if (session?.user && isMounted) {
             const authUser: AsgardUser = {
               id: session.user.id,
@@ -50,24 +62,20 @@ export const AsgardAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             setLoading(false);
             return;
           }
-        }
 
-        // Fallback or local session check via Cookies
-        const token = Cookies.get(ASGARD_ACCESS_TOKEN);
-        const storedUser = localStorage.getItem(ASGARD_ADMIN_INFO);
-
-        if (token && storedUser) {
-          try {
-            const parsed = JSON.parse(storedUser);
-            if (isMounted) setUser(parsed);
-          } catch {
-            if (isMounted) setUser(null);
+          // If no active Supabase Auth session exists, clear local state
+          if (isMounted) {
+            setUser(null);
+            Cookies.remove(ASGARD_ACCESS_TOKEN);
+            localStorage.removeItem(ASGARD_ADMIN_INFO);
           }
         } else {
+          console.warn("Supabase is not configured in environment");
           if (isMounted) setUser(null);
         }
       } catch (err) {
         console.error('Failed to initialize Asgard auth:', err);
+        if (isMounted) setUser(null);
       } finally {
         if (isMounted) setLoading(false);
       }
@@ -78,6 +86,12 @@ export const AsgardAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     if (isSupabaseConfigured()) {
       const { data: { subscription } } = supabase.auth.onAuthStateChange(
         (event, session) => {
+          console.log('SUPABASE AUTH STATE CHANGE:', event, {
+            authenticated: !!session,
+            userId: session?.user?.id,
+            email: session?.user?.email,
+          });
+
           if (session?.user) {
             const authUser: AsgardUser = {
               id: session.user.id,
@@ -88,7 +102,7 @@ export const AsgardAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
             setUser(authUser);
             Cookies.set(ASGARD_ACCESS_TOKEN, session.access_token, { expires: 7 });
             localStorage.setItem(ASGARD_ADMIN_INFO, JSON.stringify(authUser));
-          } else if (event === 'SIGNED_OUT') {
+          } else if (event === 'SIGNED_OUT' || !session) {
             setUser(null);
             Cookies.remove(ASGARD_ACCESS_TOKEN);
             localStorage.removeItem(ASGARD_ADMIN_INFO);
@@ -107,54 +121,56 @@ export const AsgardAuthProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     };
   }, []);
 
-  // Sign In Handler
+  // Sign In Handler using Supabase Auth
   const signIn = useCallback(async (email: string, password: string): Promise<{ success: boolean; error?: string }> => {
     try {
-      if (isSupabaseConfigured()) {
-        const { data, error } = await supabase.auth.signInWithPassword({
-          email,
-          password,
+      if (!isSupabaseConfigured()) {
+        const errorMsg = 'Supabase credentials are not configured in environment variables.';
+        toast.error(errorMsg);
+        return { success: false, error: errorMsg };
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        console.error('Supabase signInWithPassword failed:', {
+          message: error.message,
+          details: (error as any).details,
+          hint: (error as any).hint,
+          code: (error as any).code,
         });
+        toast.error(error.message || 'Invalid credentials');
+        return { success: false, error: error.message };
+      }
 
-        if (error) {
-          toast.error(error.message || 'Invalid credentials');
-          return { success: false, error: error.message };
-        }
+      if (data.session && data.user) {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
 
-        if (data.session && data.user) {
-          const authUser: AsgardUser = {
-            id: data.user.id,
-            email: data.user.email || email,
-            role: data.user.role || 'admin',
-            name: data.user.user_metadata?.full_name || email.split('@')[0] || 'Admin',
-          };
+        console.log("LOGIN SESSION:", session);
 
-          setUser(authUser);
-          Cookies.set(ASGARD_ACCESS_TOKEN, data.session.access_token, { expires: 7 });
-          localStorage.setItem(ASGARD_ADMIN_INFO, JSON.stringify(authUser));
-          toast.success('Signed in successfully');
-          return { success: true };
-        }
-      } else {
-        // Standalone / Local fallback mode for demo
-        const mockUser: AsgardUser = {
-          id: 'demo-admin-id',
-          email,
-          role: 'admin',
-          name: email.split('@')[0] || 'Admin',
+        const authUser: AsgardUser = {
+          id: data.user.id,
+          email: data.user.email || email,
+          role: data.user.role || 'admin',
+          name: data.user.user_metadata?.full_name || email.split('@')[0] || 'Admin',
         };
 
-        const mockToken = 'asgard_demo_token_' + Date.now();
-        Cookies.set(ASGARD_ACCESS_TOKEN, mockToken, { expires: 7 });
-        localStorage.setItem(ASGARD_ADMIN_INFO, JSON.stringify(mockUser));
-        setUser(mockUser);
-        toast.success('Signed in (Demo CMS mode)');
+        setUser(authUser);
+        Cookies.set(ASGARD_ACCESS_TOKEN, data.session.access_token, { expires: 7 });
+        localStorage.setItem(ASGARD_ADMIN_INFO, JSON.stringify(authUser));
+        toast.success('Signed in successfully');
         return { success: true };
       }
 
       return { success: false, error: 'Authentication failed' };
     } catch (err: any) {
       const msg = err?.message || 'Login error occurred';
+      console.error('Exception during signIn:', err);
       toast.error(msg);
       return { success: false, error: msg };
     }

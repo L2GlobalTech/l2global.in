@@ -3,10 +3,13 @@ import TeamSection from '@/components/web/TeamSection'
 import React from 'react'
 import heroImage from '@/public/assets/web/team/hero.png'
 import HeroCTA from '@/components/web/HeroCTA'
+import { TeamMemberRecord } from '@/types/cms'
 
+interface TeamContainerProps {
+    initialMembers?: TeamMemberRecord[]
+}
 
-
-const TeamContainer = () => {
+const TeamContainer = ({ initialMembers }: TeamContainerProps) => {
     return (
         <div>
             <div>
@@ -19,7 +22,7 @@ const TeamContainer = () => {
                 />
             </div>
             <div>
-                <TeamSection />
+                <TeamSection initialMembers={initialMembers} />
             </div>
 
             <div className='mt-4 md:mt-8'>
@@ -32,7 +35,6 @@ const TeamContainer = () => {
                     secondaryBtnText="View Services"
                     secondaryBtnLink="/services"
                 />
-
             </div>
         </div>
     )

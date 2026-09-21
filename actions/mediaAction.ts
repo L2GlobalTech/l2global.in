@@ -19,7 +19,8 @@ const STORAGE_BUCKET = 'media';
  */
 export async function uploadMedia(
   file: File,
-  folder: string = 'general'
+  folder: string = 'general',
+  bucketName: string = STORAGE_BUCKET
 ): Promise<UploadMediaResult> {
   if (!file) {
     return { success: false, data: null, error: new Error('No file provided') };
@@ -27,38 +28,71 @@ export async function uploadMedia(
 
   // Clean filename: remove special characters and add timestamp
   const cleanName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-  const filePath = `${folder}/${Date.now()}_${cleanName}`;
+  const filePath = `${folder}/${Date.now()}-${cleanName}`;
 
+  // Verify Supabase Auth session before uploading
   if (isSupabaseConfigured()) {
     try {
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+
+      console.log('===== SUPABASE AUTH DEBUG =====');
+      console.log('Has session:', !!session);
+      console.log('User ID:', session?.user?.id);
+      console.log('User email:', session?.user?.email);
+      console.log('Access token exists:', !!session?.access_token);
+      console.log('================================');
+
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      console.log('CURRENT SUPABASE USER:', user);
+
+      if (!session) {
+        const authErr = new Error('You must be logged in with an active Supabase session to upload files.');
+        console.error('STORAGE ERROR - No active Supabase session found [storage.objects]:', {
+          message: authErr.message,
+        });
+        return { success: false, data: null, error: authErr };
+      }
+
       const { data, error } = await supabase.storage
-        .from(STORAGE_BUCKET)
+        .from(bucketName)
         .upload(filePath, file, {
           cacheControl: '3600',
-          upsert: true,
+          upsert: false,
         });
 
       if (error) {
-        console.error('Supabase storage upload error:', error);
+        console.error('STORAGE ERROR', {
+          message: error?.message,
+          details: (error as any)?.details,
+          hint: (error as any)?.hint,
+          code: (error as any)?.code,
+        });
         return { success: false, data: null, error };
       }
 
-      const { data: publicData } = supabase.storage
-        .from(STORAGE_BUCKET)
-        .getPublicUrl(filePath);
+      const {
+        data: { publicUrl },
+      } = supabase.storage
+        .from(bucketName)
+        .getPublicUrl(data.path);
 
       return {
         success: true,
-        storagePath: filePath,
-        url: publicData.publicUrl,
+        storagePath: data.path,
+        url: publicUrl,
         data: {
-          id: filePath,
-          path: filePath,
-          url: publicData.publicUrl,
+          id: data.path,
+          path: data.path,
+          url: publicUrl,
         },
       };
     } catch (err: any) {
-      console.error('Failed to upload file to storage:', err);
+      console.error(`Exception during upload to [storage.objects (${bucketName})]:`, err);
       return { success: false, data: null, error: err };
     }
   }

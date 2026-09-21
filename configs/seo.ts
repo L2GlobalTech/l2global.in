@@ -77,6 +77,21 @@ export const asgardSeoConfig: Record<string, PageSeoConfig> = {
     description: 'Update administrator profile, contact info, access role, and permissions.',
     keywords: ['edit admin', 'update user', 'asgard admins'],
   },
+  team: {
+    title: 'Team Members Management',
+    description: 'Manage team members, certifications, social profiles, and display order.',
+    keywords: ['asgard team', 'team members', 'leadership', 'team management'],
+  },
+  createTeamMember: {
+    title: 'Add New Team Member',
+    description: 'Add a new team member with profile image, certification, card color, and social handles.',
+    keywords: ['create team member', 'add team', 'asgard team'],
+  },
+  editTeamMember: {
+    title: 'Edit Team Member',
+    description: 'Update team member information, certification, image, card color, and social links.',
+    keywords: ['edit team member', 'update team', 'asgard team'],
+  },
 };
 
 /**

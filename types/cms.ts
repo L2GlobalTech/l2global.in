@@ -180,3 +180,29 @@ export interface FAQFormData {
   is_active?: boolean;
 }
 
+export interface TeamMemberRecord {
+  id?: string;
+  name: string | null;
+  image_url: string | null;
+  linkedin_url: string | null;
+  twitter_url: string | null;
+  certification: string | null;
+  card_color: string | null;
+  display_order: number | null;
+  is_active: boolean | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface TeamMemberFormData {
+  id?: string;
+  name: string;
+  image_url?: string | null;
+  linkedin_url?: string;
+  twitter_url?: string;
+  certification?: string;
+  card_color?: string;
+  display_order?: number;
+  is_active?: boolean;
+}
+
