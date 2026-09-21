@@ -179,28 +179,54 @@ export default function ImageCropModal({
   const touchDistanceRef = useRef<number | null>(null);
 
   // Dynamic dimension calculations:
-  // If width is defined -> use width, otherwise full image natural width (fallback 1200)
-  // If height is defined -> use height, otherwise full image natural height (fallback 800)
-  const effectiveNaturalWidth = naturalSize.width || 1200;
-  const effectiveNaturalHeight = naturalSize.height || 800;
+  // When width and height are not specified, use full image natural width and height
+  const exportDimensions = useMemo(() => {
+    const nw = naturalSize.width || 1200;
+    const nh = naturalSize.height || 800;
 
-  const exportWidth = useMemo(() => {
-    if (width) return width;
-    if (aspectRatio && height) return Math.round(height * aspectRatio);
-    return effectiveNaturalWidth;
-  }, [width, height, aspectRatio, effectiveNaturalWidth]);
+    // Case 1: Both width and height are explicitly specified
+    if (width && height) {
+      return { width, height, aspectRatio: width / height };
+    }
 
-  const exportHeight = useMemo(() => {
-    if (height) return height;
-    if (aspectRatio && width) return Math.round(width / aspectRatio);
-    return effectiveNaturalHeight;
-  }, [height, width, aspectRatio, effectiveNaturalHeight]);
+    // Case 2: Only width is specified
+    if (width && !height) {
+      const ar = aspectRatio || (nw / nh);
+      const h = Math.round(width / ar);
+      return { width, height: h, aspectRatio: ar };
+    }
 
-  const targetAspectRatio = useMemo(() => {
-    if (aspectRatio) return aspectRatio;
-    if (exportWidth && exportHeight) return exportWidth / exportHeight;
-    return 1.6;
-  }, [aspectRatio, exportWidth, exportHeight]);
+    // Case 3: Only height is specified
+    if (height && !width) {
+      const ar = aspectRatio || (nw / nh);
+      const w = Math.round(height * ar);
+      return { width: w, height, aspectRatio: ar };
+    }
+
+    // Case 4: Neither width nor height is specified, but aspectRatio is given
+    if (aspectRatio) {
+      const imageAR = nw / nh;
+      if (imageAR > aspectRatio) {
+        // Image is wider than target ratio: take full height
+        const h = nh;
+        const w = Math.round(nh * aspectRatio);
+        return { width: w, height: h, aspectRatio };
+      } else {
+        // Image is taller than target ratio: take full width
+        const w = nw;
+        const h = Math.round(nw / aspectRatio);
+        return { width: w, height: h, aspectRatio };
+      }
+    }
+
+    // Case 5: Neither width, height, nor aspectRatio is specified -> 100% FULL ORIGINAL DIMENSIONS
+    const ar = nw / nh;
+    return { width: nw, height: nh, aspectRatio: ar };
+  }, [width, height, aspectRatio, naturalSize.width, naturalSize.height]);
+
+  const exportWidth = exportDimensions.width;
+  const exportHeight = exportDimensions.height;
+  const targetAspectRatio = exportDimensions.aspectRatio;
 
   // Measure crop box dimensions on mount, image load, and window resize
   const updateCropBoxSize = useCallback(() => {
@@ -396,7 +422,9 @@ export default function ImageCropModal({
               <span>Crop & Position Media</span>
             </h2>
             <p className="text-xs text-gray-500 mt-0.5">
-              Drag image to frame &bull; Export size: {exportWidth} × {exportHeight} ({targetAspectRatio.toFixed(2)})
+              Drag image to frame &bull; Export size: {exportWidth} × {exportHeight} (
+              {!width && !height && !aspectRatio ? 'Full Image Resolution' : `${targetAspectRatio.toFixed(2)}:1`}
+              )
             </p>
           </div>
 

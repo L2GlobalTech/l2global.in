@@ -1,7 +1,7 @@
 import TeamContainer from '@/containers/web/TeamContainer'
 import React from 'react'
 import { Metadata } from 'next';
-
+import { getPublicTeamMembers } from '@/app/(asgard)/asgard/team/action';
 
 export const metadata: Metadata = {
     title: 'Team',
@@ -23,9 +23,12 @@ export const metadata: Metadata = {
     },
 };
 
-const page = () => {
+const page = async () => {
+    const initialMembers = await getPublicTeamMembers();
     return (
-        <div><TeamContainer /></div>
+        <div>
+            <TeamContainer initialMembers={initialMembers} />
+        </div>
     )
 }
 

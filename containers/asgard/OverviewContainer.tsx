@@ -14,6 +14,7 @@ import {
   Calendar,
   ArrowUpDown,
   ShieldCheck,
+  Users,
 } from 'lucide-react';
 import { AsgardLayout } from '@/components/asgard/AsgardLayout';
 import { AsgardPageHeader } from '@/components/asgard/AsgardPageHeader';
@@ -29,6 +30,8 @@ export const OverviewContainer: React.FC = () => {
     featuredBlogs: 0,
     totalServices: 0,
     activeServices: 0,
+    totalTeamMembers: 0,
+    activeTeamMembers: 0,
     totalFaqs: 0,
     activeFaqs: 0,
     totalAdmins: 2,
@@ -60,6 +63,8 @@ export const OverviewContainer: React.FC = () => {
     featuredBlogs,
     totalServices,
     activeServices,
+    totalTeamMembers = 0,
+    activeTeamMembers = 0,
     totalFaqs,
     activeFaqs,
     totalAdmins,
@@ -74,19 +79,20 @@ export const OverviewContainer: React.FC = () => {
 
       <AsgardPageHeader
         title="Dashboard Overview"
-        description="Quick snapshot of your published articles, active services, FAQs, and CMS administrators."
+        description="Quick snapshot of your published articles, active services, team members, FAQs, and CMS administrators."
       />
 
       {/* Top High-Level Summary Cards */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
+          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
           <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
           {/* Blogs Summary Card */}
           <Link
             href="/asgard/blogs"
@@ -134,11 +140,37 @@ export const OverviewContainer: React.FC = () => {
                 <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
                   {totalServices}
                 </span>
-                <span className="text-xs text-slate-500 font-medium">total offerings</span>
+                <span className="text-xs text-slate-500 font-medium">offerings</span>
               </div>
             </div>
             <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
               <Layers className="w-5 h-5" />
+            </div>
+          </Link>
+
+          {/* Team Members Summary Card */}
+          <Link
+            href="/asgard/team"
+            className="group bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
+          >
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+                  Team
+                </span>
+                <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 font-bold border border-sky-200">
+                  {activeTeamMembers} Active
+                </span>
+              </div>
+              <div className="mt-1.5 flex items-baseline gap-1.5">
+                <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  {totalTeamMembers}
+                </span>
+                <span className="text-xs text-slate-500 font-medium">members</span>
+              </div>
+            </div>
+            <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <Users className="w-5 h-5" />
             </div>
           </Link>
 

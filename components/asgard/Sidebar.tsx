@@ -13,6 +13,7 @@ import {
   ChevronRight,
   HelpCircle,
   ShieldCheck,
+  Users,
 } from 'lucide-react';
 import { isSupabaseConfigured } from '@/configs/supabase';
 
@@ -38,6 +39,12 @@ export const Sidebar: React.FC = () => {
       name: 'Services',
       href: '/asgard/services',
       icon: Layers,
+      exact: false,
+    },
+    {
+      name: 'Team',
+      href: '/asgard/team',
+      icon: Users,
       exact: false,
     },
     {

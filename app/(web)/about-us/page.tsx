@@ -1,11 +1,8 @@
 import AboutUsContainer from '@/containers/web/AboutUsContainer'
 import { Metadata } from 'next';
 import React from 'react'
+import { getPublicTeamMembers } from '@/app/(asgard)/asgard/team/action';
 
-// export const metadata: Metadata = {
-//     title: 'L2 Global Technologies | About Us',
-//     description: '',
-// };
 export const metadata: Metadata = {
     title: 'About Us | USA, UK, Canada, Australia, Asia & Gulf',
     description:
@@ -20,11 +17,11 @@ export const metadata: Metadata = {
     },
 };
 
-
-const page = () => {
+const page = async () => {
+    const initialTeam = await getPublicTeamMembers();
     return (
         <>
-            <AboutUsContainer />
+            <AboutUsContainer initialTeam={initialTeam} />
         </>
     )
 }

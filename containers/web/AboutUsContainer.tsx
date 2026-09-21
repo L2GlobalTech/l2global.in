@@ -75,7 +75,13 @@ const industriesItems = [
 ];
 
 
-const AboutUsContainer = () => {
+import { TeamMemberRecord } from '@/types/cms'
+
+interface AboutUsContainerProps {
+    initialTeam?: TeamMemberRecord[]
+}
+
+const AboutUsContainer = ({ initialTeam }: AboutUsContainerProps) => {
     return (
         <div>
             {/* hero section */}
@@ -174,7 +180,7 @@ const AboutUsContainer = () => {
                     />
                 </div>
                 <div className='container mx-auto'>
-                    <TeamGrid />
+                    <TeamGrid initialMembers={initialTeam} />
                 </div>
             </div>
 

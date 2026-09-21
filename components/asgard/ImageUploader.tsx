@@ -221,12 +221,14 @@ export default function ImageUploader({
           </p>
           <p className="text-[11px] text-gray-400 mt-1">
             {width && height
-              ? `Aspect Ratio: ${width} × ${height}${aspectRatio ? ` (${aspectRatio.toFixed(2)})` : ''}`
+              ? `Target Dimensions: ${width} × ${height}${aspectRatio ? ` (${aspectRatio.toFixed(2)})` : ''}`
               : width
               ? `Target Width: ${width}px (Dynamic Height)`
               : height
               ? `Target Height: ${height}px (Dynamic Width)`
-              : 'Original Image Dimensions (Dynamic Cropper)'}
+              : aspectRatio
+              ? `Aspect Ratio: ${aspectRatio}:1 (Full Resolution)`
+              : 'Original Image Dimensions (Full Resolution)'}
           </p>
         </div>
       ) : (
@@ -294,7 +296,12 @@ export default function ImageUploader({
                   <span>&bull;</span>
                   <span>Height: {height}px</span>
                 </>
-              ) : null}
+              ) : (
+                <>
+                  <span>&bull;</span>
+                  <span>Full Resolution</span>
+                </>
+              )}
             </div>
 
             <div className="flex items-center gap-2">
