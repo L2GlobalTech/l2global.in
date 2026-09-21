@@ -14,6 +14,6 @@ export const RICHTEXTEDITOR = 'u067zq09fdftl5xrqwekurwlkbghlp8x48b3x0cqi8oiawq3'
 export const GOOGLE_CLINET_ID = process.env.NEXT_PUBLIC_CLIENT_ID ?? '';
 export const GOOGLE_DEVELOPER_KEY = process.env.NEXT_PUBLIC_DEVELOPER_KEY ?? '';
 //
-export const RAZORPAY_KEY = process.env.NEXT_PUBLIC_RAZORPAY_KEY ?? 'rzp_test_oOyKxmzyWBXLsn';
+export const RAZORPAY_KEY = process.env.NEXT_PUBLIC_RAZORPAY_KEY ?? 'rzp_live_Teib5d3ArzpPCt';
 
 export const SITE_KEY = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY ?? '6LcnJJIrAAAAABGcWufLGtjqzRB2D4Q1QC1ilFhp';
