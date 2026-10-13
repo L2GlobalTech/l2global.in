@@ -1,3 +1,4 @@
+import { canOptimizeServiceImage } from '@/lib/serviceImages'
 import React, { useEffect } from 'react'
 import AOS from 'aos'
 import 'aos/dist/aos.css'
@@ -134,7 +135,7 @@ const ServiceAboutSection: React.FC<IProps> = ({
                     </div>
 
                     <div data-aos="fade-up" data-aos-delay="300" >
-                        {imgSrc && <Image src={image} alt={imageAlt || linearText || 'Service illustration'} width={typeof image === 'string' ? 640 : image.width} height={typeof image === 'string' ? 640 : image.height} sizes="(min-width: 768px) 50vw, 100vw" className="rounded-xl border border-blue-100 w-full h-auto" unoptimized={typeof image === 'string'} />}
+                        {imgSrc && <Image src={image} alt={imageAlt || linearText || 'Service illustration'} width={typeof image === 'string' ? 640 : image.width} height={typeof image === 'string' ? 640 : image.height} sizes="(min-width: 768px) 50vw, 100vw" className="rounded-xl border border-blue-100 w-full h-auto" unoptimized={typeof image === 'string' && !canOptimizeServiceImage(image)} />}
                     </div>
 
                 </div>

@@ -17,9 +17,9 @@ import img10 from '@/public/assets/web/partners/logo11.svg'
 
 const features = [
     {
-        title: "Certified Experts",
+        title: "Project Expertise",
         description:
-            "A bench of 200+ certified professionals across every major enterprise platform.",
+            "Discuss the skills and platform experience your project requires with our team.",
         icon: Award,
         iconColor: "rgb(25, 93, 240)",
         bg: "rgb(226, 235, 253)",

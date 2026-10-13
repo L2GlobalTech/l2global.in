@@ -1,6 +1,6 @@
 import BlogPostContainer from '@/containers/web/BlogPostContainer'
 import { Metadata } from 'next'
-import { notFound } from 'next/navigation'
+import { notFound, permanentRedirect } from 'next/navigation'
 import React from 'react'
 import { getPublicBlogs, getPublicBlogBySlug } from '@/app/(asgard)/asgard/blogs/action'
 
@@ -16,7 +16,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     const cleanSlug = slug ? slug.replace(/^\/+|\/+$/g, '') : '';
     const post = await getPublicBlogBySlug(cleanSlug);
 
-    if (!post) notFound();
+    if (!post) return { title: 'Page Not Found', robots: { index: false, follow: true, googleBot: { index: false, follow: true } } };
 
     const imageUrl = post.image && post.image.startsWith('http') 
         ? post.image 
@@ -41,6 +41,7 @@ const BlogPostPage = async ({ params }: PageProps) => {
     const post = await getPublicBlogBySlug(cleanSlug);
 
     if (!post) notFound();
+    if (cleanSlug !== post.slug) permanentRedirect(`/blog/${post.slug}`);
 
     const allBlogs = await getPublicBlogs();
     const relatedPosts = (allBlogs || [])

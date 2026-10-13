@@ -51,6 +51,7 @@
 // }
 
 
+import ConversionTracking from '@/components/shared/ConversionTracking';
 import AOSProvider from "@/components/shared/AOSProvider";
 import FloatingWhatsAppButton from "@/components/shared/FloatingWhatsAppButton";
 import Footer from "@/components/web/Footer";
@@ -85,6 +86,7 @@ export default function WebLayout({
       <FloatingWhatsAppButton />
       <Footer />
       <AOSProvider />
+      <ConversionTracking />
     </main>
   );
 }

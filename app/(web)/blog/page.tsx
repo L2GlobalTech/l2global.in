@@ -3,6 +3,8 @@ import { Metadata } from 'next'
 import React from 'react'
 import { getPublicBlogs } from '@/app/(asgard)/asgard/blogs/action'
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
     title: 'Blog & Insights',
     description: 'Stay updated with the latest trends in enterprise integration, Salesforce, SAP, MuleSoft, and cloud strategies for the UK and Middle East markets.',

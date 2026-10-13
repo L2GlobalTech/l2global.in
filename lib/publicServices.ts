@@ -6,7 +6,9 @@ type PublishedService = ServiceRecord & { title: string; slug: string };
 
 export function normalizeServiceSlug(value: string | null): string | null {
   const slug = (value || '').trim().replace(/^\/+|\/+$/g, '');
-  return /^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug) ? slug : null;
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
+  // Preserve the existing CMS record while correcting its known public URL typo.
+  return slug === 'oracle-consulting-managed-servicesss' ? 'oracle-consulting-managed-services' : slug;
 }
 
 // Only CMS records with a real title and service description can become public pages.

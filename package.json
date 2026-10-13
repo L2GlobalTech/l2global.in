@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "prepare": "husky"
+    "prepare": "husky",
+    "check:seo": "tsc --noEmit --incremental false && node scripts/validate-seo.cjs"
   },
   "dependencies": {
     "@ascendtis/react-a-form": "^0.1.4",
@@ -43,5 +44,10 @@
     "husky": "^9.1.7",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "overrides": {
+    "@tailwindcss/typography": {
+      "postcss-selector-parser": "7.1.6"
+    }
   }
 }
