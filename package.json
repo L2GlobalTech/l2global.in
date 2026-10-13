@@ -19,13 +19,14 @@
     "js-cookie": "^3.0.5",
     "lucide": "^0.554.0",
     "lucide-react": "^0.554.0",
-    "next": "^16.2.3",
+    "next": "^16.3.8",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-fast-marquee": "^1.6.5",
     "react-hot-toast": "^2.6.0",
     "react-slick": "^0.31.0",
     "react-toastify": "^11.0.5",
+    "sharp": "^0.35.5",
     "slick-carousel": "^1.8.1",
     "tailwindcss-animate": "^1.0.7",
     "typewriter-effect": "^2.22.0"
@@ -40,7 +41,6 @@
     "@types/react-dom": "^19",
     "@types/react-slick": "^0.23.13",
     "husky": "^9.1.7",
-    "sharp": "^0.35.4",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

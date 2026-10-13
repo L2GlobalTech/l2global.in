@@ -5,6 +5,11 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [
       {
+        source: '/blogs/:path*',
+        destination: '/blog/:path*',
+        permanent: true,
+      },
+      {
         source: '/industries/healthcare',
         destination: '/industries/health-care',
         permanent: true,

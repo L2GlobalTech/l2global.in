@@ -1,25 +1,5 @@
-import BlogContainer from '@/containers/web/BlogContainer'
-import { Metadata } from 'next'
-import React from 'react'
-import { getPublicBlogs } from '@/app/(asgard)/asgard/blogs/action'
+import { permanentRedirect } from 'next/navigation';
 
-export const metadata: Metadata = {
-    title: 'Blog & Insights',
-    description: 'Stay updated with the latest trends in enterprise integration, Salesforce, SAP, MuleSoft, and cloud strategies for the UK and Middle East markets.',
-    alternates: { canonical: 'https://www.l2global.in/blogs' },
-    openGraph: {
-        title: 'Blog & Insights | L2 Global Technologies',
-        description: 'Latest trends in enterprise integration, Salesforce, SAP, MuleSoft and cloud strategies for UK and Middle East markets.',
-        url: 'https://www.l2global.in/blogs',
-        images: ['/assets/web/og-image.png'],
-    },
+export default function BlogsPage() {
+  permanentRedirect('/blog');
 }
-
-const BlogsPage = async () => {
-    const initialBlogs = await getPublicBlogs();
-    return (
-        <BlogContainer initialBlogs={initialBlogs} />
-    )
-}
-
-export default BlogsPage

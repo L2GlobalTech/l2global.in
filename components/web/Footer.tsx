@@ -10,12 +10,6 @@ import { fetchServices } from "@/actions/servicesAction";
 
 const year = new Date().getFullYear();
 
-const defaultFooterServices = [
-    { label: 'Salesforce Consulting & Implementation', href: '/services/salesforce-consulting-implementation' },
-    { label: 'Oracle Consulting & Managed Services', href: '/services/oracle-consulting-managed-services' },
-    { label: 'Cloud & DevOps Consulting', href: '/services/cloud-devops-consulting' },
-];
-
 const footerLinks = {
     Company: [
         { label: "About", href: "/about-us" },
@@ -41,15 +35,16 @@ const footerLinks = {
 };
 
 const Footer: React.FC = () => {
-    const [servicesList, setServicesList] = useState(defaultFooterServices);
+    const [servicesList, setServicesList] = useState<{ label: string; href: string }[]>([]);
 
     useEffect(() => {
         let isMounted = true;
         fetchServices().then((items) => {
-            if (isMounted && items && items.length > 0) {
-                setServicesList(items.map((s) => ({ label: s.title, href: s.href })));
+            if (isMounted) {
+                setServicesList((items || []).map((s) => ({ label: s.title, href: s.href })));
             }
         }).catch((err) => {
+            if (isMounted) setServicesList([]);
             console.warn('Failed to load dynamic services in Footer:', err);
         });
         return () => { isMounted = false; };
@@ -161,7 +156,7 @@ const Footer: React.FC = () => {
                             Services
                         </p>
                         <ul className="mt-4 space-y-3">
-                            {servicesList.map((link) => (
+                            {[{ label: 'View All Services', href: '/services' }, ...servicesList].map((link) => (
                                 <li key={link.href + link.label}>
                                     <Link href={link.href}
                                         className="hover:text-[#F15A23] text-[#6F6C90] transition-colors duration-500 tracking-[-0.5px]">

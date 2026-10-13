@@ -51,9 +51,7 @@ export default function NotFound() {
             Popular pages
           </p>
           <div className="flex flex-wrap items-center justify-center gap-3 text-sm">
-            <Link href="/services/salesforce-services" className="text-[#494852] hover:text-[#F15A23] underline">Salesforce Services</Link>
-            <Link href="/services/sap" className="text-[#494852] hover:text-[#F15A23] underline">SAP Services</Link>
-            <Link href="/services/mulesoft" className="text-[#494852] hover:text-[#F15A23] underline">MuleSoft Integration</Link>
+            <Link href="/services" className="text-[#494852] hover:text-[#F15A23] underline">View All Services</Link>
             <Link href="/about-us" className="text-[#494852] hover:text-[#F15A23] underline">About Us</Link>
             <Link href="/blog" className="text-[#494852] hover:text-[#F15A23] underline">Blog</Link>
           </div>

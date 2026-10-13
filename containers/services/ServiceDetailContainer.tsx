@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { resolveServiceCta } from '@/lib/serviceCta'
 import ServiceHeroSection from '@/components/web/services/ServiceHeroSection'
 import ServiceKPISection from '@/components/web/services/ServiceKPISection'
 import ServiceAboutSection from '@/components/web/services/ServiceAboutSection'
@@ -167,6 +168,7 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
             <ServiceHeroSection
                 image={heroImg}
                 imageAlt={`${serviceTitle} illustration`}
+                ctaHref={resolveServiceCta(serviceData?.hero_cta_url)}
                 sectionTitle={extractString(serviceData?.badge_text, serviceTitle)}
                 title={extractString(serviceData?.hero_title, serviceTitle)}
                 titleBefore={extractString(serviceData?.hero_title, serviceTitle)}
@@ -183,6 +185,7 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
             <ServiceAboutSection
                 image={aboutImg}
                 imageAlt={`${serviceTitle} overview`}
+                ctaHref={resolveServiceCta(serviceData?.about_cta_url)}
                 title={extractString(serviceData?.about_title, '')}
                 titleBefore={extractString(serviceData?.about_title, '')}
                 titleAfter={extractString(serviceData?.about_logo_text, '')}
@@ -209,7 +212,7 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
                     heading={extractString(serviceData?.cta_text, `Ready to Transform Your ${serviceTitle}?`)}
                     description="Discuss your project requirements with L2 Global."
                     primaryBtnText={`Book a ${serviceTitle} Consultation`}
-                    primaryBtnLink={extractString(serviceData?.cta_url, "/contact-us")}
+                    primaryBtnLink={resolveServiceCta(serviceData?.cta_url)}
                     secondaryBtnText="View All Services"
                     secondaryBtnLink="/services"
                 />

@@ -52,7 +52,42 @@ async function main() {
   assert(entries.every(item => item.url.startsWith('https://www.l2global.in') && !('lastModified' in item)));
   assert(entries.some(item => item.url === metadata.alternates.canonical));
   assert(!entries.some(item => item.url.endsWith('/thin') || item.url.endsWith('/agentforce-ai')));
+  const homeServices = load('components/web/Services.tsx', {
+    react: {}, 'lucide-react': {}, 'next/link': { default: 'a' },
+    './SectionHeader': 'header', './Divider': 'div',
+    'react/jsx-runtime': { jsx: (type, props) => ({ type, props }), jsxs: (type, props) => ({ type, props }) },
+    '@/actions/servicesAction': { fetchServices: async () => (await services.getPublishedServices()).map(service => ({
+      title: service.title, desc: service.hero_description, href: `/services/${service.slug}`,
+    })) },
+  });
+  const links = node => {
+    if (!node) return [];
+    if (Array.isArray(node)) return node.flatMap(links);
+    return [...(node.type === 'a' ? [node.props.href] : []), ...links(node.props?.children)];
+  };
+  assert.equal(JSON.stringify(links(await homeServices.default())), JSON.stringify(['/services/aws-cloud-services', '/services']));
+  failure = true;
+  assert.equal(JSON.stringify(links(await homeServices.default())), JSON.stringify(['/services']));
+  failure = false;
+  let blog = null;
+  const blogPage = load('app/(web)/blog/[slug]/page.tsx', {
+    '@/containers/web/BlogPostContainer': {}, react: {},
+    'react/jsx-runtime': { jsx: () => null, jsxs: () => null },
+    'next/navigation': { notFound: () => { throw new Error('404'); } },
+    '@/app/(asgard)/asgard/blogs/action': { getPublicBlogs: async () => [], getPublicBlogBySlug: async () => blog },
+  });
+  const blogParams = { params: Promise.resolve({ slug: 'test' }) };
+  await assert.rejects(blogPage.generateMetadata(blogParams), /404/);
+  await assert.rejects(blogPage.default(blogParams), /404/);
+  blog = { slug: 'test', title: 'Real CMS Article', excerpt: 'Actual excerpt' };
+  const blogMetadata = await blogPage.generateMetadata(blogParams);
+  assert.equal(blogMetadata.title, blog.title);
+  assert.equal(blogMetadata.alternates.canonical, 'https://www.l2global.in/blog/test');
+  await blogPage.default(blogParams);
+  const { resolveServiceCta } = load('lib/serviceCta.ts', {});
+  for (const value of [null, undefined, '', '  ', '#', ' # ']) assert.equal(resolveServiceCta(value), '/contact-us');
+  for (const value of ['/contact-us', 'https://example.com/book', '#contact']) assert.equal(resolveServiceCta(value), value);
   assert(!fs.readFileSync('app/layout.tsx', 'utf8').includes('hrefLang='));
-  console.log('SEO validation passed: publication, exact routes, missing records, outage handling, duplicate slugs, metadata, sitemap and hreflang.');
+  console.log('SEO validation passed: publication, exact routes, missing records, outage handling, duplicate slugs, metadata, sitemap, homepage publication and hreflang.');
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

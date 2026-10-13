@@ -17,6 +17,7 @@ interface IProps {
     tag3?: string;
     image: StaticImageData | string;
     imageAlt?: string;
+    ctaHref?: string;
 }
 
 const ServiceHeroSection: React.FC<IProps> = ({
@@ -30,7 +31,8 @@ const ServiceHeroSection: React.FC<IProps> = ({
     titleBefore,
     linearText,
     image,
-    imageAlt
+    imageAlt,
+    ctaHref = '/contact-us'
 }) => {
     const imgSrc = typeof image === 'string' ? image : image?.src || '';
     const renderTag = (tag: any) => {
@@ -132,7 +134,7 @@ const ServiceHeroSection: React.FC<IProps> = ({
                             className="mb-4 mt-6 md:mt-8 md:mb-0 flex justify-center md:justify-start items-center w-full"
                         >
                             <PrimaryButton
-                                onClick={() => { }}
+                                href={ctaHref}
                                 label={'Get Started Free'}
                                 icon={
                                     <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
