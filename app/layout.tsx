@@ -9,7 +9,7 @@ import "aos/dist/aos.css";
 import CookieConsent from "@/components/shared/CookieConsent";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://l2global.in'),
+  metadataBase: new URL('https://www.l2global.in'),
   title: {
     default: 'Salesforce Agentforce AI & SAP Consultants | UK · Texas USA · UAE | L2 Global',
     template: '%s | L2 Global Technologies',
@@ -21,8 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    alternateLocale: ['en_US', 'en_AE', 'en_SA', 'en_QA'],
-    url: 'https://l2global.in',
+    url: 'https://www.l2global.in',
     siteName: 'L2 Global Technologies',
     title: 'Salesforce Agentforce AI & SAP Consultants | L2 Global Technologies',
     description: 'UK, Texas USA & UAE IT consultants. Agentforce AI, SAP, MuleSoft. 182+ projects.',
@@ -61,10 +60,10 @@ export default function RootLayout({
     '@type': 'ProfessionalService',
     name: 'L2 Global Technologies',
     alternateName: ['L2 Global', 'L2 Global Tech'],
-    url: 'https://l2global.in',
+    url: 'https://www.l2global.in',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://l2global.in/assets/web/l2-svg.svg',
+      url: 'https://www.l2global.in/assets/web/l2-svg.svg',
       width: 200, height: 60,
     },
     email: 'contactus@l2global.in',
@@ -149,21 +148,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
-
-        {/* hreflang for international targeting */}
-        <link rel="alternate" hrefLang="en-gb" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-us" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-ca" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-au" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-ae" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-sa" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-qa" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-kw" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-bh" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-om" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-sg" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-in" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="x-default" href="https://l2global.in" />
 
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>

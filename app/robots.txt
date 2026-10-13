@@ -2,7 +2,7 @@ User-agent: *
 Allow: /
 Disallow: /api/
 
-Sitemap: https://l2global.in/sitemap.xml
+Sitemap: https://www.l2global.in/sitemap.xml
 
 # Search engines
 User-agent: Googlebot

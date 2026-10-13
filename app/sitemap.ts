@@ -1,11 +1,12 @@
 // app/sitemap.ts
 import { MetadataRoute } from 'next';
+import { getPublishedServices } from '@/lib/publicServices';
 import { getPublicBlogs } from '@/app/(asgard)/asgard/blogs/action';
 
-export const dynamic = 'force-static';
+export const dynamic = 'force-dynamic';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const BASE = 'https://l2global.in';
+  const BASE = 'https://www.l2global.in';
   const urls = [
     // Core pages
     { path: '/', freq: 'weekly', pri: 1.0 },
@@ -20,23 +21,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     { path: '/services', freq: 'monthly', pri: 0.95 },
 
-    // Services — AI (highest priority)
-    { path: '/services/agentforce-ai', freq: 'monthly', pri: 1.0 },
-    { path: '/services/sap-ai', freq: 'monthly', pri: 1.0 },
-    // Services — Core
-    { path: '/services/salesforce-services', freq: 'monthly', pri: 0.95 },
-    { path: '/services/sap-link-by-salesforce', freq: 'monthly', pri: 0.95 },
-    { path: '/services/mulesoft', freq: 'monthly', pri: 0.95 },
-    { path: '/services/crm-consulting', freq: 'monthly', pri: 0.95 },
-    { path: '/services/api-integration', freq: 'monthly', pri: 0.9 },
-    { path: '/services/aws-cloud-services', freq: 'monthly', pri: 0.9 },
-    { path: '/services/oracle-managed-services', freq: 'monthly', pri: 0.9 },
-    { path: '/services/sap', freq: 'monthly', pri: 0.95 },
-    // Services — Digital
-    { path: '/services/data-science', freq: 'monthly', pri: 0.9 },
-    { path: '/services/web-development', freq: 'monthly', pri: 0.9 },
-    { path: '/services/support-maintenance', freq: 'monthly', pri: 0.9 },
-    { path: '/services/software-testing', freq: 'monthly', pri: 0.9 },
     // Industries
     { path: '/industries/education', freq: 'monthly', pri: 0.7 },
     { path: '/industries/health-care', freq: 'monthly', pri: 0.7 },
@@ -45,16 +29,17 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { path: '/industries/non-profit', freq: 'monthly', pri: 0.7 },
   ];
 
-  const blogs = await getPublicBlogs();
+  const [blogs, services] = await Promise.all([getPublicBlogs(), getPublishedServices()]);
   const blogUrls = blogs.map((post) => ({
     path: `/blog/${post.slug}`,
     freq: 'monthly' as const,
     pri: 0.6,
   }));
 
-  return [...urls, ...blogUrls].map(({ path, freq, pri }) => ({
+  const serviceUrls = services.map(service => ({ path: `/services/${service.slug}`, freq: 'monthly', pri: 0.9 }));
+
+  return [...new Map([...urls, ...blogUrls, ...serviceUrls].map(entry => [entry.path, entry])).values()].map(({ path, freq, pri }) => ({
     url: `${BASE}${path}`,
-    lastModified: new Date(),
     changeFrequency: freq as MetadataRoute.Sitemap[number]['changeFrequency'],
     priority: pri,
   }));

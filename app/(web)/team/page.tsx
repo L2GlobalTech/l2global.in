@@ -14,11 +14,11 @@ export const metadata: Metadata = {
         "SAP Consultants",
         "Enterprise Technology Team"
     ],
-    alternates: { canonical: 'https://l2global.in/team' },
+    alternates: { canonical: 'https://www.l2global.in/team' },
     openGraph: {
         title: 'Team | L2 Global Technologies',
         description: 'Meet the expert team at L2 Global Technologies delivering Salesforce, SAP and enterprise IT solutions.',
-        url: 'https://l2global.in/team',
+        url: 'https://www.l2global.in/team',
         images: ['/assets/web/og-image.png'],
     },
 };

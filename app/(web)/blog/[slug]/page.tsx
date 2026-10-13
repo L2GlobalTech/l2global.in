@@ -57,16 +57,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
     const imageUrl = post.image && post.image.startsWith('http') 
         ? post.image 
-        : `https://l2global.in${post.image || '/assets/web/blog/salesforce-sap.png'}`;
+        : `https://www.l2global.in${post.image || '/assets/web/blog/salesforce-sap.png'}`;
 
     return {
         title: post.metaTitle || post.title,
         description: post.metaDescription || post.excerpt,
-        alternates: { canonical: `https://l2global.in/blog/${post.slug}` },
+        alternates: { canonical: `https://www.l2global.in/blog/${post.slug}` },
         openGraph: {
             title: post.metaTitle || post.title,
             description: post.metaDescription || post.excerpt,
-            url: `https://l2global.in/blog/${post.slug}`,
+            url: `https://www.l2global.in/blog/${post.slug}`,
             images: [imageUrl],
         },
     };

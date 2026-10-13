@@ -18,7 +18,7 @@ export default function ServiceFAQ({ faqs, serviceName }:
     return (
         <section className='py-16 container mx-auto px-4'>
             <script type='application/ld+json'
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(schema).replace(/</g, '\\u003c') }} />
             <div className='text-center mb-10'>
                 <h2 className='text-3xl font-semibold tracking-tight'>
                     Frequently Asked Questions — {serviceName}
