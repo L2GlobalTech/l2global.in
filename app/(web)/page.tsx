@@ -240,6 +240,8 @@
 // export default page;
 
 
+export const dynamic = 'force-dynamic';
+
 import HomeConatiner from '@/containers/web/HomeConatiner'
 import { Metadata } from 'next';
 import React from 'react'

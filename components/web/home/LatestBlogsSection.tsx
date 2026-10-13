@@ -130,7 +130,7 @@ const LatestBlogsSection: React.FC = () => {
                                     <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-4 pt-3 border-t border-slate-100">
                                         <div className="flex items-center gap-1.5">
                                             <Calendar className="w-3.5 h-3.5 text-[#F15A23]" />
-                                            <span>{new Date(post.datePublished).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+                                            <span>{(post.datePublished ? new Date(post.datePublished).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '')}</span>
                                         </div>
                                         <div className="flex items-center gap-1.5">
                                             <Clock className="w-3.5 h-3.5 text-slate-400" />

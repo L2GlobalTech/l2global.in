@@ -155,6 +155,7 @@ export default function ContactForm() {
       }
 
       trackEvent("contact_form_submit", { service: form.service });
+      trackEvent("generate_lead", { service: form.service });
 
       setForm({
         last_name: "",

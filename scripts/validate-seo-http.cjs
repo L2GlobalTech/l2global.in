@@ -1,21 +1,39 @@
 const assert = require('node:assert/strict');
-const base = 'http://127.0.0.1:3107';
+const base = process.env.SEO_TEST_BASE_URL || 'http://127.0.0.1:3107';
 (async () => {
- for (const path of ['/services/aws-cloud-services', '/services/unknown-seo-test']) {
+ for (const path of ['/services/aws-cloud-services', '/services/unknown-seo-test', '/blog/unknown-seo-test']) {
   const response = await fetch(base+path, {headers:{'user-agent':'Googlebot'}});
   const html = await response.text();
   assert.equal(response.status,404);
   assert(/<meta name="robots" content="[^"]*noindex/.test(html));
-  console.log(path, '404 + noindex (without configured CMS)');
+  assert(!/href="\/services\//.test(html), 'Missing pages must not advertise unverified services');
+  console.log(path, '404 + noindex + no fallback service links (without configured CMS)');
  }
- for (const path of ['/', '/services']) {
+ const blogError = await fetch(base+'/blog/unknown-seo-test', {headers:{'user-agent':'Googlebot'}});
+ const blogErrorHtml = await blogError.text();
+ assert((blogErrorHtml.match(/<footer/g) || []).length <= 1, 'A scoped error response must not duplicate the footer');
+ for (const path of ['/', '/services', '/faq']) {
   const response = await fetch(base+path, {headers:{'user-agent':'Googlebot'}});
   const html = await response.text();
   assert.equal(response.status,200);
   assert(html.includes(`rel="canonical" href="https://www.l2global.in${path==='/'?'':path}`));
   assert(!html.includes('hreflang='));
-  console.log(path, '200 + www canonical + no global hreflang');
+  assert(!/href="\/services\//.test(html), 'Unconfigured CMS must not advertise service detail links');
+  console.log(path, '200 + www canonical + no global hreflang + no fallback service links');
  }
+ for (const [path, destination] of [['/services/oracle-consulting-managed-servicesss', '/services/oracle-consulting-managed-services'], ['/services/oracle-managed-services', '/services/oracle-consulting-managed-services'], ['/blogs', '/blog'], ['/blogs/legacy-post?utm_source=test', '/blog/legacy-post?utm_source=test']]) {
+  const response = await fetch(base+path, {redirect:'manual'});
+  assert.equal(response.status,308);
+  assert.equal(new URL(response.headers.get('location'),base).pathname + new URL(response.headers.get('location'),base).search, destination);
+  console.log(path, '308 →', destination);
+ }
+ const llms = await fetch(base+'/llms.txt');
+ assert.equal(llms.status, 200);
+ const llmsText = await llms.text();
+ assert(llmsText.includes('https://www.l2global.in/services'));
+ assert(!llmsText.includes('https://l2global.in'));
+ assert(!llmsText.includes('/services/agentforce-ai'));
+ console.log('llms.txt canonical URLs; unavailable services excluded');
  const sitemap = await fetch(base+'/sitemap.xml');
  const xml = await sitemap.text();
  assert.equal(sitemap.status,200);

@@ -4,6 +4,13 @@ const nextConfig: NextConfig = {
   trailingSlash: false,
   async redirects() {
     return [
+      { source: '/services/oracle-consulting-managed-servicesss', destination: '/services/oracle-consulting-managed-services', permanent: true },
+      { source: '/services/oracle-managed-services', destination: '/services/oracle-consulting-managed-services', permanent: true },
+      {
+        source: '/blogs/:path*',
+        destination: '/blog/:path*',
+        permanent: true,
+      },
       {
         source: '/industries/healthcare',
         destination: '/industries/health-care',
