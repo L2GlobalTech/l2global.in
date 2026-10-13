@@ -1,12 +1,13 @@
 const assert = require('node:assert/strict');
-const base = 'http://127.0.0.1:3107';
+const base = process.env.SEO_TEST_BASE_URL || 'http://127.0.0.1:3107';
 (async () => {
  for (const path of ['/services/aws-cloud-services', '/services/unknown-seo-test']) {
   const response = await fetch(base+path, {headers:{'user-agent':'Googlebot'}});
   const html = await response.text();
   assert.equal(response.status,404);
   assert(/<meta name="robots" content="[^"]*noindex/.test(html));
-  console.log(path, '404 + noindex (without configured CMS)');
+  assert(!/href="\/services\//.test(html), 'Missing pages must not advertise unverified services');
+  console.log(path, '404 + noindex + no fallback service links (without configured CMS)');
  }
  for (const path of ['/', '/services']) {
   const response = await fetch(base+path, {headers:{'user-agent':'Googlebot'}});
@@ -14,7 +15,14 @@ const base = 'http://127.0.0.1:3107';
   assert.equal(response.status,200);
   assert(html.includes(`rel="canonical" href="https://www.l2global.in${path==='/'?'':path}`));
   assert(!html.includes('hreflang='));
-  console.log(path, '200 + www canonical + no global hreflang');
+  assert(!/href="\/services\//.test(html), 'Unconfigured CMS must not advertise service detail links');
+  console.log(path, '200 + www canonical + no global hreflang + no fallback service links');
+ }
+ for (const [path, destination] of [['/blogs', '/blog'], ['/blogs/legacy-post?utm_source=test', '/blog/legacy-post?utm_source=test']]) {
+  const response = await fetch(base+path, {redirect:'manual'});
+  assert.equal(response.status,308);
+  assert.equal(new URL(response.headers.get('location'),base).pathname + new URL(response.headers.get('location'),base).search, destination);
+  console.log(path, '308 →', destination);
  }
  const sitemap = await fetch(base+'/sitemap.xml');
  const xml = await sitemap.text();
