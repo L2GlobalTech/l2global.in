@@ -235,42 +235,8 @@ export async function getServiceById(id: string): Promise<ServiceRecord | null> 
  * READ: Get a single service by slug or title from Supabase for public pages
  */
 export async function getPublicServiceBySlug(slug: string): Promise<ServiceRecord | null> {
-  try {
-    if (!slug || !isSupabaseConfigured()) {
-      return null;
-    }
-
-    const cleanSlug = slug.trim().toLowerCase().replace(/^\/+|\/+$/g, '');
-    const decodedSlug = decodeURIComponent(cleanSlug);
-
-    // 1. Check exact slug or ID match in Supabase
-    let { data, error } = await supabase
-      .from('services')
-      .select('*')
-      .or(`slug.eq.${cleanSlug},slug.eq./${cleanSlug},id.eq.${cleanSlug}`)
-      .maybeSingle();
-
-    if (data && !error) {
-      return normalizeService(data);
-    }
-
-    // 2. Search by title pattern if not exact match
-    const titleSearch = decodedSlug.replace(/-/g, ' ');
-    const { data: titleMatches } = await supabase
-      .from('services')
-      .select('*')
-      .or(`title.ilike.%${titleSearch}%,slug.ilike.%${cleanSlug}%`)
-      .limit(1);
-
-    if (titleMatches && titleMatches.length > 0) {
-      return normalizeService(titleMatches[0]);
-    }
-
-    return null;
-  } catch (error) {
-    console.error('Failed to query public service by slug from Supabase:', error);
-    return null;
-  }
+  const { getPublishedService } = await import('@/lib/publicServices');
+  return getPublishedService(slug);
 }
 
 /**

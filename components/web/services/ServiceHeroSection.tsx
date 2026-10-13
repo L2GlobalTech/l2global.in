@@ -2,7 +2,7 @@ import React from 'react'
 import styles from './ServiceHeroSection.module.css'
 import SectionHeader from '../SectionHeader'
 import PrimaryButton from '@/components/shared/PrimaryButton'
-import { StaticImageData } from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { renderFormattedTitle } from '@/utils/highlightText';
 
 interface IProps {
@@ -16,6 +16,7 @@ interface IProps {
     tag2?: string;
     tag3?: string;
     image: StaticImageData | string;
+    imageAlt?: string;
 }
 
 const ServiceHeroSection: React.FC<IProps> = ({
@@ -28,7 +29,8 @@ const ServiceHeroSection: React.FC<IProps> = ({
     titleAfter,
     titleBefore,
     linearText,
-    image
+    image,
+    imageAlt
 }) => {
     const imgSrc = typeof image === 'string' ? image : image?.src || '';
     const renderTag = (tag: any) => {
@@ -181,7 +183,7 @@ const ServiceHeroSection: React.FC<IProps> = ({
                         data-aos-delay="300"
                         data-aos-duration="1000"
                     >
-                        {imgSrc && <img src={imgSrc} alt={linearText || 'service-hero'} />}
+                        {imgSrc && <Image src={image} alt={imageAlt || sectionTitle || 'Service illustration'} width={typeof image === 'string' ? 640 : image.width} height={typeof image === 'string' ? 640 : image.height} sizes="(min-width: 768px) 50vw, 100vw" className="w-full h-auto" priority unoptimized={typeof image === 'string'} />}
                     </div>
 
                 </div>

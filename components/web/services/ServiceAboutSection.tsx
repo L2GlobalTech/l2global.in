@@ -3,7 +3,7 @@ import AOS from 'aos'
 import 'aos/dist/aos.css'
 import styles from './ServiceHeroSection.module.css'
 import PrimaryButton from '@/components/shared/PrimaryButton'
-import { StaticImageData } from 'next/image'
+import Image, { StaticImageData } from 'next/image'
 import { renderFormattedTitle } from '@/utils/highlightText'
 
 interface IProps {
@@ -14,6 +14,7 @@ interface IProps {
     description: string;
     features: string[];
     image: StaticImageData | string;
+    imageAlt?: string;
 }
 
 const ServiceAboutSection: React.FC<IProps> = ({
@@ -23,7 +24,8 @@ const ServiceAboutSection: React.FC<IProps> = ({
     linearText,
     titleAfter,
     titleBefore,
-    image
+    image,
+    imageAlt
 }) => {
     const imgSrc = typeof image === 'string' ? image : image?.src || '';
 
@@ -130,7 +132,7 @@ const ServiceAboutSection: React.FC<IProps> = ({
                     </div>
 
                     <div data-aos="fade-up" data-aos-delay="300" >
-                        {imgSrc && <img src={imgSrc} alt={linearText || 'service-about'} className='rounded-xl border border-blue-100' />}
+                        {imgSrc && <Image src={image} alt={imageAlt || linearText || 'Service illustration'} width={typeof image === 'string' ? 640 : image.width} height={typeof image === 'string' ? 640 : image.height} sizes="(min-width: 768px) 50vw, 100vw" className="rounded-xl border border-blue-100 w-full h-auto" unoptimized={typeof image === 'string'} />}
                     </div>
 
                 </div>

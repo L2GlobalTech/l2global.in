@@ -119,47 +119,8 @@ export const mapServiceRecordToFrontend = (record: any): FrontendService => {
  * Returns ONLY the services created in Supabase.
  */
 export async function fetchServices(): Promise<FrontendService[]> {
-    try {
-        if (!isSupabaseConfigured()) {
-            return defaultServices;
-        }
-
-        let query = supabase
-            .from('services')
-            .select('*');
-
-        try {
-            query = query
-                .order('sort_order', { ascending: true, nullsFirst: false })
-                .order('created_at', { ascending: false, nullsFirst: false });
-        } catch {
-            query = query.order('created_at', { ascending: false });
-        }
-
-        const { data, error } = await query;
-
-        if (error) {
-            console.error('Error fetching services from Supabase:', error);
-            return defaultServices;
-        }
-
-        if (data && data.length > 0) {
-            // Filter only active services from Supabase
-            const activeDbServices = data
-                .filter((item: any) => item.is_active !== false)
-                .map(mapServiceRecordToFrontend);
-
-            // Return strictly the active services from Supabase
-            if (activeDbServices.length > 0) {
-                return activeDbServices;
-            }
-        }
-
-        return defaultServices;
-    } catch (err) {
-        console.error('Exception fetching services from Supabase:', err);
-        return defaultServices;
-    }
+    const { getPublishedServices } = await import('@/lib/publicServices');
+    return (await getPublishedServices()).map(mapServiceRecordToFrontend);
 }
 
 /**
@@ -183,7 +144,7 @@ export async function fetchServiceBySlug(slug: string): Promise<FrontendService 
 
         if (found) return found;
 
-        return all[0] || null;
+        return null;
     } catch (err) {
         console.error('Failed to fetch service by slug:', err);
         return null;

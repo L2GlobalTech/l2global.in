@@ -1,32 +1,18 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import HeroCTA from '@/components/web/HeroCTA'
 import { FrontendService } from '@/types'
-import { fetchServices, defaultServices, getServiceIcon } from '@/actions/servicesAction'
+import { getServiceIcon } from '@/actions/servicesAction'
 
 interface ServicesOverviewContainerProps {
     initialServices?: FrontendService[]
 }
 
 const ServicesOverviewContainer: React.FC<ServicesOverviewContainerProps> = ({ initialServices }) => {
-    const [servicesList, setServicesList] = useState<FrontendService[]>(
-        initialServices && initialServices.length > 0 ? initialServices : defaultServices
-    )
-
-    useEffect(() => {
-        let isMounted = true
-        fetchServices().then((data) => {
-            if (isMounted && data && data.length > 0) {
-                setServicesList(data)
-            }
-        }).catch((err) => {
-            console.error('Failed to fetch services from Supabase:', err)
-        })
-        return () => { isMounted = false }
-    }, [])
+    const servicesList = initialServices || []
 
     return (
         <div>

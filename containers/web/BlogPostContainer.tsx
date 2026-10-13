@@ -189,7 +189,7 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost
 
     const formattedImageUrl = post.image?.startsWith('http')
         ? post.image
-        : `https://l2global.in${post.image?.startsWith('/') ? '' : '/'}${post.image || 'assets/web/og-image.png'}`;
+        : `https://www.l2global.in${post.image?.startsWith('/') ? '' : '/'}${post.image || 'assets/web/og-image.png'}`;
 
     const readTime = calculateReadTime(post.content);
     const formattedDate = new Date(post.datePublished).toLocaleDateString('en-GB', {
@@ -201,7 +201,7 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost
     const styleInfo = getCategoryIcon(post.category, post.slug);
     const CategoryIcon = styleInfo.icon;
 
-    const pageUrl = typeof window !== 'undefined' ? window.location.href : `https://l2global.in/blog/${post.slug || post.id}`;
+    const pageUrl = typeof window !== 'undefined' ? window.location.href : `https://www.l2global.in/blog/${post.slug || post.id}`;
 
     const handleCopyLink = () => {
         if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -245,13 +245,13 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost
             'name': 'L2 Global Technology Ltd.',
             'logo': {
                 '@type': 'ImageObject',
-                'url': 'https://l2global.in/assets/web/logo.png'
+                'url': 'https://www.l2global.in/assets/web/logo.png'
             }
         },
         'description': post.excerpt,
         'mainEntityOfPage': {
             '@type': 'WebPage',
-            '@id': `https://l2global.in/blog/${post.slug || post.id}`
+            '@id': `https://www.l2global.in/blog/${post.slug || post.id}`
         }
     };
 
