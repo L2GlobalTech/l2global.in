@@ -1,7 +1,7 @@
 const assert = require('node:assert/strict');
 const base = process.env.SEO_TEST_BASE_URL || 'http://127.0.0.1:3107';
 (async () => {
- for (const path of ['/services/aws-cloud-services', '/services/unknown-seo-test']) {
+ for (const path of ['/services/aws-cloud-services', '/services/unknown-seo-test', '/blog/unknown-seo-test']) {
   const response = await fetch(base+path, {headers:{'user-agent':'Googlebot'}});
   const html = await response.text();
   assert.equal(response.status,404);
