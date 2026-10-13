@@ -70,3 +70,19 @@ AWS/AI/ML/IT Support/DevOps terms should be included in overview copy only to th
 - CMS-backed success responses require configured read-only Supabase access and post-deployment checks. No database records, credentials, master branch or hosting settings were modified.
 
 Framework behavior checked against installed Next.js documentation and official references: https://nextjs.org/docs/app/api-reference/functions/not-found and https://nextjs.org/docs/app/api-reference/file-conventions/metadata/sitemap . Streaming can retain HTTP 200 for late notFound responses; noindex is required independently of status, and local production responses are checked with a crawler user agent.
+
+## Follow-up code fixes — 13 October 2026
+
+- Removed hardcoded service destinations from desktop/mobile navigation and footer. The initial and failed/empty CMS states now show only View All Services; successful reads show published CMS records. Service detail links on the overview remain server-rendered. Navigation continues to fetch after hydration.
+- Homepage service cards now render up to four published CMS records on the server instead of advertising hardcoded offerings. The homepage is dynamic to keep those links current; it retains View All Services if CMS is empty or unavailable. The 404 page also links to the services overview instead of unverified service shortcuts.
+- `/blogs` and `/blogs/:path*` permanently redirect to `/blog` and `/blog/:path*`, preserving query parameters. Alias page files also redirect instead of rendering duplicate metadata/content. Existing singular blog links and sitemap URLs stay authoritative.
+- Updated Next.js within the 16.3 patch line to 16.3.8 and sharp to 0.35.5; moved sharp to production dependencies for runtime image optimization; refreshed compatible transitive packages including source-map-js and baseline-browser-mapping. No forced dependency downgrade or lifecycle scripts were run.
+- CMS publication/content corrections, service alias redirect decisions, merging and deployment remain pending owner approval.
+
+Follow-up validation:
+- TypeScript (no emit), SEO fixture checks (including published homepage cards and the CMS outage state), and diff whitespace checks passed.
+- Production webpack build passed in a temporary copy using Node 24.19.0 and Next.js 16.3.8. The local default Node 20 is below the existing Supabase dependency's Node >=22 requirement; verify staging/production uses a supported runtime before deployment. No hosting runtime setting was changed.
+- Local HTTP checks passed: missing services 404 + noindex, no hardcoded detail links on homepage/overview/404, www canonicals, no global hreflang, /blogs redirects with query preservation, 15 unique sitemap entries without CMS, trailing slash 308, and optimized WebP response 200.
+- Full dependency audit now reports 0 Critical, 0 High, and 2 Moderate package findings. Remaining findings are @tailwindcss/typography and its pinned postcss-selector-parser dependency. The automatic suggestion downgrades typography to 0.5.4; it was not applied. This audit is not a count of GitHub's full Dependabot alert inventory.
+- Build and HTTP checks used no CMS credentials. Successful CMS-backed production responses and browser visual QA remain unverified.
+- Changes are local and uncommitted on fix/seo-critical-high; no push, merge, CMS edit, or deployment was performed.
