@@ -15,6 +15,7 @@ interface IProps {
     features: string[];
     image: StaticImageData | string;
     imageAlt?: string;
+    ctaHref?: string;
 }
 
 const ServiceAboutSection: React.FC<IProps> = ({
@@ -25,7 +26,8 @@ const ServiceAboutSection: React.FC<IProps> = ({
     titleAfter,
     titleBefore,
     image,
-    imageAlt
+    imageAlt,
+    ctaHref = '/contact-us'
 }) => {
     const imgSrc = typeof image === 'string' ? image : image?.src || '';
 
@@ -117,8 +119,8 @@ const ServiceAboutSection: React.FC<IProps> = ({
                                 data-aos-delay="400"
                             >
                                 <PrimaryButton
-                                    onClick={() => { }}
-                                    label={'Get a qoute'}
+                                    href={ctaHref}
+                                    label={'Get a Quote'}
                                     icon={
                                         <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
                                             <path d="M11.25 14L9.64687 12.3667L13.6969 8.16667H0V5.83333H13.6969L9.675 1.63333L11.25 0L18 7L11.25 14Z" fill="white" />
