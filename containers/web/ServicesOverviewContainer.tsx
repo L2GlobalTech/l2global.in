@@ -21,11 +21,11 @@ const ServicesOverviewContainer: React.FC<ServicesOverviewContainerProps> = ({ i
                     Our Services
                 </p>
                 <h1 className="text-4xl md:text-6xl font-bold text-[#0D1526] tracking-[-1px] mb-6">
-                    Everything We Deliver
+                    IT Consulting & Implementation Services
                 </h1>
                 <p className="text-[#494852] text-lg max-w-2xl mx-auto">
-                    Salesforce, SAP, MuleSoft, cloud, data science and web development —
-                    all under one roof, serving USA, UK, Canada, Australia, Asia and Gulf businesses.
+                    Explore our service capabilities, delivery approach and support options.
+                    Choose a service below to discuss your project requirements.
                 </p>
             </div>
 

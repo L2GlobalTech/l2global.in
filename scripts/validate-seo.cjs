@@ -36,9 +36,15 @@ async function main() {
   records.pop(); failure = true;
   await assert.rejects(services.getPublishedServices(), /Unable/); failure = false;
   const page = load('app/(web)/services/[slug]/page.tsx', {
-    '@/containers/services/ServiceDetailContainer': {}, 'react/jsx-runtime': { jsx: () => null, jsxs: () => null },
+    '@/containers/services/ServiceDetailContainer': {}, 'next/link': { default: 'a' },
+    'react/jsx-runtime': { jsx: (type, props) => ({ type, props }), jsxs: (type, props) => ({ type, props }) },
     'next/navigation': { notFound: () => { throw new Error('404'); } }, '@/lib/publicServices': services,
   });
+  const serviceRender = await page.default({ params: Promise.resolve({ slug: 'aws-cloud-services' }) });
+  const serviceSchemas = JSON.parse(serviceRender.props.children[0].props.dangerouslySetInnerHTML.__html);
+  assert.equal(serviceSchemas[1]['@type'], 'BreadcrumbList');
+  assert.equal(serviceSchemas[1].itemListElement[2].item, 'https://www.l2global.in/services/aws-cloud-services');
+  assert.equal(serviceRender.props.children[2], false); // No links to inactive, thin or current services.
   const metadata = await page.generateMetadata({ params: Promise.resolve({ slug: 'aws-cloud-services' }) });
   assert.equal(metadata.alternates.canonical, 'https://www.l2global.in/services/aws-cloud-services');
   assert.equal(metadata.description, 'CMS cloud description');
