@@ -3,12 +3,12 @@ import React from 'react'
 export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'IT Services | Salesforce, SAP, AWS & DevOps',
-  description: 'Explore Salesforce, SAP, MuleSoft, AWS cloud, DevOps, IT support, data science, software testing and web development services from L2 Global.',
+  title: 'IT Consulting & Implementation Services',
+  description: 'Explore L2 Global’s IT consulting, implementation and managed services. View service capabilities and discuss your project requirements.',
   alternates: { canonical: 'https://www.l2global.in/services' },
   openGraph: {
     title: 'Our Services | L2 Global Technologies',
-    description: 'Explore Salesforce, SAP, MuleSoft, AWS cloud, DevOps, IT support, data science, testing and web development services from L2 Global.',
+    description: 'Explore L2 Global’s IT consulting, implementation and managed services. View service capabilities and discuss your project requirements.',
     url: 'https://www.l2global.in/services',
     images: ['/assets/web/og-image.png'],
   },

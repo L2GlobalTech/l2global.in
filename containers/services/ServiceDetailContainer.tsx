@@ -166,6 +166,8 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
     return (
         <div>
             <ServiceHeroSection
+                serviceName={serviceTitle}
+                ctaLabel={extractString(serviceData?.hero_cta_text).trim() || 'Discuss Your Project'}
                 image={heroImg}
                 imageAlt={`${serviceTitle} illustration`}
                 ctaHref={resolveServiceCta(serviceData?.hero_cta_url)}
@@ -183,6 +185,7 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
             {mappedStats.length > 0 && <ServiceKPISection stats={mappedStats} />}
 
             <ServiceAboutSection
+                ctaLabel={extractString(serviceData?.about_cta_text).trim() || 'Get a Quote'}
                 image={aboutImg}
                 imageAlt={`${serviceTitle} overview`}
                 ctaHref={resolveServiceCta(serviceData?.about_cta_url)}
@@ -195,6 +198,11 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
             />
 
             {mappedServices.length > 0 && <ServiceExpertiseSection services={mappedServices} />}
+
+            {extractString(serviceData?.solutions_description).trim() && <section className="container mx-auto px-5 py-16">
+                <h2 className="text-3xl font-semibold text-[#0D1526]">{[serviceData?.solutions_title, serviceData?.solutions_highlight, serviceData?.solutions_logo_text].map(value => extractString(value).trim()).filter(Boolean).join(' ') || `${serviceTitle} Solutions`}</h2>
+                <p className="mt-5 text-[#707A8F] whitespace-pre-line leading-relaxed">{extractString(serviceData?.solutions_description)}</p>
+            </section>}
 
             <ServiceProcessSteps />
 
@@ -211,7 +219,7 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
                     tag="Let's Grow Together"
                     heading={extractString(serviceData?.cta_text, `Ready to Transform Your ${serviceTitle}?`)}
                     description="Discuss your project requirements with L2 Global."
-                    primaryBtnText={`Book a ${serviceTitle} Consultation`}
+                    primaryBtnText={`Discuss ${serviceTitle}`}
                     primaryBtnLink={resolveServiceCta(serviceData?.cta_url)}
                     secondaryBtnText="View All Services"
                     secondaryBtnLink="/services"

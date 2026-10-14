@@ -1,5 +1,6 @@
 import { canOptimizeServiceImage } from '@/lib/serviceImages'
 import React from 'react'
+import Link from 'next/link'
 import styles from './ServiceHeroSection.module.css'
 import SectionHeader from '../SectionHeader'
 import PrimaryButton from '@/components/shared/PrimaryButton'
@@ -19,6 +20,8 @@ interface IProps {
     image: StaticImageData | string;
     imageAlt?: string;
     ctaHref?: string;
+    ctaLabel?: string;
+    serviceName?: string;
 }
 
 const ServiceHeroSection: React.FC<IProps> = ({
@@ -33,7 +36,9 @@ const ServiceHeroSection: React.FC<IProps> = ({
     linearText,
     image,
     imageAlt,
-    ctaHref = '/contact-us'
+    ctaHref = '/contact-us',
+    ctaLabel = 'Discuss Your Project',
+    serviceName
 }) => {
     const imgSrc = typeof image === 'string' ? image : image?.src || '';
     const renderTag = (tag: any) => {
@@ -46,6 +51,7 @@ const ServiceHeroSection: React.FC<IProps> = ({
     return (
         <div className={styles.backgroundMesh}>
             <div className='md:pt-48 pt-32 container mx-auto px-5 md:px-0'>
+                {serviceName && <nav aria-label="Breadcrumb" className="mb-6 text-sm text-[#494852]"><ol className="flex flex-wrap gap-2"><li><Link href="/" className="underline">Home</Link></li><li aria-hidden="true">/</li><li><Link href="/services" className="underline">Services</Link></li><li aria-hidden="true">/</li><li aria-current="page">{serviceName}</li></ol></nav>}
                 <div className='grid md:grid-cols-2 gap-5'>
 
                     {/* LEFT SIDE */}
@@ -136,7 +142,7 @@ const ServiceHeroSection: React.FC<IProps> = ({
                         >
                             <PrimaryButton
                                 href={ctaHref}
-                                label={'Get Started Free'}
+                                label={ctaLabel}
                                 icon={
                                     <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
                                         <path d="M11.25 14L9.64687 12.3667L13.6969 8.16667H0V5.83333H13.6969L9.675 1.63333L11.25 0L18 7L11.25 14Z" fill="white" />
