@@ -172,17 +172,13 @@ const AboutUsContainer = ({ initialTeam }: AboutUsContainerProps) => {
                 <AboutIndustriesSection items={industriesItems} color='bg-[#F15A23]' />
             </div>
 
-            <div className='py-14'>
-                <div>
-                    <Divider className="text-black" blur label="Our Directors" />
-                    <SectionHeader
-                        title="Meet the People Behind Our Back"
-                    />
-                </div>
-                <div className='container mx-auto'>
-                    <TeamGrid initialMembers={initialTeam} />
-                </div>
-            </div>
+            {/* Our Directors Section - Only shown when members have is_director === true */}
+            <TeamGrid
+                initialMembers={initialTeam}
+                onlyDirectors={true}
+                sectionLabel="Our Directors"
+                sectionTitle="Meet the People Behind Our Back"
+            />
 
             <div className='bg-[#F6F5F8] pt-12 pb-8'>
                 <div>

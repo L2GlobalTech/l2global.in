@@ -180,13 +180,14 @@ const ContactUsContainer = () => {
                 </div>
 
                 <div className="container mx-auto px-4">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
                         {locationDetails.map((itm, index) => (
                             <div
                                 key={index}
                                 data-aos="zoom-in"
-                                data-aos-delay={index * 300}
-                                data-aos-duration="700"
+                                data-aos-delay={index * 150}
+                                data-aos-duration="600"
+                                className="h-full flex flex-col"
                             >
                                 <LocationCard
                                     image={itm.image.src}

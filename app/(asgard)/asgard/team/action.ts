@@ -158,6 +158,18 @@ export async function createTeamMember(memberData: Partial<TeamMemberRecord>) {
     if (!memberData.name?.trim()) {
       return { success: false, error: 'Team member name is required.' };
     }
+    if (!memberData.designation?.trim()) {
+      return { success: false, error: 'Designation is required.' };
+    }
+    if (!memberData.experience?.trim()) {
+      return { success: false, error: 'Experience is required.' };
+    }
+    if (!memberData.expertise?.trim()) {
+      return { success: false, error: 'Expertise is required.' };
+    }
+    if (!memberData.short_description?.trim()) {
+      return { success: false, error: 'Short description is required.' };
+    }
 
     // Supabase Auth session debug check
     const {
@@ -178,18 +190,25 @@ export async function createTeamMember(memberData: Partial<TeamMemberRecord>) {
 
     console.log("CURRENT SUPABASE USER:", user);
 
+    const insertPayload: any = {
+      name: memberData.name.trim(),
+      image_url: memberData.image_url?.trim() || null,
+      linkedin_url: memberData.linkedin_url?.trim() || null,
+      twitter_url: memberData.twitter_url?.trim() || null,
+      certification: memberData.certification?.trim() || null,
+      card_color: memberData.card_color?.trim() || '#AABBD1',
+      display_order: Number.isInteger(Number(memberData.display_order)) ? Number(memberData.display_order) : 0,
+      is_active: memberData.is_active !== undefined ? Boolean(memberData.is_active) : true,
+      is_director: memberData.is_director !== undefined ? Boolean(memberData.is_director) : false,
+      designation: memberData.designation?.trim() || null,
+      experience: memberData.experience?.trim() || null,
+      expertise: memberData.expertise?.trim() || null,
+      short_description: memberData.short_description?.trim() || null,
+    };
+
     const { data, error } = await supabase
       .from('team_members')
-      .insert({
-        name: memberData.name.trim(),
-        image_url: memberData.image_url?.trim() || null,
-        linkedin_url: memberData.linkedin_url?.trim() || null,
-        twitter_url: memberData.twitter_url?.trim() || null,
-        certification: memberData.certification?.trim() || null,
-        card_color: memberData.card_color?.trim() || '#AABBD1',
-        display_order: Number.isInteger(Number(memberData.display_order)) ? Number(memberData.display_order) : 0,
-        is_active: memberData.is_active !== undefined ? Boolean(memberData.is_active) : true,
-      })
+      .insert(insertPayload)
       .select()
       .single();
 
@@ -244,6 +263,22 @@ export async function updateTeamMember(id: string, updates: Partial<TeamMemberRe
 
     console.log("CURRENT SUPABASE USER:", user);
 
+    if (updates.name !== undefined && !updates.name?.trim()) {
+      return { success: false, error: 'Team member name cannot be empty.' };
+    }
+    if (updates.designation !== undefined && !updates.designation?.trim()) {
+      return { success: false, error: 'Designation cannot be empty.' };
+    }
+    if (updates.experience !== undefined && !updates.experience?.trim()) {
+      return { success: false, error: 'Experience cannot be empty.' };
+    }
+    if (updates.expertise !== undefined && !updates.expertise?.trim()) {
+      return { success: false, error: 'Expertise cannot be empty.' };
+    }
+    if (updates.short_description !== undefined && !updates.short_description?.trim()) {
+      return { success: false, error: 'Short description cannot be empty.' };
+    }
+
     const payload: any = {
       updated_at: new Date().toISOString(),
     };
@@ -258,6 +293,11 @@ export async function updateTeamMember(id: string, updates: Partial<TeamMemberRe
       payload.display_order = Number.isInteger(Number(updates.display_order)) ? Number(updates.display_order) : 0;
     }
     if (updates.is_active !== undefined) payload.is_active = Boolean(updates.is_active);
+    if (updates.is_director !== undefined) payload.is_director = Boolean(updates.is_director);
+    if (updates.designation !== undefined) payload.designation = updates.designation?.trim() || null;
+    if (updates.experience !== undefined) payload.experience = updates.experience?.trim() || null;
+    if (updates.expertise !== undefined) payload.expertise = updates.expertise?.trim() || null;
+    if (updates.short_description !== undefined) payload.short_description = updates.short_description?.trim() || null;
 
     const { data, error } = await supabase
       .from('team_members')

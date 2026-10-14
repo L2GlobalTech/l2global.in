@@ -190,6 +190,11 @@ export interface TeamMemberRecord {
   card_color: string | null;
   display_order: number | null;
   is_active: boolean | null;
+  is_director?: boolean | null;
+  designation?: string | null;
+  experience?: string | null;
+  expertise?: string | null;
+  short_description?: string | null;
   created_at?: string;
   updated_at?: string;
 }
@@ -204,5 +209,10 @@ export interface TeamMemberFormData {
   card_color?: string;
   display_order?: number;
   is_active?: boolean;
+  is_director?: boolean;
+  designation?: string;
+  experience?: string;
+  expertise?: string;
+  short_description?: string;
 }
 
