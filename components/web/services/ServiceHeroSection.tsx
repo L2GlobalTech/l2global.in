@@ -50,12 +50,11 @@ const ServiceHeroSection: React.FC<IProps> = ({
 
     return (
         <div className={styles.backgroundMesh}>
-            <div className='md:pt-48 pt-32 container mx-auto px-5 md:px-0'>
-                {serviceName && <nav aria-label="Breadcrumb" className="mb-6 text-sm text-[#494852]"><ol className="flex flex-wrap gap-2"><li><Link href="/" className="underline">Home</Link></li><li aria-hidden="true">/</li><li><Link href="/services" className="underline">Services</Link></li><li aria-hidden="true">/</li><li aria-current="page">{serviceName}</li></ol></nav>}
-                <div className='grid md:grid-cols-2 gap-5'>
+            <div className='md:pt-48 pt-32 pb-14 md:pb-20 container mx-auto px-5 md:px-0'>
+                <div className='grid md:grid-cols-2 gap-8 lg:gap-12 items-center'>
 
                     {/* LEFT SIDE */}
-                    <div>
+                    <div className="flex flex-col justify-center">
 
                         <div className='flex pb-5'>
                             <div
@@ -151,6 +150,39 @@ const ServiceHeroSection: React.FC<IProps> = ({
                             />
                         </div>
 
+                        <div className={`${styles.wrapper} mt-8 mb-4 md:mb-0`}>
+
+                            <div
+                                data-aos="fade-up"
+                                data-aos-delay="600"
+                                className={styles.avatarGroup}
+                            >
+                                <div className={`${styles.avatar} ${styles.blue}`}></div>
+                                <div className={`${styles.avatar} ${styles.purple}`}></div>
+                                <div className={`${styles.avatar} ${styles.orange}`}></div>
+                                <div className={`${styles.avatar} ${styles.green}`}></div>
+                            </div>
+
+                            <div className={styles.divider}></div>
+
+                            <div data-aos="fade-up" data-aos-delay="650">
+                                <div className={styles.stars}>
+                                    {[...Array(5)].map((_, i) => (
+                                        <svg key={i} viewBox="0 0 24 24" className={styles.starIcon}>
+                                            <path d="M11.525 2.295a.53.53 0 0 1 .95 0l2.31 4.679a2.123 2.123 0 0 0 1.595 1.16l5.166.756a.53.53 0 0 1 .294.904l-3.736 3.638a2.123 2.123 0 0 0-.611 1.878l.882 5.14a.53.53 0 0 1-.771.56l-4.618-2.428a2.122 2.122 0 0 0-1.973 0L6.396 21.01a.53.53 0 0 1-.77-.56l.881-5.139a2.122 2.122 0 0 0-.611-1.879L2.16 9.795a.53.53 0 0 1 .294-.906l5.165-.755a2.122 2.122 0 0 0 1.597-1.16z" />
+                                        </svg>
+                                    ))}
+                                </div>
+                                <p
+                                    data-aos="fade-up"
+                                    data-aos-delay="700"
+                                    className={styles.text}
+                                >
+                                    Trusted by 500+ enterprises
+                                </p>
+                            </div>
+
+                        </div>
                     </div>
 
                     {/* RIGHT IMAGE */}
@@ -158,8 +190,15 @@ const ServiceHeroSection: React.FC<IProps> = ({
                         data-aos="zoom-in"
                         data-aos-delay="300"
                         data-aos-duration="1000"
+                        className="flex items-center justify-center md:justify-end w-full"
                     >
-                        {imgSrc && <Image src={image} alt={imageAlt || sectionTitle || 'Service illustration'} width={typeof image === 'string' ? 640 : image.width} height={typeof image === 'string' ? 640 : image.height} sizes="(min-width: 768px) 50vw, 100vw" className="w-full h-auto" priority unoptimized={typeof image === 'string' && !canOptimizeServiceImage(image)} />}
+                        {imgSrc && (
+                            <img
+                                src={imgSrc}
+                                alt={linearText || 'service-hero'}
+                                className="max-w-full h-auto object-contain"
+                            />
+                        )}
                     </div>
 
                 </div>

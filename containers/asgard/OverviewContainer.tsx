@@ -15,6 +15,10 @@ import {
   ArrowUpDown,
   ShieldCheck,
   Users,
+  Briefcase,
+  MapPin,
+  Clock,
+  Eye,
 } from 'lucide-react';
 import { AsgardLayout } from '@/components/asgard/AsgardLayout';
 import { AsgardPageHeader } from '@/components/asgard/AsgardPageHeader';
@@ -34,11 +38,14 @@ export const OverviewContainer: React.FC = () => {
     activeTeamMembers: 0,
     totalFaqs: 0,
     activeFaqs: 0,
+    totalCareerOpenings: 0,
+    activeCareerOpenings: 0,
     totalAdmins: 2,
     activeAdmins: 2,
     recentBlogs: [],
     recentServices: [],
     recentFaqs: [],
+    recentJobs: [],
   });
   const [loading, setLoading] = useState(true);
 
@@ -67,10 +74,14 @@ export const OverviewContainer: React.FC = () => {
     activeTeamMembers = 0,
     totalFaqs,
     activeFaqs,
+    totalCareerOpenings = 0,
+    activeCareerOpenings = 0,
     totalAdmins,
     activeAdmins,
     recentBlogs,
     recentServices,
+    recentFaqs,
+    recentJobs = [],
   } = metrics;
 
   return (
@@ -84,145 +95,169 @@ export const OverviewContainer: React.FC = () => {
 
       {/* Top High-Level Summary Cards */}
       {loading ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
-          <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-xs h-28 animate-pulse" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
+          {[1, 2, 3, 4, 5, 6].map((i) => (
+            <div key={i} className="bg-white rounded-2xl p-5 border border-slate-200 shadow-xs h-28 animate-pulse" />
+          ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 sm:gap-6 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 mb-8">
           {/* Blogs Summary Card */}
           <Link
             href="/asgard/blogs"
-            className="group bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
+            className="group bg-white rounded-2xl p-4.5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
           >
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  Blog Articles
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                  Blogs
                 </span>
                 {featuredBlogs > 0 && (
-                  <span className="inline-flex items-center gap-1 text-xs px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 font-bold border border-amber-200">
-                    <Star className="w-3 h-3 fill-amber-400 text-amber-500" />
-                    {featuredBlogs} Featured
+                  <span className="inline-flex items-center gap-0.5 text-[10px] px-1.5 py-0.2 rounded-full bg-amber-50 text-amber-700 font-bold border border-amber-200">
+                    <Star className="w-2.5 h-2.5 fill-amber-400 text-amber-500" />
+                    {featuredBlogs}
                   </span>
                 )}
               </div>
-              <div className="mt-1.5 flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              <div className="mt-1 flex items-baseline gap-1">
+                <span className="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
                   {totalBlogs}
                 </span>
-                <span className="text-xs text-slate-500 font-medium">published</span>
+                <span className="text-[11px] text-slate-400 font-medium">posts</span>
               </div>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <FileText className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <FileText className="w-4.5 h-4.5" />
             </div>
           </Link>
 
           {/* Services Summary Card */}
           <Link
             href="/asgard/services"
-            className="group bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
+            className="group bg-white rounded-2xl p-4.5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
           >
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                   Services
                 </span>
-                <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                <span className="inline-flex items-center text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
                   {activeServices} Active
                 </span>
               </div>
-              <div className="mt-1.5 flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              <div className="mt-1 flex items-baseline gap-1">
+                <span className="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
                   {totalServices}
                 </span>
-                <span className="text-xs text-slate-500 font-medium">offerings</span>
+                <span className="text-[11px] text-slate-400 font-medium">services</span>
               </div>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <Layers className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <Layers className="w-4.5 h-4.5" />
             </div>
           </Link>
 
           {/* Team Members Summary Card */}
           <Link
             href="/asgard/team"
-            className="group bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
+            className="group bg-white rounded-2xl p-4.5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
           >
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                   Team
                 </span>
-                <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-sky-50 text-sky-700 font-bold border border-sky-200">
+                <span className="inline-flex items-center text-[10px] px-1.5 py-0.2 rounded-full bg-sky-50 text-sky-700 font-bold border border-sky-200">
                   {activeTeamMembers} Active
                 </span>
               </div>
-              <div className="mt-1.5 flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              <div className="mt-1 flex items-baseline gap-1">
+                <span className="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
                   {totalTeamMembers}
                 </span>
-                <span className="text-xs text-slate-500 font-medium">members</span>
+                <span className="text-[11px] text-slate-400 font-medium">members</span>
               </div>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <Users className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <Users className="w-4.5 h-4.5" />
             </div>
           </Link>
 
           {/* FAQs Summary Card */}
           <Link
             href="/asgard/faqs"
-            className="group bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
+            className="group bg-white rounded-2xl p-4.5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
           >
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
-                  FAQ Items
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                  FAQs
                 </span>
-                <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-bold border border-indigo-200">
+                <span className="inline-flex items-center text-[10px] px-1.5 py-0.2 rounded-full bg-purple-50 text-purple-700 font-bold border border-purple-200">
                   {activeFaqs} Active
                 </span>
               </div>
-              <div className="mt-1.5 flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              <div className="mt-1 flex items-baseline gap-1">
+                <span className="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
                   {totalFaqs}
                 </span>
-                <span className="text-xs text-slate-500 font-medium">questions</span>
+                <span className="text-[11px] text-slate-400 font-medium">items</span>
               </div>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <HelpCircle className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <HelpCircle className="w-4.5 h-4.5" />
+            </div>
+          </Link>
+
+          {/* Career Openings Summary Card */}
+          <Link
+            href="/asgard/career-openings"
+            className="group bg-white rounded-2xl p-4.5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
+          >
+            <div>
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
+                  Careers
+                </span>
+                <span className="inline-flex items-center text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
+                  {activeCareerOpenings} Active
+                </span>
+              </div>
+              <div className="mt-1 flex items-baseline gap-1">
+                <span className="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
+                  {totalCareerOpenings}
+                </span>
+                <span className="text-[11px] text-slate-400 font-medium">jobs</span>
+              </div>
+            </div>
+            <div className="w-9 h-9 rounded-xl bg-violet-50 text-violet-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <Briefcase className="w-4.5 h-4.5" />
             </div>
           </Link>
 
           {/* Admins Summary Card */}
           <Link
             href="/asgard/admins"
-            className="group bg-white rounded-2xl p-5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
+            className="group bg-white rounded-2xl p-4.5 border border-slate-200 shadow-xs hover:shadow-md hover:border-slate-300 transition-all cursor-pointer flex items-center justify-between"
           >
             <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-bold text-slate-500 uppercase tracking-wider">
+              <div className="flex items-center gap-1.5 flex-wrap">
+                <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                   Admins
                 </span>
-                <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 font-bold border border-purple-200">
+                <span className="inline-flex items-center text-[10px] px-1.5 py-0.2 rounded-full bg-emerald-50 text-emerald-700 font-bold border border-emerald-200">
                   {activeAdmins} Active
                 </span>
               </div>
-              <div className="mt-1.5 flex items-baseline gap-1.5">
-                <span className="text-2xl sm:text-3xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
+              <div className="mt-1 flex items-baseline gap-1">
+                <span className="text-xl sm:text-2xl font-extrabold text-slate-900 group-hover:text-indigo-600 transition-colors">
                   {totalAdmins}
                 </span>
-                <span className="text-xs text-slate-500 font-medium">authorized</span>
+                <span className="text-[11px] text-slate-400 font-medium">users</span>
               </div>
             </div>
-            <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
-              <ShieldCheck className="w-5 h-5" />
+            <div className="w-9 h-9 rounded-xl bg-slate-100 text-slate-700 flex items-center justify-center group-hover:scale-105 transition-transform shrink-0">
+              <ShieldCheck className="w-4.5 h-4.5" />
             </div>
           </Link>
         </div>

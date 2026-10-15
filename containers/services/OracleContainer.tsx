@@ -196,7 +196,7 @@ const OracleContainer: React.FC<OracleContainerProps> = ({ initialData }) => {
     };
 
     const features = serviceData?.about_features && Array.isArray(serviceData.about_features) && serviceData.about_features.length > 0
-        ? serviceData.about_features.map((f: any) => extractString(f)).filter(Boolean)
+        ? serviceData.about_features.filter((f: any) => typeof f === 'string' ? f.trim().length > 0 : Boolean(f?.description || f?.title))
         : defaultFeatures
 
     const heroImg = (serviceData?.hero_image_id ? getMediaPublicUrl(serviceData.hero_image_id, 'services') : null) || oracleImg
@@ -221,12 +221,15 @@ const OracleContainer: React.FC<OracleContainerProps> = ({ initialData }) => {
 
             <ServiceAboutSection
                 image={aboutImg}
+                badge={extractString(serviceData?.about_badge, 'About the Service')}
                 title={extractString(serviceData?.about_title, '')}
                 titleBefore={extractString(serviceData?.about_title, 'Why')}
                 titleAfter={extractString(serviceData?.about_logo_text, 'Managed Services Matter')}
                 linearText={extractString(serviceData?.about_highlight, 'Oracle')}
                 description={extractString(serviceData?.about_description, 'Oracle environments power mission-critical business operations. Our managed services ensure your Oracle databases, applications, and cloud infrastructure operate securely, efficiently, and without disruption.')}
                 features={features}
+                ctaText={extractString(serviceData?.about_cta_text, 'Get a quote')}
+                ctaUrl={extractString(serviceData?.about_cta_url, '/contact-us')}
             />
 
             <ServiceExpertiseSection services={mappedServices} />

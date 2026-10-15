@@ -27,6 +27,7 @@ import { LoadingState } from '@/components/asgard/LoadingState';
 import { EmptyState } from '@/components/asgard/EmptyState';
 import { DeleteModal } from '@/components/asgard/DeleteModal';
 import { DataTablePagination } from '@/components/asgard/DataTablePagination';
+import { AsgardFilterSelect } from '@/components/asgard/AsgardFilterSelect';
 import {
   getTeamMembers,
   deleteTeamMember,
@@ -169,27 +170,36 @@ export const TeamMembersContainer: React.FC = () => {
             placeholder="Search by name, certification..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full pl-9.5 pr-3.5 py-2 text-xs sm:text-sm bg-slate-100 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-colors placeholder:text-slate-400"
+            className="w-full pl-9.5 pr-8 py-2 text-xs sm:text-sm bg-slate-100 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-colors placeholder:text-slate-400"
           />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => setSearchInput('')}
+              className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer"
+              title="Clear search"
+            >
+              <XCircle className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         <div className="flex items-center flex-wrap gap-2.5">
           {/* Status Filter */}
-          <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-xl text-slate-700">
-            <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <select
-              value={statusFilter}
-              onChange={(e) => {
-                setStatusFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="bg-transparent border-0 text-xs sm:text-sm font-medium text-slate-700 focus:outline-none cursor-pointer pr-1"
-            >
-              <option value="all">All Statuses</option>
-              <option value="active">Active Only</option>
-              <option value="inactive">Inactive Only</option>
-            </select>
-          </div>
+          <AsgardFilterSelect
+            icon={<Filter className="w-3.5 h-3.5 text-slate-400" />}
+            labelPrefix="Status"
+            value={statusFilter}
+            onChange={(val) => {
+              setStatusFilter(val);
+              setCurrentPage(1);
+            }}
+            options={[
+              { value: 'all', label: 'All Statuses' },
+              { value: 'active', label: 'Active Only' },
+              { value: 'inactive', label: 'Inactive Only' },
+            ]}
+          />
 
           {/* Refresh Button */}
           <button
@@ -269,26 +279,45 @@ export const TeamMembersContainer: React.FC = () => {
                           )}
 
                           <div className="min-w-0">
-                            <h4 className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors text-xs sm:text-sm truncate">
-                              {member.name || 'Unnamed Member'}
-                            </h4>
-                            <span className="text-[11px] text-slate-400 font-mono block truncate">
+                            <div className="flex items-center gap-1.5">
+                              <h4 className="font-bold text-slate-900 group-hover:text-indigo-600 transition-colors text-xs sm:text-sm truncate">
+                                {member.name || 'Unnamed Member'}
+                              </h4>
+                              {member.is_director && (
+                                <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-semibold bg-amber-50 text-amber-700 border border-amber-200 shrink-0">
+                                  Director
+                                </span>
+                              )}
+                            </div>
+                            {member.designation && (
+                              <span className="text-[11px] font-medium text-indigo-600 block truncate">
+                                {member.designation}
+                              </span>
+                            )}
+                            <span className="text-[10px] text-slate-400 font-mono block truncate">
                               {member.id}
                             </span>
                           </div>
                         </div>
                       </td>
 
-                      {/* Certification */}
+                      {/* Certification & Experience */}
                       <td className="px-3.5 py-3">
-                        {member.certification ? (
-                          <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 max-w-xs truncate">
-                            <Award className="w-3 h-3 text-indigo-500 shrink-0" />
-                            <span className="truncate">{member.certification}</span>
-                          </span>
-                        ) : (
-                          <span className="text-[11px] text-slate-400 italic">None specified</span>
-                        )}
+                        <div className="space-y-1">
+                          {member.certification ? (
+                            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-indigo-50 text-indigo-700 border border-indigo-100 max-w-xs truncate">
+                              <Award className="w-3 h-3 text-indigo-500 shrink-0" />
+                              <span className="truncate">{member.certification}</span>
+                            </span>
+                          ) : (
+                            <span className="text-[11px] text-slate-400 italic">None specified</span>
+                          )}
+                          {member.experience && (
+                            <div className="text-[10px] text-slate-500 font-medium">
+                              {member.experience}
+                            </div>
+                          )}
+                        </div>
                       </td>
 
                       {/* Social Profiles */}

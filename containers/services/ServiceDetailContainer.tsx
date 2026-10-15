@@ -146,11 +146,13 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
         })
         : []
 
-    // Dynamic Features - only show integrated data
-    const features: string[] = serviceData?.about_features && Array.isArray(serviceData.about_features)
-        ? serviceData.about_features
-            .map((f: any) => extractString(f, ''))
-            .filter((f: string) => f.length > 0)
+    // Dynamic Features / Highlights - preserve structured objects and legacy strings
+    const features = serviceData?.about_features && Array.isArray(serviceData.about_features)
+        ? serviceData.about_features.filter((f: any) => {
+            if (typeof f === 'string') return f.trim().length > 0;
+            if (typeof f === 'object' && f !== null) return Boolean(f.description || f.title || f.text);
+            return false;
+        })
         : []
 
     // Dynamic FAQs - only show integrated data
@@ -187,14 +189,15 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
             <ServiceAboutSection
                 ctaLabel={extractString(serviceData?.about_cta_text).trim() || 'Get a Quote'}
                 image={aboutImg}
-                imageAlt={`${serviceTitle} overview`}
-                ctaHref={resolveServiceCta(serviceData?.about_cta_url)}
+                badge={extractString(serviceData?.about_badge, 'About the Service')}
                 title={extractString(serviceData?.about_title, '')}
                 titleBefore={extractString(serviceData?.about_title, '')}
                 titleAfter={extractString(serviceData?.about_logo_text, '')}
                 linearText={extractString(serviceData?.about_highlight, '')}
                 description={extractString(serviceData?.about_description, '')}
                 features={features}
+                ctaText={extractString(serviceData?.about_cta_text, 'Get a quote')}
+                ctaUrl={extractString(serviceData?.about_cta_url, '/contact-us')}
             />
 
             {mappedServices.length > 0 && <ServiceExpertiseSection services={mappedServices} />}

@@ -14,6 +14,7 @@ import {
   HelpCircle,
   ShieldCheck,
   Users,
+  Briefcase,
 } from 'lucide-react';
 import { isSupabaseConfigured } from '@/configs/supabase';
 
@@ -51,6 +52,12 @@ export const Sidebar: React.FC = () => {
       name: 'FAQs',
       href: '/asgard/faqs',
       icon: HelpCircle,
+      exact: false,
+    },
+    {
+      name: 'Career Openings',
+      href: '/asgard/career-openings',
+      icon: Briefcase,
       exact: false,
     },
     {

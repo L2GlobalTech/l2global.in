@@ -14,6 +14,7 @@ import {
   Eye,
   Star,
   Tag,
+  XCircle,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { AsgardLayout } from '@/components/asgard/AsgardLayout';
@@ -24,6 +25,7 @@ import { DeleteModal } from '@/components/asgard/DeleteModal';
 import { BlogPreviewModal } from '@/components/asgard/BlogPreviewModal';
 import { DataTablePagination } from '@/components/asgard/DataTablePagination';
 import { BlogImageThumbnail } from '@/components/asgard/BlogImageThumbnail';
+import { AsgardFilterSelect } from '@/components/asgard/AsgardFilterSelect';
 import { deleteMedia } from '@/actions/mediaAction';
 import {
   getBlogs,
@@ -183,29 +185,34 @@ export const BlogsContainer: React.FC = () => {
             placeholder="Search by title, subtitle, tag or content..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full pl-9.5 pr-3.5 py-2 text-xs sm:text-sm bg-slate-100 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-colors placeholder:text-slate-400"
+            className="w-full pl-9.5 pr-8 py-2 text-xs sm:text-sm bg-slate-100 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-colors placeholder:text-slate-400"
           />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => setSearchInput('')}
+              className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer"
+              title="Clear search"
+            >
+              <XCircle className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         <div className="flex items-center gap-2.5">
-          <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-xl text-slate-700">
-            <Filter className="w-3.5 h-3.5 text-slate-400" />
-            <select
-              value={tagFilter}
-              onChange={(e) => {
-                setTagFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="bg-transparent border-0 text-xs sm:text-sm font-medium text-slate-700 focus:outline-none cursor-pointer pr-1"
-            >
-              <option value="all">All Tags</option>
-              {availableTags.map((tag) => (
-                <option key={tag} value={tag}>
-                  {tag}
-                </option>
-              ))}
-            </select>
-          </div>
+          <AsgardFilterSelect
+            icon={<Tag className="w-3.5 h-3.5 text-slate-400" />}
+            labelPrefix="Tag"
+            value={tagFilter}
+            onChange={(val) => {
+              setTagFilter(val);
+              setCurrentPage(1);
+            }}
+            options={[
+              { value: 'all', label: 'All Tags' },
+              ...availableTags.map((t) => ({ value: t, label: t })),
+            ]}
+          />
 
           <button
             type="button"

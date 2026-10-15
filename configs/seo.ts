@@ -92,7 +92,28 @@ export const asgardSeoConfig: Record<string, PageSeoConfig> = {
     description: 'Update team member information, certification, image, card color, and social links.',
     keywords: ['edit team member', 'update team', 'asgard team'],
   },
+  careerOpenings: {
+    title: 'Career Openings Management',
+    description: 'Manage, search, filter, and publish job openings on the L2 Global Careers portal.',
+    keywords: ['asgard career openings', 'jobs management', 'recruitment cms', 'career portal'],
+  },
+  createCareerOpening: {
+    title: 'Add Job Opening',
+    description: 'Create and publish a new career opportunity with responsibilities, specifications, and details.',
+    keywords: ['create job', 'add opening', 'asgard careers'],
+  },
+  editCareerOpening: {
+    title: 'Edit Job Opening',
+    description: 'Update job requirements, specifications, workplace type, salary, and status.',
+    keywords: ['edit job', 'update opening', 'asgard careers'],
+  },
+  viewCareerOpening: {
+    title: 'Job Opening Details',
+    description: 'View full career opening details, requirements, and publishing status.',
+    keywords: ['job details', 'career opening', 'asgard careers'],
+  },
 };
+
 
 /**
  * Helper to generate Next.js Metadata object from a key in asgardSeoConfig

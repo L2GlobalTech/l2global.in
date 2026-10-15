@@ -18,6 +18,8 @@ import {
   CheckCircle2,
   Sparkles,
   ExternalLink,
+  Briefcase,
+  FileText,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { AsgardLayout } from '@/components/asgard/AsgardLayout';
@@ -66,9 +68,20 @@ export const TeamMemberFormContainer: React.FC<TeamMemberFormContainerProps> = (
     card_color: '#AABBD1',
     display_order: 0,
     is_active: true,
+    is_director: false,
+    designation: '',
+    experience: '',
+    expertise: '',
+    short_description: '',
   });
 
-  const [errors, setErrors] = useState<{ name?: string }>({});
+  const [errors, setErrors] = useState<{
+    name?: string;
+    designation?: string;
+    experience?: string;
+    expertise?: string;
+    short_description?: string;
+  }>({});
 
   // Fetch existing member if editing
   useEffect(() => {
@@ -98,6 +111,11 @@ export const TeamMemberFormContainer: React.FC<TeamMemberFormContainerProps> = (
           card_color: member.card_color || '#AABBD1',
           display_order: typeof member.display_order === 'number' ? member.display_order : 0,
           is_active: member.is_active !== undefined ? Boolean(member.is_active) : true,
+          is_director: member.is_director !== undefined ? Boolean(member.is_director) : false,
+          designation: member.designation || '',
+          experience: member.experience || '',
+          expertise: member.expertise || '',
+          short_description: member.short_description || '',
         });
       } catch (err: any) {
         console.error('Error loading team member:', err);
@@ -117,10 +135,37 @@ export const TeamMemberFormContainer: React.FC<TeamMemberFormContainerProps> = (
   const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
+    const newErrors: typeof errors = {};
+
     const name = formData.name?.trim();
     if (!name) {
-      setErrors({ name: 'Member name is required' });
-      toast.error('Please enter the team member name.');
+      newErrors.name = 'Full name is required';
+    }
+
+    const designation = formData.designation?.trim();
+    if (!designation) {
+      newErrors.designation = 'Designation is required';
+    }
+
+    const experience = formData.experience?.trim();
+    if (!experience) {
+      newErrors.experience = 'Experience is required';
+    }
+
+    const expertise = formData.expertise?.trim();
+    if (!expertise) {
+      newErrors.expertise = 'Expertise is required';
+    }
+
+    const short_description = formData.short_description?.trim();
+    if (!short_description) {
+      newErrors.short_description = 'Short description is required';
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      const firstError = Object.values(newErrors)[0];
+      toast.error(firstError || 'Please fill in all required fields.');
       return;
     }
 
@@ -152,6 +197,11 @@ export const TeamMemberFormContainer: React.FC<TeamMemberFormContainerProps> = (
           ? Number(formData.display_order)
           : 0,
         is_active: Boolean(formData.is_active),
+        is_director: Boolean(formData.is_director),
+        designation: formData.designation?.trim() || null,
+        experience: formData.experience?.trim() || null,
+        expertise: formData.expertise?.trim() || null,
+        short_description: formData.short_description?.trim() || null,
       };
 
       if (isEditMode && id) {
@@ -310,6 +360,127 @@ export const TeamMemberFormContainer: React.FC<TeamMemberFormContainerProps> = (
                     <p className="text-[11px] text-slate-400 mt-1">
                       Displays as a badge or role tag on the member profile card.
                     </p>
+                  </div>
+                </div>
+
+                {/* Director & Professional Details Card */}
+                <div className="bg-white rounded-xl p-4 sm:p-5 border border-slate-200 shadow-xs space-y-4">
+                  <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5 border-b border-slate-100 pb-2.5">
+                    <Briefcase className="w-4 h-4 text-indigo-600" />
+                    Director & Professional Details
+                  </h3>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    {/* Designation */}
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                        Designation / Executive Title <span className="text-rose-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.designation || ''}
+                        onChange={(e) => {
+                          setFormData({ ...formData, designation: e.target.value });
+                          if (errors.designation) setErrors({ ...errors, designation: undefined });
+                        }}
+                        placeholder="e.g. Managing Director, Director of Technology"
+                        className={`w-full px-3 py-2 text-xs bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-800 placeholder:text-slate-400 ${
+                          errors.designation ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200'
+                        }`}
+                      />
+                      {errors.designation ? (
+                        <p className="text-xs text-rose-500 mt-1 font-medium">{errors.designation}</p>
+                      ) : (
+                        <p className="text-[11px] text-slate-400 mt-1">
+                          Shown as the primary title on the website cards.
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Experience */}
+                    <div>
+                      <label className="block text-xs font-semibold text-slate-700 mb-1">
+                        Experience <span className="text-rose-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.experience || ''}
+                        onChange={(e) => {
+                          setFormData({ ...formData, experience: e.target.value });
+                          if (errors.experience) setErrors({ ...errors, experience: undefined });
+                        }}
+                        placeholder="e.g. 15+ Years Experience"
+                        className={`w-full px-3 py-2 text-xs bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-800 placeholder:text-slate-400 ${
+                          errors.experience ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200'
+                        }`}
+                      />
+                      {errors.experience ? (
+                        <p className="text-xs text-rose-500 mt-1 font-medium">{errors.experience}</p>
+                      ) : (
+                        <p className="text-[11px] text-slate-400 mt-1">
+                          Years of industry experience badge.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Expertise */}
+                  <div>
+                    <label className="block text-xs font-semibold text-slate-700 mb-1 flex items-center gap-1">
+                      <Sparkles className="w-3.5 h-3.5 text-indigo-500" />
+                      Expertise <span className="text-rose-500">*</span>
+                    </label>
+                    <input
+                      type="text"
+                      value={formData.expertise || ''}
+                      onChange={(e) => {
+                        setFormData({ ...formData, expertise: e.target.value });
+                        if (errors.expertise) setErrors({ ...errors, expertise: undefined });
+                      }}
+                      placeholder="e.g. Salesforce & Cloud Architecture, SAP ERP"
+                      className={`w-full px-3 py-2 text-xs bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-800 placeholder:text-slate-400 ${
+                        errors.expertise ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200'
+                      }`}
+                    />
+                    {errors.expertise ? (
+                      <p className="text-xs text-rose-500 mt-1 font-medium">{errors.expertise}</p>
+                    ) : (
+                      <p className="text-[11px] text-slate-400 mt-1">
+                        Specialized technological focus or key domains.
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Short Description */}
+                  <div>
+                    <div className="flex items-center justify-between mb-1">
+                      <label className="text-xs font-semibold text-slate-700 flex items-center gap-1">
+                        <FileText className="w-3.5 h-3.5 text-indigo-500" />
+                        Short Description <span className="text-rose-500">*</span>
+                      </label>
+                      <span className="text-[11px] text-slate-400">
+                        {formData.short_description ? formData.short_description.trim().split(/\s+/).filter(Boolean).length : 0} / ~10 words
+                      </span>
+                    </div>
+                    <textarea
+                      rows={2}
+                      value={formData.short_description || ''}
+                      onChange={(e) => {
+                        setFormData({ ...formData, short_description: e.target.value });
+                        if (errors.short_description) setErrors({ ...errors, short_description: undefined });
+                      }}
+                      placeholder="e.g. Driving enterprise digital transformation through scalable cloud solutions and innovation."
+                      className={`w-full px-3 py-2 text-xs bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-800 placeholder:text-slate-400 ${
+                        errors.short_description ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200'
+                      }`}
+                    />
+                    {errors.short_description ? (
+                      <p className="text-xs text-rose-500 mt-1 font-medium">{errors.short_description}</p>
+                    ) : (
+                      <p className="text-[11px] text-slate-400 mt-1">
+                        A concise ~10 word leadership description shown on hover.
+                      </p>
+                    )}
                   </div>
                 </div>
 
@@ -509,14 +680,26 @@ export const TeamMemberFormContainer: React.FC<TeamMemberFormContainerProps> = (
                           {formData.certification}
                         </span>
                       )}
+
+                      {/* Director Badge */}
+                      {formData.is_director && (
+                        <span className="absolute top-2 left-2 text-[10px] font-bold bg-amber-500 text-white px-2 py-0.5 rounded-full shadow-xs">
+                          Director
+                        </span>
+                      )}
                     </div>
 
                     <h4 className="font-bold text-sm text-slate-900 truncate w-full">
                       {formData.name || 'Member Name'}
                     </h4>
-                    <p className="text-xs text-slate-600 truncate w-full mt-0.5">
-                      {formData.certification || 'Role / Position'}
+                    <p className="text-xs font-semibold text-indigo-600 truncate w-full mt-0.5">
+                      {formData.designation || formData.certification || 'Role / Position'}
                     </p>
+                    {formData.experience && (
+                      <p className="text-[11px] text-slate-500 truncate w-full mt-0.5">
+                        {formData.experience}
+                      </p>
+                    )}
 
                     {/* Socials */}
                     {(formData.linkedin_url || formData.twitter_url) && (
@@ -562,6 +745,30 @@ export const TeamMemberFormContainer: React.FC<TeamMemberFormContainerProps> = (
                     />
                     <span className="text-[11px] text-slate-400 mt-1 block">
                       Lower numbers appear first (0, 1, 2...).
+                    </span>
+                  </div>
+
+                  {/* Is Director Checkbox */}
+                  <div className="pt-2 border-t border-slate-100">
+                    <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+                      Director Designation
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        id="is_director"
+                        type="checkbox"
+                        checked={formData.is_director ?? false}
+                        onChange={(e) =>
+                          setFormData({ ...formData, is_director: e.target.checked })
+                        }
+                        className="w-4 h-4 text-indigo-600 rounded border-slate-300 focus:ring-indigo-500 focus:ring-offset-0 cursor-pointer"
+                      />
+                      <label htmlFor="is_director" className="text-xs font-semibold text-slate-700 cursor-pointer select-none">
+                        Is Director
+                      </label>
+                    </div>
+                    <span className="text-[11px] text-slate-400 mt-1 block">
+                      Check to mark this team member as a Director. (Default: False)
                     </span>
                   </div>
 

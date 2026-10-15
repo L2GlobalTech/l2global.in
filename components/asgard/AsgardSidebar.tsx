@@ -16,6 +16,7 @@ import {
   ChevronRight,
   ShieldCheck,
   Users,
+  Briefcase,
 } from 'lucide-react';
 import Image from 'next/image';
 import { useAsgardAuth } from '@/context/AsgardAuthContext';
@@ -71,6 +72,12 @@ export const AsgardSidebar: React.FC = () => {
       name: 'FAQs',
       href: '/asgard/faqs',
       icon: HelpCircle,
+      exact: false,
+    },
+    {
+      name: 'Career Openings',
+      href: '/asgard/career-openings',
+      icon: Briefcase,
       exact: false,
     },
     {

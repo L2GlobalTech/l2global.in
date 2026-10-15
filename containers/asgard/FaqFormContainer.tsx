@@ -224,7 +224,7 @@ export const FaqFormContainer: React.FC<FaqFormContainerProps> = ({ id }) => {
           <LoadingState message="Loading FAQ details..." rows={5} />
         ) : (
           <form onSubmit={handleFormSubmit}>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 max-w-5xl">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
               {/* Main Content: Question & Answer (2 cols) */}
               <div className="lg:col-span-2 space-y-4">
                 <div className="bg-white rounded-xl p-4 sm:p-5 border border-slate-200 shadow-xs space-y-4">
@@ -251,9 +251,8 @@ export const FaqFormContainer: React.FC<FaqFormContainerProps> = ({ id }) => {
                         if (errors.question) setErrors({ ...errors, question: undefined });
                       }}
                       placeholder="e.g. How does L2 Global ensure data migration security?"
-                      className={`w-full px-3 py-2 text-xs font-medium bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-900 placeholder:text-slate-400 ${
-                        errors.question ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200'
-                      }`}
+                      className={`w-full px-3 py-2 text-xs font-medium bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-900 placeholder:text-slate-400 ${errors.question ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200'
+                        }`}
                     />
                     {errors.question && (
                       <p className="text-xs text-rose-500 mt-1 font-medium">{errors.question}</p>
@@ -278,9 +277,8 @@ export const FaqFormContainer: React.FC<FaqFormContainerProps> = ({ id }) => {
                         if (errors.answer) setErrors({ ...errors, answer: undefined });
                       }}
                       placeholder="Write a comprehensive and clear explanation to address client queries..."
-                      className={`w-full px-3 py-2 text-xs bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-800 leading-relaxed placeholder:text-slate-400 ${
-                        errors.answer ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200'
-                      }`}
+                      className={`w-full px-3 py-2 text-xs bg-slate-50 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all text-slate-800 leading-relaxed placeholder:text-slate-400 ${errors.answer ? 'border-rose-400 bg-rose-50/20' : 'border-slate-200'
+                        }`}
                     />
                     {errors.answer && (
                       <p className="text-xs text-rose-500 mt-1 font-medium">{errors.answer}</p>

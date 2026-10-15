@@ -23,7 +23,6 @@ export interface BlogPost {
   author: string;
   authorRole: string;
   datePublished: string;
-  dateModified?: string;
   image: string;
   category: string;
   tags: string[];
@@ -43,3 +42,5 @@ export interface FrontendService {
   hero_description?: string | null;
   is_active?: boolean;
 }
+
+export type { JobOpeningRecord, JobOpeningFormData } from './cms';

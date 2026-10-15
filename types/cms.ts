@@ -47,6 +47,15 @@ export interface ServiceResultStat {
   description?: string;
 }
 
+export interface ServiceHighlightItem {
+  id?: string;
+  title?: string;
+  description: string;
+  icon?: string;
+  display_order?: number;
+  is_active?: boolean;
+}
+
 export interface ServiceFAQItem {
   question: string;
   answer: string;
@@ -76,7 +85,7 @@ export interface ServiceItem {
   about_title?: string | null;
   about_highlight?: string | null;
   about_description?: string | null;
-  about_features?: string[] | any[] | null;
+  about_features?: (string | ServiceHighlightItem)[] | any[] | null;
   about_image_id?: string | null;
   about_logo_text?: string | null;
   about_cta_text?: string | null;
@@ -129,7 +138,7 @@ export interface ServiceFormData {
   about_title?: string;
   about_highlight?: string;
   about_description?: string;
-  about_features?: string[];
+  about_features?: (string | ServiceHighlightItem)[];
   about_image_id?: string | null;
   about_logo_text?: string;
   about_cta_text?: string;
@@ -190,6 +199,11 @@ export interface TeamMemberRecord {
   card_color: string | null;
   display_order: number | null;
   is_active: boolean | null;
+  is_director?: boolean | null;
+  designation?: string | null;
+  experience?: string | null;
+  expertise?: string | null;
+  short_description?: string | null;
   created_at?: string;
   updated_at?: string;
 }
@@ -204,5 +218,46 @@ export interface TeamMemberFormData {
   card_color?: string;
   display_order?: number;
   is_active?: boolean;
+  is_director?: boolean;
+  designation?: string;
+  experience?: string;
+  expertise?: string;
+  short_description?: string;
+}
+
+export interface JobOpeningRecord {
+  id: string;
+  title: string;
+  slug: string;
+  experience_level?: string | null;
+  locations?: string[] | null;
+  primary_responsibility: string;
+  job_specifications?: string[] | null;
+  employment_type?: string | null;
+  work_place_type?: string | null;
+  salary?: string | null;
+  experience_required?: string | null;
+  application_url?: string | null;
+  is_active: boolean;
+  display_order: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface JobOpeningFormData {
+  id?: string;
+  title: string;
+  slug: string;
+  experience_level?: string;
+  locations?: string[];
+  primary_responsibility: string;
+  job_specifications?: string[];
+  employment_type?: string;
+  work_place_type?: string;
+  salary?: string;
+  experience_required?: string;
+  application_url?: string;
+  is_active?: boolean;
+  display_order?: number;
 }
 
