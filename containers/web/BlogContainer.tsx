@@ -359,7 +359,7 @@ const BlogContainer: React.FC<BlogContainerProps> = ({ initialBlogs }) => {
                                         <div className="space-y-2 text-xs font-mono text-slate-500">
                                             <div className="flex items-center gap-2">
                                                 <Calendar className="w-3.5 h-3.5 text-[#F15A23]" />
-                                                <span>Published: {new Date(featuredPost.datePublished).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })}</span>
+                                                <span>Published: {(featuredPost.datePublished ? new Date(featuredPost.datePublished).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '')}</span>
                                             </div>
                                             <div className="flex items-center gap-2">
                                                 <Clock className="w-3.5 h-3.5 text-slate-400" />
@@ -474,7 +474,7 @@ const BlogContainer: React.FC<BlogContainerProps> = ({ initialBlogs }) => {
                                             <div>
                                                 {/* Meta */}
                                                 <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 mb-4 pt-3 border-t border-slate-100">
-                                                    <span>{new Date(post.datePublished).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+                                                    <span>{(post.datePublished ? new Date(post.datePublished).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '')}</span>
                                                     <span>{calculateReadTime(post.content)}</span>
                                                 </div>
 

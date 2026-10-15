@@ -43,4 +43,4 @@ export interface FrontendService {
   is_active?: boolean;
 }
 
-export type { JobOpeningRecord, JobOpeningFormData } from './cms';
+export type { JobOpeningRecord, JobOpeningFormData } from './cms';

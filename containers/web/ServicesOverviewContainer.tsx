@@ -1,32 +1,18 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import Link from 'next/link'
 import { ArrowUpRight } from 'lucide-react'
 import HeroCTA from '@/components/web/HeroCTA'
 import { FrontendService } from '@/types'
-import { fetchServices, defaultServices, getServiceIcon } from '@/actions/servicesAction'
+import { getServiceIcon } from '@/actions/servicesAction'
 
 interface ServicesOverviewContainerProps {
     initialServices?: FrontendService[]
 }
 
 const ServicesOverviewContainer: React.FC<ServicesOverviewContainerProps> = ({ initialServices }) => {
-    const [servicesList, setServicesList] = useState<FrontendService[]>(
-        initialServices && initialServices.length > 0 ? initialServices : defaultServices
-    )
-
-    useEffect(() => {
-        let isMounted = true
-        fetchServices().then((data) => {
-            if (isMounted && data && data.length > 0) {
-                setServicesList(data)
-            }
-        }).catch((err) => {
-            console.error('Failed to fetch services from Supabase:', err)
-        })
-        return () => { isMounted = false }
-    }, [])
+    const servicesList = initialServices || []
 
     return (
         <div>
@@ -35,11 +21,11 @@ const ServicesOverviewContainer: React.FC<ServicesOverviewContainerProps> = ({ i
                     Our Services
                 </p>
                 <h1 className="text-4xl md:text-6xl font-bold text-[#0D1526] tracking-[-1px] mb-6">
-                    Everything We Deliver
+                    IT Consulting & Implementation Services
                 </h1>
                 <p className="text-[#494852] text-lg max-w-2xl mx-auto">
-                    Salesforce, SAP, MuleSoft, cloud, data science and web development —
-                    all under one roof, serving USA, UK, Canada, Australia, Asia and Gulf businesses.
+                    Explore our service capabilities, delivery approach and support options.
+                    Choose a service below to discuss your project requirements.
                 </p>
             </div>
 

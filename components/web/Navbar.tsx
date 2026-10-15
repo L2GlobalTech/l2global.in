@@ -22,13 +22,6 @@ const industries = [
   { label: 'Non Profit Organizations', href: '/industries/non-profit' },
 ]
 
-// Default Services fallback
-const defaultNavServices = [
-  { label: 'Salesforce Consulting & Implementation', href: '/services/salesforce-services' },
-  { label: 'Oracle Consulting & Managed Services', href: '/services/oracle-managed-services' },
-  { label: 'Cloud & DevOps Consulting', href: '/services/aws-cloud-services' },
-];
-
 const companyLinks = [
   { href: '/about-us', label: 'About' },
   { href: '/contact-us', label: 'Contact Us' },
@@ -65,15 +58,16 @@ const Navbar = () => {
   const pathName = usePathname()
   const [scrolled, setScrolled] = useState(false)
   const [isContactOpen, setIsContactOpen] = useState(false);
-  const [servicesList, setServicesList] = useState(defaultNavServices);
+  const [servicesList, setServicesList] = useState<{ label: string; href: string }[]>([]);
 
   useEffect(() => {
     let isMounted = true;
     fetchServices().then((items) => {
-      if (isMounted && items && items.length > 0) {
-        setServicesList(items.map((s) => ({ label: s.title, href: s.href })));
+      if (isMounted) {
+        setServicesList((items || []).map((s) => ({ label: s.title, href: s.href })));
       }
     }).catch((err) => {
+      if (isMounted) setServicesList([]);
       console.warn('Failed to load dynamic services in Navbar:', err);
     });
     return () => { isMounted = false; };
@@ -191,7 +185,7 @@ const Navbar = () => {
                   let dropdownItems: any[] = []
 
                   if (label === 'Industries') dropdownItems = industries
-                  if (label === 'Services') dropdownItems = servicesList
+                  if (label === 'Services') dropdownItems = [{ label: 'View All Services', href: '/services' }, ...servicesList]
                   if (label === 'Company') dropdownItems = companyLinks
 
                   return (

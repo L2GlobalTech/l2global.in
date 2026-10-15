@@ -4,11 +4,11 @@ import React from 'react'
 export const metadata = {
   title: 'Terms & Conditions',
   description: 'Terms and conditions for using the L2 Global Technologies website and services.',
-  alternates: { canonical: 'https://l2global.in/terms-and-conditions' },
+  alternates: { canonical: 'https://www.l2global.in/terms-and-conditions' },
   openGraph: {
     title: 'Terms & Conditions | L2 Global Technologies',
     description: 'Terms and conditions for using the L2 Global Technologies website and services.',
-    url: 'https://l2global.in/terms-and-conditions',
+    url: 'https://www.l2global.in/terms-and-conditions',
     images: ['/assets/web/og-image.png'],
   },
 };

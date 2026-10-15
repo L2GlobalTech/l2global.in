@@ -1,8 +1,10 @@
+import { canOptimizeServiceImage } from '@/lib/serviceImages'
 import React from 'react'
+import Link from 'next/link'
 import styles from './ServiceHeroSection.module.css'
 import SectionHeader from '../SectionHeader'
 import PrimaryButton from '@/components/shared/PrimaryButton'
-import { StaticImageData } from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import { renderFormattedTitle } from '@/utils/highlightText';
 
 interface IProps {
@@ -16,6 +18,10 @@ interface IProps {
     tag2?: string;
     tag3?: string;
     image: StaticImageData | string;
+    imageAlt?: string;
+    ctaHref?: string;
+    ctaLabel?: string;
+    serviceName?: string;
 }
 
 const ServiceHeroSection: React.FC<IProps> = ({
@@ -28,7 +34,11 @@ const ServiceHeroSection: React.FC<IProps> = ({
     titleAfter,
     titleBefore,
     linearText,
-    image
+    image,
+    imageAlt,
+    ctaHref = '/contact-us',
+    ctaLabel = 'Discuss Your Project',
+    serviceName
 }) => {
     const imgSrc = typeof image === 'string' ? image : image?.src || '';
     const renderTag = (tag: any) => {
@@ -130,8 +140,8 @@ const ServiceHeroSection: React.FC<IProps> = ({
                             className="mb-4 mt-6 md:mt-8 md:mb-0 flex justify-center md:justify-start items-center w-full"
                         >
                             <PrimaryButton
-                                onClick={() => { }}
-                                label={'Get Started Free'}
+                                href={ctaHref}
+                                label={ctaLabel}
                                 icon={
                                     <svg width="18" height="14" viewBox="0 0 18 14" fill="none">
                                         <path d="M11.25 14L9.64687 12.3667L13.6969 8.16667H0V5.83333H13.6969L9.675 1.63333L11.25 0L18 7L11.25 14Z" fill="white" />

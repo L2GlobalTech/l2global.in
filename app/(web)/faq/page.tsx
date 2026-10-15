@@ -3,7 +3,8 @@ import { Metadata } from 'next'
 import React from 'react'
 
 export const metadata: Metadata = {
-    title: 'FAQ | L2 Global Technology Ltd.',
+    title: 'Frequently Asked Questions',
+    alternates: { canonical: 'https://www.l2global.in/faq' },
     description: 'Frequently asked questions about L2 Global Technology Ltd. services, enterprise integration, Salesforce, SAP, and MuleSoft.',
 }
 

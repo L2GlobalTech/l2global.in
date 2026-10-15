@@ -363,23 +363,6 @@ export const slugify = (text: string): string => {
     .replace(/--+/g, '-');
 };
 
-const inferRelatedService = (tag?: string | null, title?: string | null): { link: string; name: string } => {
-  const combined = `${tag || ''} ${title || ''}`.toLowerCase();
-  if (combined.includes('agentforce')) return { link: '/services/agentforce-ai', name: 'Salesforce Agentforce AI' };
-  if (combined.includes('sap joule') || combined.includes('sap ai')) return { link: '/services/sap-ai', name: 'SAP Joule AI Implementation' };
-  if (combined.includes('mulesoft') || combined.includes('boomi') || combined.includes('ipaas')) return { link: '/services/mulesoft', name: 'MuleSoft Consulting' };
-  if (combined.includes('sap link') || (combined.includes('salesforce') && combined.includes('sap'))) return { link: '/services/sap-link-by-salesforce', name: 'SAP Link by Salesforce' };
-  if (combined.includes('sap')) return { link: '/services/sap', name: 'SAP S/4HANA Services' };
-  if (combined.includes('aws') || combined.includes('cloud migration')) return { link: '/services/aws-cloud-services', name: 'AWS Cloud Services' };
-  if (combined.includes('oracle') || combined.includes('dba')) return { link: '/services/oracle-managed-services', name: 'Oracle Managed Services' };
-  if (combined.includes('crm') || combined.includes('salesforce implementation')) return { link: '/services/crm-consulting', name: 'CRM Consulting' };
-  if (combined.includes('salesforce')) return { link: '/services/salesforce-services', name: 'Salesforce Services' };
-  if (combined.includes('data science') || combined.includes('machine learning')) return { link: '/services/data-science', name: 'Data Science & ML' };
-  if (combined.includes('testing') || combined.includes('qa')) return { link: '/services/software-testing', name: 'Software Testing & QA' };
-  if (combined.includes('support') || combined.includes('maintenance')) return { link: '/services/support-maintenance', name: 'Application Support' };
-  return { link: '/services', name: 'Enterprise Services' };
-};
-
 export const mapBlogRecordToBlogPost = (record: BlogRecord): BlogPost => {
   const rawTitle = record.title?.trim() || 'Untitled Article';
   const computedSlug = (record.slug && record.slug.trim()) ? record.slug.trim() : (slugify(rawTitle) || record.id || 'article');
@@ -408,7 +391,7 @@ export const mapBlogRecordToBlogPost = (record: BlogRecord): BlogPost => {
   }
 
   const category = parsedTags[0] || 'Enterprise Tech';
-  const related = inferRelatedService(record.tag, record.title);
+
 
   // Format content: convert plain text newlines to html paragraphs if raw text
   let rawContent = record.content || '';
@@ -431,12 +414,13 @@ export const mapBlogRecordToBlogPost = (record: BlogRecord): BlogPost => {
     content: rawContent || '<p>Content coming soon.</p>',
     author: 'L2 Global Tech Editorial',
     authorRole: 'Enterprise Integration Experts',
-    datePublished: record.created_at || new Date().toISOString(),
+    datePublished: record.created_at && !Number.isNaN(Date.parse(record.created_at)) ? new Date(record.created_at).toISOString() : '',
+    dateModified: record.updated_at && !Number.isNaN(Date.parse(record.updated_at)) ? new Date(record.updated_at).toISOString() : undefined,
     image,
     category,
     tags: parsedTags,
-    serviceLink: related.link,
-    serviceName: related.name,
+    serviceLink: '/services',
+    serviceName: 'Explore IT Services',
     is_featured: Boolean(record.is_featured),
   };
 };
@@ -445,109 +429,13 @@ export const mapBlogRecordToBlogPost = (record: BlogRecord): BlogPost => {
  * READ: Fetch all published blogs from Supabase for the public website
  */
 export async function getPublicBlogs(): Promise<BlogPost[]> {
-  try {
-    if (!isSupabaseConfigured()) {
-      return [];
-    }
-
-    const { data, error } = await supabase
-      .from('blogs')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Error fetching public blogs from Supabase:', error);
-      return [];
-    }
-
-    const dbBlogs = (data || []).map((row: any) => mapBlogRecordToBlogPost(row as BlogRecord));
-    return dbBlogs;
-  } catch (error) {
-    console.error('Failed to query public blogs from Supabase:', error);
-    return [];
-  }
+  const { getPublishedBlogs } = await import('@/lib/publicBlogs');
+  return getPublishedBlogs();
 }
 
-/**
- * READ: Fetch a single public blog by ID or Slug directly from Supabase
- */
-export async function getPublicBlogByIdOrSlug(idOrSlug: string): Promise<BlogPost | null> {
-  try {
-    if (!idOrSlug || !isSupabaseConfigured()) return null;
-
-    const cleanInput = idOrSlug.trim().replace(/^\/+|\/+$/g, '');
-    const decodedInput = decodeURIComponent(cleanInput).trim().toLowerCase();
-    const normalizedSlug = slugify(decodedInput);
-
-    // 1. Direct database query by UUID `id`
-    const isUUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(cleanInput);
-    if (isUUID) {
-      const { data: idMatch, error: idError } = await supabase
-        .from('blogs')
-        .select('*')
-        .eq('id', cleanInput)
-        .maybeSingle();
-
-      if (!idError && idMatch) {
-        return mapBlogRecordToBlogPost(idMatch as BlogRecord);
-      }
-    }
-
-    // 2. Direct database query by `slug` (exact match, with or without leading slash, case-insensitive)
-    const { data: slugMatches, error: slugError } = await supabase
-      .from('blogs')
-      .select('*')
-      .or(`slug.eq.${decodedInput},slug.eq./${decodedInput},slug.ilike.${decodedInput},slug.ilike./${decodedInput}`)
-      .limit(1);
-
-    if (!slugError && slugMatches && slugMatches.length > 0) {
-      return mapBlogRecordToBlogPost(slugMatches[0] as BlogRecord);
-    }
-
-    // 3. Fallback: Fetch all blogs from database and match against slug, title slugify, or ID
-    const { data: allRows, error: allErr } = await supabase
-      .from('blogs')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (!allErr && allRows && allRows.length > 0) {
-      const matched = allRows.find((row: any) => {
-        if (!row) return false;
-        const rowId = String(row.id || '').trim();
-        const rowSlug = String(row.slug || '').trim().replace(/^\/+|\/+$/g, '').toLowerCase();
-        const rowTitleSlug = slugify(String(row.title || ''));
-
-        return (
-          rowId === cleanInput ||
-          rowSlug === decodedInput ||
-          rowSlug === normalizedSlug ||
-          slugify(rowSlug) === normalizedSlug ||
-          rowTitleSlug === normalizedSlug ||
-          rowTitleSlug === decodedInput
-        );
-      });
-
-      if (matched) {
-        return mapBlogRecordToBlogPost(matched as BlogRecord);
-      }
-    }
-
-    // 4. Final attempt by ID
-    const { data: fallbackIdMatch } = await supabase
-      .from('blogs')
-      .select('*')
-      .eq('id', cleanInput)
-      .maybeSingle();
-
-    if (fallbackIdMatch) {
-      return mapBlogRecordToBlogPost(fallbackIdMatch as BlogRecord);
-    }
-
-    return null;
-  } catch (error) {
-    console.error('Failed to fetch public blog by ID or slug:', error);
-    return null;
-  }
+export async function getPublicBlogByIdOrSlug(input: string): Promise<BlogPost | null> {
+  const { getPublishedBlog } = await import('@/lib/publicBlogs');
+  return getPublishedBlog(input);
 }
 
 export const getPublicBlogBySlug = getPublicBlogByIdOrSlug;

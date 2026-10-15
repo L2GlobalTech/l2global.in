@@ -8,11 +8,11 @@ export const metadata: Metadata = {
     description:
         'Specialist IT integration consultancy delivering Salesforce, SAP, MuleSoft and cloud' +
         ' solutions across the USA, UK, Canada, Australia, Asia and Gulf. 182+ projects delivered.',
-    alternates: { canonical: 'https://l2global.in/about-us' },
+    alternates: { canonical: 'https://www.l2global.in/about-us' },
     openGraph: {
         title: 'About Us | L2 Global Technologies',
         description: 'Specialist IT integration consultancy delivering Salesforce, SAP, MuleSoft and cloud solutions. UK · USA · Canada · Australia · Asia · India.',
-        url: 'https://l2global.in/about-us',
+        url: 'https://www.l2global.in/about-us',
         images: ['/assets/web/og-image.png'],
     },
 };

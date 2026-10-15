@@ -5,4 +5,4 @@ export const ENDPOINT =
 export const DEV_ENDPOINT =
     process.env.NEXT_PUBLIC_DEV_API_URL ?? 'http://localhost:3100/';
 
-export const WEB_ENDPOINT = 'https://l2global.in/';
+export const WEB_ENDPOINT = 'https://www.l2global.in/';

@@ -240,6 +240,8 @@
 // export default page;
 
 
+export const dynamic = 'force-dynamic';
+
 import HomeConatiner from '@/containers/web/HomeConatiner'
 import { Metadata } from 'next';
 import React from 'react'
@@ -249,15 +251,14 @@ import React from 'react'
 //     description: '',
 // };
 export const metadata: Metadata = {
-    title: 'Salesforce, SAP & MuleSoft Experts',
+    title: 'Salesforce, SAP & Cloud Consulting',
     description:
-        'Expert Salesforce, SAP, MuleSoft and cloud integration consultants serving USA, UK,' +
-        ' Canada, Australia, Asia and Gulf businesses. Free consultation today.',
-    alternates: { canonical: 'https://l2global.in' },
+        'L2 Global provides Salesforce, SAP, MuleSoft and cloud consulting, API integration, data science and web development. Discuss your IT project with our team.',
+    alternates: { canonical: 'https://www.l2global.in' },
     openGraph: {
         title: 'Salesforce, SAP & MuleSoft Consultants | L2 Global Technologies',
         description: 'Expert IT integration for USA, UK, Canada, Australia, Asia and Gulf businesses. Free consultation.',
-        url: 'https://l2global.in',
+        url: 'https://www.l2global.in',
         images: ['/assets/web/og-image.png'],
     },
 };

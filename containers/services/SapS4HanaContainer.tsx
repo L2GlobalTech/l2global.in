@@ -154,7 +154,7 @@ const SapS4HanaContainer = () => {
                 titleAfter={''}
                 linearText={'S/4HANA With Confidence'}
                 description={'SAP S/4HANA and RISE with SAP migration experts serving USA, UK, Canada, Australia, Asia and Gulf businesses. ECC mainstream support ends 2027 — plan your migration in London, New York and Dubai now. 40+ migrations delivered. Free consultation.'}
-                tag1={'SAP Gold Partner'} tag2={'RISE Certified'} tag3={'24/7 Support'} />
+                tag1={'S/4HANA Specialists'} tag2={'RISE with SAP'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />
 

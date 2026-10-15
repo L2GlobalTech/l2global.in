@@ -53,10 +53,11 @@ const Footer: React.FC = () => {
     useEffect(() => {
         let isMounted = true;
         fetchServices().then((items) => {
-            if (isMounted && items && items.length > 0) {
-                setServicesList(items.map((s) => ({ label: s.title, href: s.href })));
+            if (isMounted) {
+                setServicesList((items || []).map((s) => ({ label: s.title, href: s.href })));
             }
         }).catch((err) => {
+            if (isMounted) setServicesList([]);
             console.warn('Failed to load dynamic services in Footer:', err);
         });
         return () => { isMounted = false; };

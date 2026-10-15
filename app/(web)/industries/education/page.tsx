@@ -6,11 +6,11 @@ import React from 'react'
 export const metadata: Metadata = {
     title: 'Salesforce for Schools | UK & UAE',
     description: 'Salesforce for Schools, student lifecycle management and digital transformation for universities and K-12 institutions across the UK and UAE.',
-    alternates: { canonical: 'https://l2global.in/industries/education' },
+    alternates: { canonical: 'https://www.l2global.in/industries/education' },
     openGraph: {
         title: 'Education Technology Solutions | L2 Global Technologies',
         description: 'Salesforce for Schools, student lifecycle management and digital transformation for education institutions.',
-        url: 'https://l2global.in/industries/education',
+        url: 'https://www.l2global.in/industries/education',
         images: ['/assets/web/og-image.png'],
     },
 };
@@ -21,7 +21,7 @@ const page = () => {
             <EducationContainer />
             <ServiceLocalSchema
                 serviceName='Education Technology Solutions'
-                serviceUrl='https://l2global.in/industries/education'
+                serviceUrl='https://www.l2global.in/industries/education'
                 description='Salesforce for Schools, student lifecycle management and digital transformation for education institutions.'
                 cities={[
                     'London', 'Manchester', 'Birmingham', 'Edinburgh', 'Leeds', 'Bristol',

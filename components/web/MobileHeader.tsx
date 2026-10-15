@@ -32,27 +32,22 @@ const companyLinks = [
     { label: "FAQ", href: "/faq" },
 ]
 
-const defaultMobileServices = [
-    { label: 'Salesforce Consulting & Implementation', href: '/services/salesforce-services' },
-    { label: 'Oracle Consulting & Managed Services', href: '/services/oracle-managed-services' },
-    { label: 'Cloud & DevOps Consulting', href: '/services/aws-cloud-services' },
-]
-
 type ViewType = "MENU" | "INDUSTRIES" | "COMPANY" | "SERVICES"
 
 const MobileHeader = () => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false)
     const [view, setView] = useState<ViewType>("MENU")
     const [isContactOpen, setIsContactOpen] = useState(false);
-    const [servicesList, setServicesList] = useState(defaultMobileServices)
+    const [servicesList, setServicesList] = useState<{ label: string; href: string }[]>([])
 
     useEffect(() => {
         let isMounted = true;
         fetchServices().then((items) => {
-            if (isMounted && items && items.length > 0) {
-                setServicesList(items.map((s) => ({ label: s.title, href: s.href })));
+            if (isMounted) {
+                setServicesList((items || []).map((s) => ({ label: s.title, href: s.href })));
             }
         }).catch((err) => {
+            if (isMounted) setServicesList([]);
             console.warn('Failed to load dynamic services in MobileHeader:', err);
         });
         return () => { isMounted = false; };

@@ -1,6 +1,7 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React from 'react'
+import { resolveServiceCta } from '@/lib/serviceCta'
 import ServiceHeroSection from '@/components/web/services/ServiceHeroSection'
 import ServiceKPISection from '@/components/web/services/ServiceKPISection'
 import ServiceAboutSection from '@/components/web/services/ServiceAboutSection'
@@ -13,7 +14,6 @@ import ServiceWhyChooseUs from '@/components/web/services/ServiceWhyChooseUs'
 import ServiceFAQ from '@/components/web/services/ServiceFAQ'
 import { BarChart3, Cloud, Database, GitMerge, Shield, Zap, Server, Settings, Cpu, Layers, Rocket, Users, Award, Headphones } from 'lucide-react'
 import { ServiceRecord } from '@/types/cms'
-import { getPublicServiceBySlug } from '@/app/(asgard)/asgard/services/action'
 import { getMediaPublicUrl } from '@/actions/mediaAction'
 
 // Fallback images
@@ -95,17 +95,7 @@ const defaultGradients = [
 ]
 
 const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service: initialService, slug }) => {
-    const [serviceData, setServiceData] = useState<ServiceRecord | null>(initialService || null)
-
-    useEffect(() => {
-        let isMounted = true
-        getPublicServiceBySlug(slug).then((data) => {
-            if (isMounted && data) {
-                setServiceData(data)
-            }
-        }).catch(console.error)
-        return () => { isMounted = false }
-    }, [slug])
+    const serviceData = initialService
 
     const fallbackImgs = getFallbackImages(slug || serviceData?.title || '')
 
@@ -170,7 +160,7 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
         ? serviceData.faqs.map((f: any) => ({
             q: extractString(f?.question || f?.q, ''),
             a: extractString(f?.answer || f?.a, ''),
-        })).filter((f: any) => f.q.length > 0)
+        })).filter((f: any) => f.q.length > 0 && f.a.length > 0)
         : []
 
     const serviceTitle = extractString(serviceData?.title, 'Enterprise Solutions')
@@ -178,34 +168,44 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
     return (
         <div>
             <ServiceHeroSection
+                serviceName={serviceTitle}
+                ctaLabel={extractString(serviceData?.hero_cta_text).trim() || 'Discuss Your Project'}
                 image={heroImg}
+                imageAlt={`${serviceTitle} illustration`}
+                ctaHref={resolveServiceCta(serviceData?.hero_cta_url)}
                 sectionTitle={extractString(serviceData?.badge_text, serviceTitle)}
-                title={extractString(serviceData?.hero_title, '')}
-                titleBefore={extractString(serviceData?.hero_title, 'Scalable & Intelligent')}
-                titleAfter={extractString(serviceData?.hero_logo_text, 'Solutions')}
+                title={extractString(serviceData?.hero_title, serviceTitle)}
+                titleBefore={extractString(serviceData?.hero_title, serviceTitle)}
+                titleAfter={extractString(serviceData?.hero_logo_text, '')}
                 linearText={extractString(serviceData?.hero_highlight, '')}
-                description={extractString(serviceData?.hero_description, 'Empower your business with tailored transformation, automated workflows, and enterprise-grade cloud solutions.')}
-                tag1={extractString(serviceData?.hero_badges?.[0], 'Certified Experts')}
-                tag2={extractString(serviceData?.hero_badges?.[1], 'Enterprise Grade')}
-                tag3={extractString(serviceData?.hero_badges?.[2], '24/7 Support')}
+                description={extractString(serviceData?.hero_description, extractString(serviceData?.about_description))}
+                tag1={extractString(serviceData?.hero_badges?.[0], '')}
+                tag2={extractString(serviceData?.hero_badges?.[1], '')}
+                tag3={extractString(serviceData?.hero_badges?.[2], '')}
             />
 
             {mappedStats.length > 0 && <ServiceKPISection stats={mappedStats} />}
 
             <ServiceAboutSection
+                ctaLabel={extractString(serviceData?.about_cta_text).trim() || 'Get a Quote'}
                 image={aboutImg}
                 badge={extractString(serviceData?.about_badge, 'About the Service')}
                 title={extractString(serviceData?.about_title, '')}
                 titleBefore={extractString(serviceData?.about_title, '')}
                 titleAfter={extractString(serviceData?.about_logo_text, '')}
                 linearText={extractString(serviceData?.about_highlight, '')}
-                description={extractString(serviceData?.about_description, 'Modernize your core business infrastructure with secure, high-performance IT solutions that streamline operations, reduce total cost of ownership, and scale seamlessly.')}
+                description={extractString(serviceData?.about_description, '')}
                 features={features}
                 ctaText={extractString(serviceData?.about_cta_text, 'Get a quote')}
                 ctaUrl={extractString(serviceData?.about_cta_url, '/contact-us')}
             />
 
             {mappedServices.length > 0 && <ServiceExpertiseSection services={mappedServices} />}
+
+            {extractString(serviceData?.solutions_description).trim() && <section className="container mx-auto px-5 py-16">
+                <h2 className="text-3xl font-semibold text-[#0D1526]">{[serviceData?.solutions_title, serviceData?.solutions_highlight, serviceData?.solutions_logo_text].map(value => extractString(value).trim()).filter(Boolean).join(' ') || `${serviceTitle} Solutions`}</h2>
+                <p className="mt-5 text-[#707A8F] whitespace-pre-line leading-relaxed">{extractString(serviceData?.solutions_description)}</p>
+            </section>}
 
             <ServiceProcessSteps />
 
@@ -221,9 +221,9 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
                 <HeroCTA
                     tag="Let's Grow Together"
                     heading={extractString(serviceData?.cta_text, `Ready to Transform Your ${serviceTitle}?`)}
-                    description="Partner with L2 Global for implementation and consulting backed by 180+ deployments across the USA, UK, Canada, Australia, Asia and Gulf."
-                    primaryBtnText={`Book a ${serviceTitle} Consultation`}
-                    primaryBtnLink={extractString(serviceData?.cta_url, "/contact-us")}
+                    description="Discuss your project requirements with L2 Global."
+                    primaryBtnText={`Discuss ${serviceTitle}`}
+                    primaryBtnLink={resolveServiceCta(serviceData?.cta_url)}
                     secondaryBtnText="View All Services"
                     secondaryBtnLink="/services"
                 />

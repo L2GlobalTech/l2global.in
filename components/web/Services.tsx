@@ -1,49 +1,47 @@
-'use client'
-import React, { useEffect } from 'react'
+import React from 'react'
+import { fetchServices } from '@/actions/servicesAction';
 import { ArrowUpRight } from "lucide-react";
 import Link from 'next/link';
 import SectionHeader from './SectionHeader';
 import Divider from './Divider';
 
-const Services = () => {
-   const cards = [
+const cardStyles = [
   {
-    title: "Salesforce Agentforce AI & CRM",
-    desc: "Deploy autonomous AI agents with Agentforce. CRM implementation, customisation and managed support. Salesforce Partner. 180+ deployments. UK · Texas · UAE.",
     bg: "bg-[#E5ECFD]",
     icon: "/assets/web/home/services/digital.png",
     border: "border-[#C1C1FF]",
     iconColor: "#606EE4",
-    href: "/services/salesforce-services",
   },
   {
-    title: "SAP S/4HANA & Joule AI",
-    desc: "SAP Gold Partner. S/4HANA migration, RISE with SAP, BTP, Joule AI deployment. ECC support ends 2027 — plan your migration now. UK · Texas · UAE.",
     bg: "bg-[#FFEFE1]",
     icon: "/assets/web/home/services/data.png",
     border: "border-[#FFBCA5]",
     iconColor: "#F49308",
-    href: "/services/sap-link-by-salesforce",
   },
   {
-    title: "MuleSoft & API Integration",
-    desc: "Certified MuleSoft Anypoint Partner. 250+ APIs delivered. Connect SAP, Salesforce, Oracle and every system. API-led connectivity. UK · Texas · UAE.",
     bg: "bg-[#FDE7EB]",
     icon: "/assets/web/home/services/web.png",
     border: "border-[#FAC3CC]",
     iconColor: "#FF7A90",
-    href: "/services/mulesoft",
   },
   {
-    title: "Data Science, AI & Web Development",
-    desc: "Python ML, generative AI, BI dashboards. Salesforce-connected models. Plus B2B website design & development — fixed price, SEO-built-in. UK · Texas · UAE.",
     bg: "bg-[#E4F6DF]",
     icon: "/assets/web/home/services/enterprise.png",
     border: "border-[#ACD99D]",
     iconColor: "#5D9E4B",
-    href: "/services/data-science",
   },
 ];
+
+const Services = async () => {
+    let services: Awaited<ReturnType<typeof fetchServices>> = [];
+    try {
+        services = await fetchServices();
+    } catch {
+        console.warn('Unable to load homepage services');
+    }
+    const cards = services.slice(0, 4).map((service, index) => ({
+        ...cardStyles[index], title: service.title, desc: service.desc, href: service.href,
+    }));
 
     // AOS initialised globally in AOSProvider — no need to reinitialise here
 
@@ -64,8 +62,8 @@ const Services = () => {
                 <div className="pb-4 md:pb-10 grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
                     {cards.map((card, idx) => (
                         <Link
-                            key={idx}
-                            href={card.href || "/services/salesforce-services"}
+                            key={card.href}
+                            href={card.href}
                             data-aos="zoom-in"
                             data-aos-delay={200 + idx * 150}
                             data-aos-duration="800"
@@ -76,7 +74,7 @@ const Services = () => {
                         >
                             <div className="flex items-center justify-between mb-2">
                                 <div className={`w-12 h-12 md:w-[85px] md:h-[85px] rounded-xl md:rounded-2xl flex items-center justify-center border ${card.border} bg-white`}>
-                                    <img src={card.icon} alt={card.title} className="w-7 h-7 md:w-12 md:h-12 object-contain" />
+                                    <img src={card.icon} alt="" className="w-7 h-7 md:w-12 md:h-12 object-contain" />
                                 </div>
 
                                 <div className={`w-10 h-10 md:w-16 md:h-12 rounded-full border ${card.border} flex items-center justify-center bg-white cursor-pointer transition-all duration-300 group-hover:translate-x-1 group-hover:-translate-y-1`}>
@@ -93,6 +91,11 @@ const Services = () => {
                             </p>
                         </Link>
                     ))}
+                </div>
+                <div className="text-center pb-4">
+                    <Link href="/services" className="font-semibold text-[#074FDA] hover:underline">
+                        View All Services
+                    </Link>
                 </div>
             </div>
         </div>

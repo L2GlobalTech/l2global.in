@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import {
@@ -29,8 +29,6 @@ import {
     Loader2
 } from 'lucide-react';
 import { BlogPost } from '@/types';
-import { getPublicBlogByIdOrSlug, getPublicBlogById, getPublicBlogBySlug, getPublicBlogs } from '@/app/(asgard)/asgard/blogs/action';
-import { usePathname } from 'next/navigation';
 
 // Helper to calculate read time
 const calculateReadTime = (content: string) => {
@@ -97,72 +95,9 @@ interface BlogPostContainerProps {
 }
 
 const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost, slug: propSlug, relatedPosts: initialRelated = [] }) => {
-    const [post, setPost] = useState<BlogPost | null>(initialPost || null);
-    const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>(initialRelated);
-    const [loading, setLoading] = useState<boolean>(!initialPost && Boolean(propSlug));
+    const post = initialPost || null;
+    const relatedPosts = initialRelated;
     const [copied, setCopied] = useState(false);
-
-    const pathname = usePathname();
-    const blogSlug = propSlug || (pathname ? pathname.split('/').filter(Boolean).pop() : '');
-
-    console.log('Blog Slug from page:', blogSlug);
-
-    // Client-side fetch by Slug or ID on change and log fetched data
-    useEffect(() => {
-        let isMounted = true;
-        const currentSlug = blogSlug;
-
-        if (currentSlug) {
-            if (!initialPost) {
-                setLoading(true);
-            }
-            getPublicBlogByIdOrSlug(currentSlug)
-                .then((data) => {
-                    if (isMounted) {
-                        console.log('Fetched Blog Details using Slug/ID:', currentSlug, data);
-                        if (data) {
-                            setPost(data);
-                        } else if (!initialPost) {
-                            setPost(null);
-                        }
-                        setLoading(false);
-                    }
-                })
-                .catch((err) => {
-                    console.error('Error fetching blog details by slug/id:', err);
-                    if (isMounted) setLoading(false);
-                });
-        } else if (initialPost) {
-            setPost(initialPost);
-            setLoading(false);
-        }
-
-        return () => {
-            isMounted = false;
-        };
-    }, [blogSlug, initialPost]);
-
-    // Fetch related articles if none provided
-    useEffect(() => {
-        if (relatedPosts.length === 0 && post) {
-            getPublicBlogs().then(all => {
-                const filtered = all.filter(b => b.slug !== post.slug && String(b.id) !== String(post.id)).slice(0, 3);
-                setRelatedPosts(filtered);
-            }).catch(console.error);
-        }
-    }, [relatedPosts.length, post]);
-
-    if (loading) {
-        return (
-            <div className="bg-[#fcfcfd] min-h-screen text-slate-900 font-sans flex items-center justify-center pt-32 pb-20">
-                <div className="text-center bg-white p-8 rounded-2xl border border-slate-200 shadow-xs max-w-sm w-full mx-4">
-                    <Loader2 className="w-8 h-8 text-[#074FDA] animate-spin mx-auto mb-3" />
-                    <h3 className="text-base font-bold text-slate-900 mb-1">Loading Publication</h3>
-                    <p className="text-slate-500 text-xs">Fetching the latest architectural insights...</p>
-                </div>
-            </div>
-        );
-    }
 
     if (!post) {
         return (
@@ -189,19 +124,19 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost
 
     const formattedImageUrl = post.image?.startsWith('http')
         ? post.image
-        : `https://l2global.in${post.image?.startsWith('/') ? '' : '/'}${post.image || 'assets/web/og-image.png'}`;
+        : `https://www.l2global.in${post.image?.startsWith('/') ? '' : '/'}${post.image || 'assets/web/og-image.png'}`;
 
     const readTime = calculateReadTime(post.content);
-    const formattedDate = new Date(post.datePublished).toLocaleDateString('en-GB', {
+    const formattedDate = (post.datePublished ? new Date(post.datePublished).toLocaleDateString('en-GB', {
         day: 'numeric',
         month: 'long',
         year: 'numeric'
-    });
+    }) : '');
 
     const styleInfo = getCategoryIcon(post.category, post.slug);
     const CategoryIcon = styleInfo.icon;
 
-    const pageUrl = typeof window !== 'undefined' ? window.location.href : `https://l2global.in/blog/${post.slug || post.id}`;
+    const pageUrl = typeof window !== 'undefined' ? window.location.href : `https://www.l2global.in/blog/${post.slug || post.id}`;
 
     const handleCopyLink = () => {
         if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -233,25 +168,24 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost
         '@type': 'Article',
         'headline': post.title,
         'image': [formattedImageUrl],
-        'datePublished': post.datePublished,
-        'dateModified': post.datePublished,
+        'datePublished': post.datePublished || undefined,
+        'dateModified': post.dateModified,
         'author': [{
-            '@type': 'Person',
+            '@type': 'Organization',
             'name': post.author || 'L2 Global Tech Editorial',
-            'jobTitle': post.authorRole || 'Enterprise Integration Experts'
         }],
         'publisher': {
             '@type': 'Organization',
             'name': 'L2 Global Technology Ltd.',
             'logo': {
                 '@type': 'ImageObject',
-                'url': 'https://l2global.in/assets/web/logo.png'
+                'url': 'https://www.l2global.in/assets/web/l2-svg.svg'
             }
         },
         'description': post.excerpt,
         'mainEntityOfPage': {
             '@type': 'WebPage',
-            '@id': `https://l2global.in/blog/${post.slug || post.id}`
+            '@id': `https://www.l2global.in/blog/${post.slug || post.id}`
         }
     };
 
@@ -265,7 +199,7 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost
         <div className="bg-[#fcfcfd] min-h-screen text-slate-900 font-sans selection:bg-[#074FDA] selection:text-white">
             <script
                 type="application/ld+json"
-                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+                dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c') }}
             />
 
             {/* EDITORIAL ARTICLE MASTHEAD & BREADCRUMBS */}
@@ -615,7 +549,7 @@ const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost
 
                                         <div>
                                             <div className="text-[11px] font-mono text-slate-400 mb-3 pt-3 border-t border-slate-100 flex items-center justify-between">
-                                                <span>{new Date(item.datePublished).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })}</span>
+                                                <span>{(item.datePublished ? new Date(item.datePublished).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' }) : '')}</span>
                                                 <span>{calculateReadTime(item.content)}</span>
                                             </div>
 

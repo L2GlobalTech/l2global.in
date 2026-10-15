@@ -154,7 +154,7 @@ const AgentforceAIContainer = () => {
                 titleAfter={''}
                 linearText={'For Your Business'}
                 description={'Salesforce Agentforce implementation experts serving USA, UK, Canada, Australia, Asia and Gulf businesses. Autonomous sales and service agents grounded in your Data Cloud, live in London, New York and Dubai. 60+ agents deployed. Free consultation.'}
-                tag1={'Certified Salesforce Partner'} tag2={'Data Cloud Ready'} tag3={'24/7 Support'} />
+                tag1={'Salesforce Agentforce Specialists'} tag2={'Data Cloud Ready'} tag3={'24/7 Support'} />
 
             <ServiceKPISection stats={stats} />
 

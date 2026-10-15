@@ -12,11 +12,11 @@ export const metadata: Metadata = {
     description:
         'Book a free consultation. Salesforce, SAP, MuleSoft and cloud experts serving' +
         ' London, New York, Dubai and across the USA, UK, Canada, Australia, Asia and Gulf region.',
-    alternates: { canonical: 'https://l2global.in/contact-us' },
+    alternates: { canonical: 'https://www.l2global.in/contact-us' },
     openGraph: {
         title: 'Contact Us | L2 Global Technologies',
         description: 'Book a free consultation. Salesforce, SAP, MuleSoft and cloud experts serving USA, UK, Canada, Australia, Asia and Gulf.',
-        url: 'https://l2global.in/contact-us',
+        url: 'https://www.l2global.in/contact-us',
         images: ['/assets/web/og-image.png'],
     },
 };

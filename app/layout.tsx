@@ -9,23 +9,22 @@ import "aos/dist/aos.css";
 import CookieConsent from "@/components/shared/CookieConsent";
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://l2global.in'),
+  metadataBase: new URL('https://www.l2global.in'),
   title: {
     default: 'Salesforce Agentforce AI & SAP Consultants | UK · Texas USA · UAE | L2 Global',
     template: '%s | L2 Global Technologies',
   },
   description:
-    'UK-headquartered Salesforce Agentforce AI, SAP Gold Partner, MuleSoft and data science' +
+    'UK-headquartered Salesforce Agentforce AI, SAP, MuleSoft and data science' +
     ' consultants. UK, Texas USA, UAE & India. 182+ projects delivered. Free consultation.',
   // REMOVED: keywords array — Google ignores meta keywords since 2009
   openGraph: {
     type: 'website',
     locale: 'en_GB',
-    alternateLocale: ['en_US', 'en_AE', 'en_SA', 'en_QA'],
-    url: 'https://l2global.in',
+    url: 'https://www.l2global.in',
     siteName: 'L2 Global Technologies',
     title: 'Salesforce Agentforce AI & SAP Consultants | L2 Global Technologies',
-    description: 'UK, Texas USA & UAE IT consultants. Agentforce AI, SAP Gold Partner, MuleSoft. 182+ projects.',
+    description: 'UK, Texas USA & UAE IT consultants. Agentforce AI, SAP, MuleSoft. 182+ projects.',
     images: [{ url: '/assets/web/og-image.png', width: 1200, height: 630, alt: 'L2 Global Technologies — Salesforce Agentforce AI & SAP Consultants' }],
   },
   // No title/description/images here — every page below defines its own openGraph,
@@ -61,10 +60,10 @@ export default function RootLayout({
     '@type': 'ProfessionalService',
     name: 'L2 Global Technologies',
     alternateName: ['L2 Global', 'L2 Global Tech'],
-    url: 'https://l2global.in',
+    url: 'https://www.l2global.in',
     logo: {
       '@type': 'ImageObject',
-      url: 'https://l2global.in/assets/web/l2-svg.svg',
+      url: 'https://www.l2global.in/assets/web/l2-svg.svg',
       width: 200, height: 60,
     },
     email: 'contactus@l2global.in',
@@ -72,7 +71,7 @@ export default function RootLayout({
     foundingDate: '2014', // FIX: was incorrectly '2020'
     numberOfEmployees: { '@type': 'QuantitativeValue', value: 45 },
     description:
-      'UK-headquartered Salesforce Agentforce AI, SAP Gold Partner, MuleSoft, data science' +
+      'UK-headquartered Salesforce Agentforce AI, SAP, MuleSoft, data science' +
       ' and website development consultants. UK, Texas USA, UAE & India. 182+ projects. Founded 2014.',
     address: [
       {
@@ -125,13 +124,13 @@ export default function RootLayout({
       'Website Design and Development',
       'AWS Cloud Migration',
     ],
-    hasCredential: [
-      { '@type': 'EducationalOccupationalCredential', name: 'Salesforce Partner' },
-      { '@type': 'EducationalOccupationalCredential', name: 'SAP Gold Partner' },
-      { '@type': 'EducationalOccupationalCredential', name: 'MuleSoft Anypoint Partner' },
-      { '@type': 'EducationalOccupationalCredential', name: 'AWS Partner' },
-      { '@type': 'EducationalOccupationalCredential', name: 'Oracle Technology Partner' },
-    ],
+    // hasCredential: [ — commented out until an actual vendor partnership exists.
+    //   { '@type': 'EducationalOccupationalCredential', name: 'Salesforce Partner' },
+    //   { '@type': 'EducationalOccupationalCredential', name: 'SAP Gold Partner' },
+    //   { '@type': 'EducationalOccupationalCredential', name: 'MuleSoft Anypoint Partner' },
+    //   { '@type': 'EducationalOccupationalCredential', name: 'AWS Partner' },
+    //   { '@type': 'EducationalOccupationalCredential', name: 'Oracle Technology Partner' },
+    // ],
     sameAs: [
       'https://www.linkedin.com/company/l2-global-technologies',
       'https://www.facebook.com/l2globaltechnologies',
@@ -149,21 +148,6 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="preconnect" href="https://www.googletagmanager.com" />
-
-        {/* hreflang for international targeting */}
-        <link rel="alternate" hrefLang="en-gb" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-us" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-ca" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-au" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-ae" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-sa" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-qa" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-kw" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-bh" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-om" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-sg" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="en-in" href="https://l2global.in" />
-        <link rel="alternate" hrefLang="x-default" href="https://l2global.in" />
 
         <link rel="icon" href="/favicon.ico" sizes="any" />
       </head>

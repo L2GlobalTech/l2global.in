@@ -1,17 +1,15 @@
-import { ServiceLocalSchema } from '@/components/shared/JsonLd';
 import ServicesOverviewContainer from '@/containers/web/ServicesOverviewContainer'
 import React from 'react'
+export const dynamic = 'force-dynamic';
 
 export const metadata = {
-  title: 'Our Services | Salesforce, SAP & Cloud',
-  description:
-    'Salesforce Agentforce AI, SAP Joule AI, S/4HANA migration, MuleSoft integration,' +
-    ' AWS, Oracle, data science and web development for USA, UK, Canada, Australia, Asia and Gulf businesses.',
-  alternates: { canonical: 'https://l2global.in/services' },
+  title: 'IT Consulting & Implementation Services',
+  description: 'Explore L2 Global’s IT consulting, implementation and managed services. View service capabilities and discuss your project requirements.',
+  alternates: { canonical: 'https://www.l2global.in/services' },
   openGraph: {
     title: 'Our Services | L2 Global Technologies',
-    description: 'Salesforce, SAP, MuleSoft, cloud, data science and web development. UK · USA · Canada · Australia · Asia · UAE. Free consultation.',
-    url: 'https://l2global.in/services',
+    description: 'Explore L2 Global’s IT consulting, implementation and managed services. View service capabilities and discuss your project requirements.',
+    url: 'https://www.l2global.in/services',
     images: ['/assets/web/og-image.png'],
   },
 };
@@ -24,16 +22,14 @@ const page = async () => {
   return (
     <div>
       <ServicesOverviewContainer initialServices={initialServices} />
-      <ServiceLocalSchema
-        serviceName='IT Consulting Services'
-        serviceUrl='https://l2global.in/services'
-        description='Salesforce, SAP, MuleSoft, cloud, data science and web development consultants for USA, UK, Canada, Australia, Asia and Gulf enterprises.'
-        cities={[
-          'London', 'Manchester', 'Birmingham', 'Edinburgh', 'Leeds', 'Bristol',
-          'New York', 'Texas', 'California', 'Chicago', 'Houston', 'Los Angeles',
-          'Dubai', 'Abu Dhabi', 'Riyadh', 'Doha', 'Kuwait City', 'Manama', 'Muscat',
-        ]}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
+        '@context': 'https://schema.org', '@type': 'ItemList',
+        name: 'L2 Global IT Services',
+        itemListElement: initialServices.map((service, index) => ({
+          '@type': 'ListItem', position: index + 1, name: service.title,
+          url: `https://www.l2global.in${service.href}`,
+        })),
+      }).replace(/</g, '\\u003c') }} />
     </div>
   )
 }
