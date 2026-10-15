@@ -197,7 +197,7 @@ export default function SalesForceContainer({ initialData }: SalesForceContainer
         : defaultFaqs
 
     const features = serviceData?.about_features && Array.isArray(serviceData.about_features) && serviceData.about_features.length > 0
-        ? serviceData.about_features.map((f: any) => extractString(f)).filter(Boolean)
+        ? serviceData.about_features.filter((f: any) => typeof f === 'string' ? f.trim().length > 0 : Boolean(f?.description || f?.title))
         : defaultFeatures
 
     const heroImg = (serviceData?.hero_image_id ? getMediaPublicUrl(serviceData.hero_image_id, 'services') : null) || sapImg
@@ -222,12 +222,15 @@ export default function SalesForceContainer({ initialData }: SalesForceContainer
 
             <ServiceAboutSection
                 image={aboutImg}
+                badge={extractString(serviceData?.about_badge, 'About the Service')}
                 title={extractString(serviceData?.about_title, '')}
                 titleBefore={extractString(serviceData?.about_title, 'Why')}
                 titleAfter={extractString(serviceData?.about_logo_text, 'Integration Matters')}
                 linearText={extractString(serviceData?.about_highlight, 'Salesforce')}
                 description={extractString(serviceData?.about_description, 'Salesforce enables businesses to centralize customer data, automate workflows, and gain real-time insights across sales, marketing, and service operations. Our Salesforce experts help you unlock the full potential of CRM with seamless integrations, improved efficiency, and scalable solutions tailored to your business needs.')}
                 features={features}
+                ctaText={extractString(serviceData?.about_cta_text, 'Get a quote')}
+                ctaUrl={extractString(serviceData?.about_cta_url, '/contact-us')}
             />
 
             <ServiceExpertiseSection services={mappedServices} />

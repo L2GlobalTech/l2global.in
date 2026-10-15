@@ -59,6 +59,8 @@ import Navbar from "@/components/web/Navbar";
 import { Inter } from "next/font/google";
 
 
+import { Toaster } from "react-hot-toast";
+
 const urbanist = Inter({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700", "800", "900"],
@@ -71,6 +73,7 @@ export default function WebLayout({
 }) {
   return (
     <main className={`${urbanist.className} relative`}>
+      <Toaster position="top-right" />
       {/* <div className="absolute top-6 left-0 w-full z-50"> */}
       <div className="hidden lg:block">
         <Navbar />
@@ -88,3 +91,4 @@ export default function WebLayout({
     </main>
   );
 }
+

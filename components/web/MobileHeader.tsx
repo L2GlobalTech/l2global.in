@@ -243,17 +243,28 @@ const MobileHeader = () => {
                             </Link>
                         ))}
 
-                    {view === "SERVICES" &&
-                        servicesList.map(item => (
+                    {view === "SERVICES" && (
+                        <>
                             <Link
-                                key={item.href}
-                                href={item.href}
+                                href="/services"
                                 onClick={onNavigate}
-                                className={linkClass}
+                                className={`${linkClass} font-semibold text-[#F15A23] flex items-center justify-between bg-orange-50/60`}
                             >
-                                {item.label}
+                                <span>View All Services</span>
+                                <ChevronRight size={18} />
                             </Link>
-                        ))}
+                            {servicesList.map(item => (
+                                <Link
+                                    key={item.href}
+                                    href={item.href}
+                                    onClick={onNavigate}
+                                    className={linkClass}
+                                >
+                                    {item.label}
+                                </Link>
+                            ))}
+                        </>
+                    )}
                 </div>
 
                 <ContactPopup

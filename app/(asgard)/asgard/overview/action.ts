@@ -9,11 +9,14 @@ export interface OverviewMetrics {
   activeTeamMembers?: number;
   totalFaqs: number;
   activeFaqs: number;
+  totalCareerOpenings?: number;
+  activeCareerOpenings?: number;
   totalAdmins: number;
   activeAdmins: number;
   recentBlogs: any[];
   recentServices: any[];
   recentFaqs: any[];
+  recentJobs?: any[];
 }
 
 /**
@@ -29,11 +32,14 @@ export async function getOverviewStats(): Promise<OverviewMetrics> {
     activeTeamMembers: 0,
     totalFaqs: 0,
     activeFaqs: 0,
+    totalCareerOpenings: 0,
+    activeCareerOpenings: 0,
     totalAdmins: 2,
     activeAdmins: 2,
     recentBlogs: [],
     recentServices: [],
     recentFaqs: [],
+    recentJobs: [],
   };
 
   if (!isSupabaseConfigured()) {
@@ -106,6 +112,21 @@ export async function getOverviewStats(): Promise<OverviewMetrics> {
       // Use fallback
     }
 
+    let totalCareerOpenings = 0;
+    let activeCareerOpenings = 0;
+    let recentJobs: any[] = [];
+
+    try {
+      const { data: jobsData } = await supabase.from('job_openings').select('id, title, is_active, employment_type, experience_level, locations, created_at').order('created_at', { ascending: false });
+      if (jobsData && jobsData.length > 0) {
+        totalCareerOpenings = jobsData.length;
+        activeCareerOpenings = jobsData.filter((j: any) => j.is_active !== false).length;
+        recentJobs = jobsData.slice(0, 5);
+      }
+    } catch {
+      // Use fallback
+    }
+
     return {
       totalBlogs,
       featuredBlogs,
@@ -115,11 +136,14 @@ export async function getOverviewStats(): Promise<OverviewMetrics> {
       activeTeamMembers,
       totalFaqs,
       activeFaqs,
+      totalCareerOpenings,
+      activeCareerOpenings,
       totalAdmins,
       activeAdmins,
       recentBlogs,
       recentServices,
       recentFaqs,
+      recentJobs,
     };
   } catch (error) {
     console.error('Error fetching overview stats from Supabase:', error);

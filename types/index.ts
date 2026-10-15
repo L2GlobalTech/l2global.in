@@ -42,3 +42,5 @@ export interface FrontendService {
   hero_description?: string | null;
   is_active?: boolean;
 }
+
+export type { JobOpeningRecord, JobOpeningFormData } from './cms';

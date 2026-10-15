@@ -197,7 +197,7 @@ const Navbar = () => {
                   return (
                     <HeadlessMenu as="div" className="relative" key={label}>
                       <HeadlessMenu.Button
-                        className={`relative flex items-center transition duration-300 outline-none ${linkClasses}`}
+                        className={`relative flex items-center transition duration-300 outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0 ${linkClasses}`}
                       >
                         <span className="relative pl-4 flex items-center gap-1 tracking-[-1px] cursor-pointer">
                           {isActive && (
@@ -221,22 +221,41 @@ const Navbar = () => {
                         leaveTo="opacity-0 translate-y-2"
                       >
                         <HeadlessMenu.Items
-                          className="absolute left-0 mt-3 w-56 rounded-2xl bg-white
-                          shadow-lg border border-gray-200 p-2 z-50"
+                          className="absolute left-0 mt-3 min-w-[280px] rounded-2xl bg-white
+                          shadow-2xl border border-slate-100 p-2 z-50 outline-none focus:outline-none focus-visible:outline-none ring-0 focus:ring-0"
                         >
                           {dropdownItems.map(item => (
                             <HeadlessMenu.Item key={item.href}>
                               {({ active }) => (
                                 <Link
                                   href={item.href}
-                                  className={`block px-4 py-2 rounded-lg text-sm tracking-[-1px]
-                                  ${active ? 'bg-gray-100 text-black' : 'text-gray-700'}`}
+                                  className={`block px-4 py-2 rounded-lg text-sm tracking-[-1px] outline-none focus:outline-none ${
+                                    active ? 'bg-gray-100 text-black' : 'text-gray-700'
+                                  }`}
                                 >
                                   {item.label}
                                 </Link>
                               )}
                             </HeadlessMenu.Item>
                           ))}
+
+                          {label === 'Services' && (
+                            <div className="border-t border-gray-100 mt-1.5 pt-1.5">
+                              <HeadlessMenu.Item>
+                                {({ active }) => (
+                                  <Link
+                                    href="/services"
+                                    className={`flex items-center justify-between px-4 py-2 rounded-lg text-sm font-semibold tracking-[-0.5px] transition-all outline-none focus:outline-none ${
+                                      active ? 'bg-orange-50 text-[#F15A23]' : 'text-[#F15A23] hover:bg-orange-50/70'
+                                    }`}
+                                  >
+                                    <span>View All Services</span>
+                                    <MoveRight size={14} />
+                                  </Link>
+                                )}
+                              </HeadlessMenu.Item>
+                            </div>
+                          )}
                         </HeadlessMenu.Items>
                       </Transition>
                     </HeadlessMenu>

@@ -321,7 +321,11 @@ export async function createService(serviceData: ServiceRecord): Promise<{ succe
       about_highlight: serviceData.about_highlight?.trim() || null,
       about_description: serviceData.about_description?.trim() || null,
       about_features: Array.isArray(serviceData.about_features)
-        ? serviceData.about_features.filter((f) => typeof f === 'string' ? f.trim().length > 0 : Boolean(f))
+        ? serviceData.about_features.filter((f) => {
+            if (typeof f === 'string') return f.trim().length > 0;
+            if (typeof f === 'object' && f !== null) return Boolean((f as any).description || (f as any).title);
+            return false;
+          })
         : [],
       about_image_id: serviceData.about_image_id?.trim() || null,
       about_logo_text: serviceData.about_logo_text?.trim() || null,
@@ -429,7 +433,11 @@ export async function updateService(
     if (updates.about_description !== undefined) payload.about_description = updates.about_description?.trim() || null;
     if (updates.about_features !== undefined) {
       payload.about_features = Array.isArray(updates.about_features)
-        ? updates.about_features.filter((f) => typeof f === 'string' ? f.trim().length > 0 : Boolean(f))
+        ? updates.about_features.filter((f) => {
+            if (typeof f === 'string') return f.trim().length > 0;
+            if (typeof f === 'object' && f !== null) return Boolean((f as any).description || (f as any).title);
+            return false;
+          })
         : [];
     }
     if (updates.about_image_id !== undefined) payload.about_image_id = updates.about_image_id ? updates.about_image_id.trim() : null;

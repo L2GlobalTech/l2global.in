@@ -27,6 +27,7 @@ import { LoadingState } from '@/components/asgard/LoadingState';
 import { EmptyState } from '@/components/asgard/EmptyState';
 import { DeleteModal } from '@/components/asgard/DeleteModal';
 import { DataTablePagination } from '@/components/asgard/DataTablePagination';
+import { AsgardFilterSelect } from '@/components/asgard/AsgardFilterSelect';
 import {
   getTeamMembers,
   deleteTeamMember,
@@ -169,27 +170,36 @@ export const TeamMembersContainer: React.FC = () => {
             placeholder="Search by name, certification..."
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            className="w-full pl-9.5 pr-3.5 py-2 text-xs sm:text-sm bg-slate-100 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-colors placeholder:text-slate-400"
+            className="w-full pl-9.5 pr-8 py-2 text-xs sm:text-sm bg-slate-100 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500/20 transition-colors placeholder:text-slate-400"
           />
+          {searchInput && (
+            <button
+              type="button"
+              onClick={() => setSearchInput('')}
+              className="absolute right-2.5 top-2.5 text-slate-400 hover:text-slate-600 p-0.5 rounded cursor-pointer"
+              title="Clear search"
+            >
+              <XCircle className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         <div className="flex items-center flex-wrap gap-2.5">
           {/* Status Filter */}
-          <div className="flex items-center gap-1.5 bg-slate-100 px-3 py-1.5 rounded-xl text-slate-700">
-            <Filter className="w-3.5 h-3.5 text-slate-400 shrink-0" />
-            <select
-              value={statusFilter}
-              onChange={(e) => {
-                setStatusFilter(e.target.value);
-                setCurrentPage(1);
-              }}
-              className="bg-transparent border-0 text-xs sm:text-sm font-medium text-slate-700 focus:outline-none cursor-pointer pr-1"
-            >
-              <option value="all">All Statuses</option>
-              <option value="active">Active Only</option>
-              <option value="inactive">Inactive Only</option>
-            </select>
-          </div>
+          <AsgardFilterSelect
+            icon={<Filter className="w-3.5 h-3.5 text-slate-400" />}
+            labelPrefix="Status"
+            value={statusFilter}
+            onChange={(val) => {
+              setStatusFilter(val);
+              setCurrentPage(1);
+            }}
+            options={[
+              { value: 'all', label: 'All Statuses' },
+              { value: 'active', label: 'Active Only' },
+              { value: 'inactive', label: 'Inactive Only' },
+            ]}
+          />
 
           {/* Refresh Button */}
           <button

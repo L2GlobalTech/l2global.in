@@ -40,11 +40,11 @@ const ServiceHeroSection: React.FC<IProps> = ({
 
     return (
         <div className={styles.backgroundMesh}>
-            <div className='md:pt-48 pt-32 container mx-auto px-5 md:px-0'>
-                <div className='grid md:grid-cols-2 gap-5'>
+            <div className='md:pt-48 pt-32 pb-14 md:pb-20 container mx-auto px-5 md:px-0'>
+                <div className='grid md:grid-cols-2 gap-8 lg:gap-12 items-center'>
 
                     {/* LEFT SIDE */}
-                    <div>
+                    <div className="flex flex-col justify-center">
 
                         <div className='flex pb-5'>
                             <div
@@ -140,7 +140,7 @@ const ServiceHeroSection: React.FC<IProps> = ({
                             />
                         </div>
 
-                        <div className={`${styles.wrapper} mt-8 mb-14`}>
+                        <div className={`${styles.wrapper} mt-8 mb-4 md:mb-0`}>
 
                             <div
                                 data-aos="fade-up"
@@ -180,8 +180,15 @@ const ServiceHeroSection: React.FC<IProps> = ({
                         data-aos="zoom-in"
                         data-aos-delay="300"
                         data-aos-duration="1000"
+                        className="flex items-center justify-center md:justify-end w-full"
                     >
-                        {imgSrc && <img src={imgSrc} alt={linearText || 'service-hero'} />}
+                        {imgSrc && (
+                            <img
+                                src={imgSrc}
+                                alt={linearText || 'service-hero'}
+                                className="max-w-full h-auto object-contain"
+                            />
+                        )}
                     </div>
 
                 </div>

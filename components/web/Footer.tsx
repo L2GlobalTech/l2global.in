@@ -16,7 +16,7 @@ const footerLinks = {
         { label: "Careers", href: "/career" },
         { label: "Team", href: "/team" },
         { label: "Blog & Insights", href: "/blog" },
-        // { label: "FAQs", href: "/faq" },
+        { label: "FAQs", href: "/faq" },
     ],
 
     Industries: [

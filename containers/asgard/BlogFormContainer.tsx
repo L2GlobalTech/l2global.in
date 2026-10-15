@@ -9,6 +9,7 @@ import { AsgardLayout } from '@/components/asgard/AsgardLayout';
 import { LoadingState } from '@/components/asgard/LoadingState';
 import ImageUploader from '@/components/asgard/ImageUploader';
 import { RichTextEditor } from '@/components/asgard/RichTextEditor';
+import { AsgardSelect } from '@/components/asgard/AsgardSelect';
 import { uploadMedia, getMediaPublicUrl, deleteMedia } from '@/actions/mediaAction';
 import {
   getBlogById,
@@ -335,26 +336,19 @@ export const BlogFormContainer: React.FC<BlogFormContainerProps> = ({ id }) => {
                   <label className="block text-xs sm:text-sm font-semibold text-slate-900 mb-1.5">
                     Featured Article Status
                   </label>
-                  <div className="relative">
-                    <select
-                      name="is_featured"
-                      value={formData.is_featured ? 'true' : 'false'}
-                      onChange={(e) =>
-                        setFormData((prev) => ({
-                          ...prev,
-                          is_featured: e.target.value === 'true',
-                        }))
-                      }
-                      className={`${inputClass} pr-10 appearance-none cursor-pointer`}
-                    >
-                      <option value="false">Standard Blog</option>
-                      <option value="true">Featured Article</option>
-                    </select>
-                    <ChevronDown
-                      size={16}
-                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none"
-                    />
-                  </div>
+                  <AsgardSelect
+                    value={formData.is_featured ? 'true' : 'false'}
+                    onChange={(val) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        is_featured: val === 'true',
+                      }))
+                    }
+                    options={[
+                      { value: 'false', label: 'Standard Blog' },
+                      { value: 'true', label: 'Featured Article' },
+                    ]}
+                  />
                 </div>
               </div>
 

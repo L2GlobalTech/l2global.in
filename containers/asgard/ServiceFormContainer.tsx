@@ -21,11 +21,14 @@ import {
   Globe,
   Image as ImageIcon,
   Check,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { AsgardLayout } from '@/components/asgard/AsgardLayout';
 import { LoadingState } from '@/components/asgard/LoadingState';
 import ImageUploader from '@/components/asgard/ImageUploader';
+import { AsgardSelect } from '@/components/asgard/AsgardSelect';
 import { uploadMedia, getMediaPublicUrl, deleteMedia } from '@/actions/mediaAction';
 import {
   getServiceById,
@@ -39,7 +42,15 @@ import {
   ServiceCapabilityItem,
   ServiceResultStat,
   ServiceFAQItem,
+  ServiceHighlightItem,
 } from '@/types/cms';
+import { HIGHLIGHT_ICON_OPTIONS, renderHighlightIcon } from '@/utils/serviceHighlightIcons';
+
+const highlightIconSelectOptions = HIGHLIGHT_ICON_OPTIONS.map((opt) => ({
+  value: opt.value,
+  label: opt.label,
+  icon: <opt.IconComponent className="w-4 h-4 text-indigo-600" />,
+}));
 
 interface ServiceFormContainerProps {
   id?: string;
@@ -155,6 +166,53 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
           return arr.map((item: any) => extractString(item)).filter((s: string) => s.length > 0);
         };
 
+        const normalizeHighlightsList = (arr: any): ServiceHighlightItem[] => {
+          if (!Array.isArray(arr)) return [];
+          return arr
+            .map((item: any, idx: number): ServiceHighlightItem => {
+              if (typeof item === 'string') {
+                const colonIdx = item.indexOf(':');
+                if (colonIdx > 2 && colonIdx < 35) {
+                  return {
+                    id: `hl-${idx}-${Date.now()}`,
+                    title: item.slice(0, colonIdx).trim(),
+                    description: item.slice(colonIdx + 1).trim(),
+                    icon: 'Sparkles',
+                    display_order: idx + 1,
+                    is_active: true,
+                  };
+                }
+                return {
+                  id: `hl-${idx}-${Date.now()}`,
+                  title: '',
+                  description: item.trim(),
+                  icon: 'CheckCircle2',
+                  display_order: idx + 1,
+                  is_active: true,
+                };
+              }
+              if (typeof item === 'object' && item !== null) {
+                return {
+                  id: item.id || `hl-${idx}-${Date.now()}`,
+                  title: item.title || '',
+                  description: item.description || item.text || item.label || '',
+                  icon: item.icon || 'Sparkles',
+                  display_order: typeof item.display_order === 'number' ? item.display_order : idx + 1,
+                  is_active: item.is_active !== false,
+                };
+              }
+              return {
+                id: `hl-${idx}-${Date.now()}`,
+                title: '',
+                description: '',
+                icon: 'CheckCircle2',
+                display_order: idx + 1,
+                is_active: true,
+              };
+            })
+            .filter((h) => Boolean(h.description?.trim() || h.title?.trim()));
+        };
+
         setFormData({
           id: service.id,
           title: extractString(service.title, ''),
@@ -183,7 +241,7 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
           about_title: service.about_title || '',
           about_highlight: service.about_highlight || '',
           about_description: service.about_description || '',
-          about_features: normalizeStringList(service.about_features),
+          about_features: normalizeHighlightsList(service.about_features),
           about_image_id: service.about_image_id || null,
           about_logo_text: service.about_logo_text || '',
           about_cta_text: service.about_cta_text || 'Get a Quote',
@@ -313,26 +371,71 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
     }));
   };
 
-  // About Features
-  const handleAddAboutFeature = () => {
+  // Service Highlights (about_features)
+  const handleAddAboutHighlight = () => {
     setFormData((prev) => ({
       ...prev,
-      about_features: [...(prev.about_features || []), ''],
+      about_features: [
+        ...(prev.about_features || []),
+        {
+          id: `hl-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+          title: '',
+          description: '',
+          icon: 'Sparkles',
+          display_order: (prev.about_features?.length || 0) + 1,
+          is_active: true,
+        },
+      ],
     }));
   };
-  const handleAboutFeatureChange = (index: number, value: string) => {
+
+  const handleAboutHighlightChange = (
+    index: number,
+    field: keyof ServiceHighlightItem,
+    value: any
+  ) => {
     setFormData((prev) => {
       const list = [...(prev.about_features || [])];
-      list[index] = value;
+      const current = typeof list[index] === 'string'
+        ? {
+            id: `hl-${index}-${Date.now()}`,
+            title: '',
+            description: list[index] as string,
+            icon: 'CheckCircle2',
+            display_order: index + 1,
+            is_active: true,
+          }
+        : { ...(list[index] as ServiceHighlightItem) };
+
+      (current as any)[field] = value;
+      list[index] = current;
       return { ...prev, about_features: list };
     });
   };
-  const handleRemoveAboutFeature = (index: number) => {
+
+  const handleRemoveAboutHighlight = (index: number) => {
     setFormData((prev) => ({
       ...prev,
       about_features: (prev.about_features || []).filter((_, i) => i !== index),
     }));
   };
+
+  const handleMoveAboutHighlight = (index: number, direction: 'up' | 'down') => {
+    setFormData((prev) => {
+      const list = [...(prev.about_features || [])];
+      const targetIndex = direction === 'up' ? index - 1 : index + 1;
+      if (targetIndex < 0 || targetIndex >= list.length) return prev;
+      const temp = list[index];
+      list[index] = list[targetIndex];
+      list[targetIndex] = temp;
+      return { ...prev, about_features: list };
+    });
+  };
+
+  // Legacy compatibility alias
+  const handleAddAboutFeature = handleAddAboutHighlight;
+  const handleAboutFeatureChange = (index: number, value: string) => handleAboutHighlightChange(index, 'description', value);
+  const handleRemoveAboutFeature = handleRemoveAboutHighlight;
 
   // Results Stats
   const handleAddResultStat = () => {
@@ -453,7 +556,11 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
         solutions_image_id: resolvedSolutionsImageId,
         hero_badges: (formData.hero_badges || []).filter(Boolean),
         capabilities: (formData.capabilities || []).filter((c) => Boolean(c.title?.trim())),
-        about_features: (formData.about_features || []).filter((f) => Boolean(f?.trim())),
+        about_features: (formData.about_features || []).filter((f: any) => {
+          if (typeof f === 'string') return Boolean(f.trim());
+          if (typeof f === 'object' && f !== null) return Boolean(f.description?.trim() || f.title?.trim());
+          return false;
+        }),
         results_stats: (formData.results_stats || []).filter((s) => Boolean(s.value?.trim() || s.label?.trim())),
         solutions_badges: (formData.solutions_badges || []).filter(Boolean),
         faqs: (formData.faqs || []).filter((f) => Boolean(f.question?.trim())),
@@ -711,15 +818,19 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
                         <label className="block text-xs font-semibold text-slate-700 mb-1.5">
                           Publish Status
                         </label>
-                        <select
-                          name="is_active"
+                        <AsgardSelect
                           value={formData.is_active ? 'true' : 'false'}
-                          onChange={handleInputChange}
-                          className={`${inputClass} cursor-pointer`}
-                        >
-                          <option value="true">Active (Visible)</option>
-                          <option value="false">Inactive (Hidden)</option>
-                        </select>
+                          onChange={(val) =>
+                            setFormData((prev) => ({
+                              ...prev,
+                              is_active: val === 'true',
+                            }))
+                          }
+                          options={[
+                            { value: 'true', label: 'Active (Visible)' },
+                            { value: 'false', label: 'Inactive (Hidden)' },
+                          ]}
+                        />
                       </div>
 
                       <div>
@@ -1130,51 +1241,184 @@ export const ServiceFormContainer: React.FC<ServiceFormContainerProps> = ({ id }
                       </div>
                     </div>
 
-                    {/* About Features List */}
-                    <div className="p-4 bg-slate-50 rounded-xl border border-slate-200 space-y-3">
-                      <div className="flex items-center justify-between">
+                    {/* About Section: Service Highlights Cards */}
+                    <div className="p-4 sm:p-5 bg-slate-50/80 rounded-2xl border border-slate-200 space-y-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 pb-3 border-b border-slate-200">
                         <div>
-                          <h4 className="text-xs font-bold text-slate-800">
-                            Feature Bullet Points (about_features jsonb)
-                          </h4>
-                          <p className="text-[11px] text-slate-500">
-                            Checkmark items displayed in the About section.
+                          <div className="flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-indigo-600" />
+                            <h4 className="text-xs sm:text-sm font-bold text-slate-900">
+                              Service Highlights Cards (About Section)
+                            </h4>
+                          </div>
+                          <p className="text-[11px] text-slate-500 mt-0.5 leading-relaxed">
+                            Structured highlights displayed as cards on the public website with icons, titles, and descriptions.
                           </p>
                         </div>
                         <button
                           type="button"
-                          onClick={handleAddAboutFeature}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-lg border border-indigo-200 cursor-pointer"
+                          onClick={handleAddAboutHighlight}
+                          className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 rounded-xl transition-all shadow-xs cursor-pointer self-start sm:self-auto"
                         >
                           <Plus className="w-3.5 h-3.5" />
-                          <span>Add Bullet Point</span>
+                          <span>Add Highlight</span>
                         </button>
                       </div>
 
-                      <div className="space-y-2">
-                        {(formData.about_features || []).map((feature, idx) => {
-                          const featureVal = typeof feature === 'string' ? feature : (feature as any)?.text ?? (feature as any)?.title ?? '';
-                          return (
-                            <div key={idx} className="flex items-center gap-2">
-                              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                              <input
-                                type="text"
-                                placeholder={`Feature Point #${idx + 1}`}
-                                value={featureVal || ''}
-                                onChange={(e) => handleAboutFeatureChange(idx, e.target.value)}
-                                className={inputClass}
-                              />
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveAboutFeature(idx)}
-                                className="p-2 text-slate-400 hover:text-rose-600 rounded cursor-pointer"
+                      {(!formData.about_features || formData.about_features.length === 0) ? (
+                        <div className="p-6 text-center border-2 border-dashed border-slate-200 rounded-xl bg-white">
+                          <Sparkles className="w-8 h-8 text-slate-300 mx-auto mb-2 stroke-1" />
+                          <p className="text-xs font-semibold text-slate-700">No service highlights added yet</p>
+                          <p className="text-[11px] text-slate-400 mt-1">
+                            Add key highlights to describe your service offering in modern card format.
+                          </p>
+                          <button
+                            type="button"
+                            onClick={handleAddAboutHighlight}
+                            className="mt-3 inline-flex items-center gap-1 px-3 py-1.5 text-xs font-semibold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 rounded-lg transition-colors cursor-pointer"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Add First Highlight</span>
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="space-y-3">
+                          {formData.about_features.map((featureItem: any, idx: number) => {
+                            const highlight: ServiceHighlightItem = typeof featureItem === 'string'
+                              ? { title: '', description: featureItem, icon: 'CheckCircle2', is_active: true }
+                              : featureItem;
+
+                            const isFirst = idx === 0;
+                            const isLast = idx === (formData.about_features?.length || 0) - 1;
+
+                            return (
+                              <div
+                                key={highlight.id || idx}
+                                className={`bg-white rounded-xl border transition-all p-3.5 sm:p-4 space-y-3 shadow-2xs ${
+                                  highlight.is_active === false
+                                    ? 'border-slate-200 opacity-60 bg-slate-50/50'
+                                    : 'border-slate-200 hover:border-slate-300'
+                                }`}
                               >
-                                <Trash2 className="w-4 h-4" />
-                              </button>
-                            </div>
-                          );
-                        })}
-                      </div>
+                                {/* Card Header with Reordering & Status Controls */}
+                                <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                                  <div className="flex items-center gap-2">
+                                    <span className="text-[11px] font-bold px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-mono">
+                                      #{idx + 1}
+                                    </span>
+                                    <div className="flex items-center gap-0.5">
+                                      <button
+                                        type="button"
+                                        onClick={() => handleMoveAboutHighlight(idx, 'up')}
+                                        disabled={isFirst}
+                                        className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed rounded hover:bg-slate-100 cursor-pointer"
+                                        title="Move up"
+                                      >
+                                        <ArrowUp className="w-3.5 h-3.5" />
+                                      </button>
+                                      <button
+                                        type="button"
+                                        onClick={() => handleMoveAboutHighlight(idx, 'down')}
+                                        disabled={isLast}
+                                        className="p-1 text-slate-400 hover:text-slate-700 disabled:opacity-30 disabled:cursor-not-allowed rounded hover:bg-slate-100 cursor-pointer"
+                                        title="Move down"
+                                      >
+                                        <ArrowDown className="w-3.5 h-3.5" />
+                                      </button>
+                                    </div>
+                                    <div className="w-6 h-6 rounded bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
+                                      {renderHighlightIcon(highlight.icon, 'w-3.5 h-3.5')}
+                                    </div>
+                                    <span className="text-xs font-semibold text-slate-800 truncate max-w-[150px] sm:max-w-[200px]">
+                                      {highlight.title || 'Untitled Highlight'}
+                                    </span>
+                                  </div>
+
+                                  <div className="flex items-center gap-2">
+                                    {/* Active Visibility Toggle */}
+                                    <button
+                                      type="button"
+                                      onClick={() => handleAboutHighlightChange(idx, 'is_active', highlight.is_active === false ? true : false)}
+                                      className={`inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-semibold rounded-md border transition-colors cursor-pointer ${
+                                        highlight.is_active !== false
+                                          ? 'bg-emerald-50 text-emerald-700 border-emerald-200'
+                                          : 'bg-slate-100 text-slate-500 border-slate-200'
+                                      }`}
+                                      title="Toggle visibility on website"
+                                    >
+                                      {highlight.is_active !== false ? 'Active' : 'Hidden'}
+                                    </button>
+
+                                    {/* Delete Button */}
+                                    <button
+                                      type="button"
+                                      onClick={() => handleRemoveAboutHighlight(idx)}
+                                      className="p-1.5 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg transition-colors cursor-pointer"
+                                      title="Remove this highlight"
+                                    >
+                                      <Trash2 className="w-3.5 h-3.5" />
+                                    </button>
+                                  </div>
+                                </div>
+
+                                {/* Form Fields: Title, Icon, Description */}
+                                <div className="grid grid-cols-1 sm:grid-cols-12 gap-3">
+                                  {/* Title Input */}
+                                  <div className="sm:col-span-6">
+                                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                                      Highlight Heading (Optional)
+                                    </label>
+                                    <input
+                                      type="text"
+                                      placeholder="e.g. CRM Implementation"
+                                      value={highlight.title || ''}
+                                      onChange={(e) => handleAboutHighlightChange(idx, 'title', e.target.value)}
+                                      className={inputClass}
+                                    />
+                                  </div>
+
+                                  {/* Icon Selector */}
+                                  <div className="sm:col-span-6">
+                                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                                      Card Icon
+                                    </label>
+                                    <AsgardSelect
+                                      value={highlight.icon || 'Sparkles'}
+                                      onChange={(val) => handleAboutHighlightChange(idx, 'icon', val)}
+                                      options={highlightIconSelectOptions}
+                                      searchable={true}
+                                      size="sm"
+                                    />
+                                  </div>
+
+                                  {/* Description Input */}
+                                  <div className="sm:col-span-12">
+                                    <label className="block text-[11px] font-semibold text-slate-700 mb-1">
+                                      Description Text <span className="text-rose-500">*</span>
+                                    </label>
+                                    <textarea
+                                      rows={2}
+                                      placeholder="e.g. Tailored setup aligning sales, service, and marketing with enterprise workflows."
+                                      value={highlight.description || ''}
+                                      onChange={(e) => handleAboutHighlightChange(idx, 'description', e.target.value)}
+                                      className="w-full px-3 py-2 text-xs sm:text-sm text-slate-900 bg-slate-100 border-0 rounded-xl focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all placeholder:text-slate-400 resize-y min-h-[50px]"
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            );
+                          })}
+
+                          <button
+                            type="button"
+                            onClick={handleAddAboutHighlight}
+                            className="w-full py-2 border-2 border-dashed border-slate-200 hover:border-indigo-300 hover:bg-indigo-50/30 text-slate-600 hover:text-indigo-600 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-colors cursor-pointer"
+                          >
+                            <Plus className="w-3.5 h-3.5" />
+                            <span>Add Another Highlight</span>
+                          </button>
+                        </div>
+                      )}
                     </div>
                   </div>
                 )}
