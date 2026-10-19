@@ -15,6 +15,7 @@ import ServiceFAQ from '@/components/web/services/ServiceFAQ'
 import { BarChart3, Cloud, Database, GitMerge, Shield, Zap, Server, Settings, Cpu, Layers, Rocket, Users, Award, Headphones } from 'lucide-react'
 import { ServiceRecord } from '@/types/cms'
 import { getMediaPublicUrl } from '@/actions/mediaAction'
+import { renderFormattedTitle } from '@/utils/highlightText'
 
 // Fallback images
 import salesforceHeroImg from '@/public/assets/web/Service-detail/salesforce-img.png'
@@ -116,6 +117,7 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
 
     const heroImg = (serviceData?.hero_image_id ? getMediaPublicUrl(serviceData.hero_image_id, 'services') : null) || fallbackImgs.hero
     const aboutImg = (serviceData?.about_image_id ? getMediaPublicUrl(serviceData.about_image_id, 'services') : null) || fallbackImgs.about
+    const solutionsImg = serviceData?.solutions_image_id ? getMediaPublicUrl(serviceData.solutions_image_id, 'services') : null
 
     // Dynamic Capabilities - only show integrated data
     const mappedServices = serviceData?.capabilities && serviceData.capabilities.length > 0
@@ -165,6 +167,16 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
 
     const serviceTitle = extractString(serviceData?.title, 'Enterprise Solutions')
 
+    const solutionsTitle = extractString(serviceData?.solutions_title).trim()
+    const solutionsHighlight = extractString(serviceData?.solutions_highlight).trim()
+    const solutionsLogoText = extractString(serviceData?.solutions_logo_text).trim()
+    const solutionsDesc = extractString(serviceData?.solutions_description).trim()
+    const solutionsBadge = extractString(serviceData?.solutions_badge).trim()
+    const solutionsBadges = Array.isArray(serviceData?.solutions_badges)
+        ? serviceData.solutions_badges.map((b: any) => extractString(b).trim()).filter(Boolean)
+        : []
+    const hasSolutions = Boolean(solutionsDesc || solutionsTitle || solutionsHighlight || solutionsImg)
+
     return (
         <div>
             <ServiceHeroSection
@@ -201,10 +213,67 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
 
             {mappedServices.length > 0 && <ServiceExpertiseSection services={mappedServices} />}
 
-            {extractString(serviceData?.solutions_description).trim() && <section className="container mx-auto px-5 py-16">
-                <h2 className="text-3xl font-semibold text-[#0D1526]">{[serviceData?.solutions_title, serviceData?.solutions_highlight, serviceData?.solutions_logo_text].map(value => extractString(value).trim()).filter(Boolean).join(' ') || `${serviceTitle} Solutions`}</h2>
-                <p className="mt-5 text-[#707A8F] whitespace-pre-line leading-relaxed">{extractString(serviceData?.solutions_description)}</p>
-            </section>}
+            {hasSolutions && (
+                <section className="container mx-auto px-5 py-12 md:py-16 lg:py-20">
+                    <div className={solutionsImg ? "grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center" : "max-w-4xl"}>
+                        <div className={`w-full ${solutionsImg ? 'lg:col-span-7' : ''}`} data-aos="fade-right">
+                            {solutionsBadge && (
+                                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-slate-100 border border-slate-200/80 mb-4">
+                                    <span className="w-2 h-2 rounded-full bg-[#195DF0] animate-pulse" />
+                                    <span className="text-xs font-semibold uppercase tracking-wider text-slate-700">
+                                        {solutionsBadge}
+                                    </span>
+                                </div>
+                            )}
+
+                            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#0D1526] tracking-tight leading-snug">
+                                {renderFormattedTitle({
+                                    title: solutionsTitle || (!solutionsHighlight && !solutionsLogoText ? `${serviceTitle} Solutions` : ''),
+                                    linearText: solutionsHighlight,
+                                    titleAfter: solutionsLogoText,
+                                    customClassName: 'bg-gradient-to-r from-[#195DF0] to-[#8152E0] bg-clip-text text-transparent inline',
+                                })}
+                            </h2>
+
+                            {solutionsDesc && (
+                                <p className="mt-4 sm:mt-5 text-sm sm:text-base text-[#707A8F] whitespace-pre-line leading-relaxed font-normal">
+                                    {solutionsDesc}
+                                </p>
+                            )}
+
+                            {solutionsBadges.length > 0 && (
+                                <div className="flex flex-wrap gap-2 mt-6">
+                                    {solutionsBadges.map((badgeText: string, idx: number) => (
+                                        <span
+                                            key={idx}
+                                            className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-indigo-50 text-indigo-700 border border-indigo-100"
+                                        >
+                                            {badgeText}
+                                        </span>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+
+                        {solutionsImg && (
+                            <div
+                                className="w-full lg:col-span-5 flex items-center justify-center mt-6 lg:mt-0"
+                                data-aos="fade-left"
+                                data-aos-delay="200"
+                            >
+                                <div className="relative w-full overflow-hidden rounded-2xl sm:rounded-3xl border border-slate-200/80 bg-slate-50/50 shadow-md hover:shadow-xl transition-all duration-300">
+                                    <img
+                                        src={solutionsImg}
+                                        alt={[solutionsTitle, solutionsHighlight, solutionsLogoText].filter(Boolean).join(' ') || `${serviceTitle} Solutions architecture`}
+                                        className="w-full h-auto max-h-[460px] object-cover sm:object-contain lg:object-cover mx-auto"
+                                        loading="lazy"
+                                    />
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                </section>
+            )}
 
             <ServiceProcessSteps />
 

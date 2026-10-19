@@ -185,7 +185,7 @@ const Navbar = () => {
                   let dropdownItems: any[] = []
 
                   if (label === 'Industries') dropdownItems = industries
-                  if (label === 'Services') dropdownItems = [{ label: 'View All Services', href: '/services' }, ...servicesList]
+                  if (label === 'Services') dropdownItems = servicesList
                   if (label === 'Company') dropdownItems = companyLinks
 
                   return (
@@ -234,7 +234,7 @@ const Navbar = () => {
                           ))}
 
                           {label === 'Services' && (
-                            <div className="border-t border-gray-100 mt-1.5 pt-1.5">
+                            <div className={servicesList.length > 0 ? 'border-t border-gray-100 mt-1.5 pt-1.5' : ''}>
                               <HeadlessMenu.Item>
                                 {({ active }) => (
                                   <Link
