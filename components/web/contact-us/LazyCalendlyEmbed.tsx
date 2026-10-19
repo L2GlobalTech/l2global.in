@@ -14,6 +14,11 @@ export default function LazyCalendlyEmbed() {
     useEffect(() => {
         if (!loaded) return;
 
+        const script = document.createElement('script');
+        script.src = 'https://assets.calendly.com/assets/external/widget.js';
+        script.async = true;
+        document.body.appendChild(script);
+
         const handleMessage = (e: MessageEvent) => {
             if (
                 e.origin.includes('calendly.com') &&
@@ -24,7 +29,12 @@ export default function LazyCalendlyEmbed() {
         };
 
         window.addEventListener('message', handleMessage);
-        return () => window.removeEventListener('message', handleMessage);
+        return () => {
+            window.removeEventListener('message', handleMessage);
+            if (document.body.contains(script)) {
+                document.body.removeChild(script);
+            }
+        };
     }, [loaded]);
 
     if (!loaded) {
@@ -44,17 +54,10 @@ export default function LazyCalendlyEmbed() {
     }
 
     return (
-        <>
-            <div
-                className="calendly-inline-widget"
-                data-url={CALENDLY_URL}
-                style={{ minWidth: '320px', height: '700px' }}
-            />
-            <script
-                type="text/javascript"
-                src="https://assets.calendly.com/assets/external/widget.js"
-                async
-            />
-        </>
+        <div
+            className="calendly-inline-widget"
+            data-url={CALENDLY_URL}
+            style={{ minWidth: '320px', height: '700px' }}
+        />
     )
 }

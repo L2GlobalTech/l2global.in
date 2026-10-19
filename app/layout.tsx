@@ -154,15 +154,17 @@ export default function RootLayout({
       <body className={`antialiased ${urbanist.className}`}>
         {/*
           GA4 CONSENT MODE v2 — GDPR/UK PECR COMPLIANT
-          Step 1: Initialise GA in DENIED state before any other GA code.
+          Initialise GA in DENIED state before any GA code runs or events fire.
           CookieConsent component calls gtag("consent","update",{...granted})
           after the user clicks Accept.
-          Rendered in <body>, not a hand-written <head>, per Next.js App Router
-          guidance for next/script — the previous <head> placement caused the
-          script to be duplicated between SSR output and client-side injection,
-          producing a hydration mismatch on every page.
         */}
-        <Script id="ga-consent-init" strategy="beforeInteractive">
+        <Script
+          async
+          src="https://www.googletagmanager.com/gtag/js?id=G-YP4HCLVLZ9"
+          strategy="afterInteractive"
+        />
+
+        <Script id="google-analytics" strategy="afterInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
@@ -174,21 +176,6 @@ export default function RootLayout({
               security_storage: 'granted',
               wait_for_update: 500
             });
-          `}
-        </Script>
-
-        {/* Step 2: Load gtag.js */}
-        <Script
-          async
-          src="https://www.googletagmanager.com/gtag/js?id=G-YP4HCLVLZ9"
-          strategy="afterInteractive"
-        />
-
-        {/* Step 3: Configure GA — will only fire analytics events after consent granted */}
-        <Script id="google-analytics" strategy="afterInteractive">
-          {`
-            window.dataLayer = window.dataLayer || [];
-            function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
             gtag('config', 'G-YP4HCLVLZ9', {
               send_page_view: true,
