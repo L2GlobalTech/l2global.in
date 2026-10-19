@@ -187,7 +187,6 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
             {mappedStats.length > 0 && <ServiceKPISection stats={mappedStats} />}
 
             <ServiceAboutSection
-                ctaLabel={extractString(serviceData?.about_cta_text).trim() || 'Get a Quote'}
                 image={aboutImg}
                 badge={extractString(serviceData?.about_badge, 'About the Service')}
                 title={extractString(serviceData?.about_title, '')}
@@ -196,7 +195,7 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
                 linearText={extractString(serviceData?.about_highlight, '')}
                 description={extractString(serviceData?.about_description, '')}
                 features={features}
-                ctaText={extractString(serviceData?.about_cta_text, 'Get a quote')}
+                ctaText={extractString(serviceData?.about_cta_text).trim() || 'Get a quote'}
                 ctaUrl={extractString(serviceData?.about_cta_url, '/contact-us')}
             />
 
