@@ -73,27 +73,28 @@ const MobileHeader = () => {
     return (
         <>
 
-            <header className="lg:hidden bg-white py-3.5 fixed top-0 left-0 w-full z-10 shadow-md">
-                <div className="container mx-auto flex items-center justify-between gap-3">
+            <header className="lg:hidden bg-white py-2.5 fixed top-0 left-0 w-full z-40 shadow-sm border-b border-gray-100">
+                <div className="container mx-auto px-4 flex items-center justify-between gap-3">
                     <div className="flex items-center gap-3">
                         <button
                             onClick={() => {
                                 setIsSidebarOpen(true)
                                 setView("MENU")
                             }}
-                            className="p-2"
+                            className="p-2 -ml-2 text-gray-800 hover:text-[#F15A23] transition-colors"
+                            aria-label="Open menu"
                         >
-                            <Menu size={22} />
+                            <Menu size={24} />
                         </button>
 
-                        <Link href="/" onClick={onNavigate}>
+                        <Link href="/" onClick={onNavigate} className="flex items-center">
                             <Image
                                 src={logo}
                                 alt="L2 Global Technologies logo"
-                                width={150}
-                                height={80}
+                                width={160}
+                                height={40}
                                 priority
-                                className="w-[150px] h-20 object-contain"
+                                className="w-36 sm:w-44 h-9 sm:h-10 object-contain"
                             />
                         </Link>
                     </div>
@@ -101,7 +102,7 @@ const MobileHeader = () => {
                     <GradientButton
                         onClick={() => setIsContactOpen(true)}
                         className="rounded-full px-3! py-3!"
-                        icon={<Phone size={20} fill="white" strokeWidth={0} />}
+                        icon={<Phone size={18} fill="white" strokeWidth={0} />}
                     />
                 </div>
             </header>
@@ -110,24 +111,25 @@ const MobileHeader = () => {
             {isSidebarOpen && (
                 <div
                     onClick={() => setIsSidebarOpen(false)}
-                    className="fixed inset-0 bg-black/40 z-40 lg:hidden"
+                    className="fixed inset-0 bg-black/40 z-50 lg:hidden backdrop-blur-xs transition-opacity"
                 />
             )}
 
 
             <div
                 className={`fixed top-0 left-0 h-full w-[85%] max-w-sm bg-white z-50
-        transform transition-transform duration-300
+        transform transition-transform duration-300 flex flex-col shadow-2xl
         ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"} lg:hidden`}
             >
                 {/* SIDEBAR HEADER */}
-                <div className="flex items-center justify-between bg-primary px-4 py-5 border-b border-gray-200">
-                    <Image src={logo} alt="L2 Global Technologies logo" width={140} height={60} className="w-[140px] h-[60px]" />
+                <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100 bg-white">
+                    <Image src={logo} alt="L2 Global Technologies logo" width={150} height={38} className="w-36 h-9 object-contain" />
                     <button
                         onClick={() => setIsSidebarOpen(false)}
-                        className="bg-red-50 h-10 w-10 rounded-md flex items-center justify-center"
+                        className="bg-red-50 hover:bg-red-100 h-9 w-9 rounded-lg flex items-center justify-center transition-colors"
+                        aria-label="Close menu"
                     >
-                        <X size={20} className="text-red-500" />
+                        <X size={18} className="text-red-500" />
                     </button>
                 </div>
 
@@ -136,11 +138,12 @@ const MobileHeader = () => {
                     <div className="flex items-center gap-3 px-4 py-3 bg-[#F6F5F8] border-b border-gray-200">
                         <button
                             onClick={() => setView("MENU")}
-                            className="h-10 w-10 rounded-md flex items-center justify-center bg-white"
+                            className="h-9 w-9 rounded-lg flex items-center justify-center bg-white border border-gray-200 shadow-xs hover:bg-gray-50 transition-colors"
+                            aria-label="Back to main menu"
                         >
-                            <ArrowLeft size={18} />
+                            <ArrowLeft size={16} />
                         </button>
-                        <h3 className="font-semibold text-md text-[#074FDA]">
+                        <h3 className="font-semibold text-base text-[#074FDA]">
                             {view === "INDUSTRIES" && "Industries"}
                             {view === "COMPANY" && "Company"}
                             {view === "SERVICES" && "Services"}
@@ -149,7 +152,7 @@ const MobileHeader = () => {
                 )}
 
                 {/* CONTENT */}
-                <div className="overflow-y-auto">
+                <div className="flex-1 overflow-y-auto">
 
                     {view === "MENU" && (
                         <>
@@ -243,10 +246,10 @@ const MobileHeader = () => {
                             <Link
                                 href="/services"
                                 onClick={onNavigate}
-                                className={`${linkClass} font-semibold text-[#F15A23] flex items-center justify-between bg-orange-50/60`}
+                                className="flex items-center justify-between font-semibold tracking-tight border-b p-3.5 border-orange-100 bg-orange-50/70 text-[#F15A23] hover:bg-orange-100/70 transition-all duration-300"
                             >
                                 <span>View All Services</span>
-                                <ChevronRight size={18} />
+                                <ChevronRight size={18} className="text-[#F15A23]" />
                             </Link>
                             {servicesList.map(item => (
                                 <Link
