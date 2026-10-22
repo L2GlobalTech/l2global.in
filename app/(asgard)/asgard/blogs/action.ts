@@ -39,7 +39,7 @@ export interface GetBlogsResult {
 
 const formatMediaId = (val: any): string | null => {
   if (!val || typeof val !== 'string') return null;
-  const trimmed = val.trim();
+  const trimmed = val.trim().replace(/^[\r\n\s]+|[\r\n\s]+$/g, '');
   return trimmed.length > 0 ? trimmed : null;
 };
 
@@ -358,20 +358,24 @@ export const slugify = (text: string): string => {
     .toString()
     .toLowerCase()
     .trim()
+    .replace(/[\r\n]+/g, '-')
     .replace(/\s+/g, '-')
     .replace(/[^\w-]+/g, '')
-    .replace(/--+/g, '-');
+    .replace(/--+/g, '-')
+    .replace(/^-+|-+$/g, '');
 };
 
 export const mapBlogRecordToBlogPost = (record: BlogRecord): BlogPost => {
-  const rawTitle = record.title?.trim() || 'Untitled Article';
-  const computedSlug = (record.slug && record.slug.trim()) ? record.slug.trim() : (slugify(rawTitle) || record.id || 'article');
-  const mediaUrl = record.media_id ? getMediaPublicUrl(record.media_id, 'blogs') : null;
+  const rawTitle = (record.title || '').trim().replace(/^[\r\n\s]+|[\r\n\s]+$/g, '') || 'Untitled Article';
+  const rawSlug = (record.slug || '').trim().replace(/^[\r\n\s]+|[\r\n\s]+$/g, '');
+  const computedSlug = rawSlug ? slugify(rawSlug) : (slugify(rawTitle) || record.id || 'article');
+  const rawMedia = (record.media_id || '').trim().replace(/^[\r\n\s]+|[\r\n\s]+$/g, '');
+  const mediaUrl = rawMedia ? getMediaPublicUrl(rawMedia, 'blogs') : null;
   const fallbackImage = '/assets/web/blog/salesforce-sap.png';
   const image = mediaUrl || fallbackImage;
 
-  const tagString = record.tag?.trim() || '';
-  const keywordsString = record.meta_keywords?.trim() || '';
+  const tagString = (record.tag || '').trim().replace(/^[\r\n\s]+|[\r\n\s]+$/g, '');
+  const keywordsString = (record.meta_keywords || '').trim().replace(/^[\r\n\s]+|[\r\n\s]+$/g, '');
   const parsedTags: string[] = [];
 
   if (tagString) {
@@ -392,11 +396,12 @@ export const mapBlogRecordToBlogPost = (record: BlogRecord): BlogPost => {
 
   const category = parsedTags[0] || 'Enterprise Tech';
 
-
   // Format content: convert plain text newlines to html paragraphs if raw text
   let rawContent = record.content || '';
   if (!rawContent && record.sub_description) {
-    rawContent = `<p>${record.sub_description}</p>`;
+    rawContent = `<p>${record.sub_description.trim()}</p>`;
+  } else if (!rawContent && record.subtitle) {
+    rawContent = `<p>${record.subtitle.trim()}</p>`;
   } else if (rawContent && !rawContent.includes('<') && !rawContent.includes('>')) {
     rawContent = rawContent
       .split(/\n\n+/)
@@ -404,13 +409,18 @@ export const mapBlogRecordToBlogPost = (record: BlogRecord): BlogPost => {
       .join('');
   }
 
+  const excerpt =
+    (record.subtitle || '').trim().replace(/^[\r\n\s]+|[\r\n\s]+$/g, '') ||
+    (record.sub_description || '').trim().replace(/^[\r\n\s]+|[\r\n\s]+$/g, '') ||
+    'Read full insights from L2 Global Technology enterprise integration architects.';
+
   return {
     id: record.id || computedSlug,
     slug: computedSlug,
     title: rawTitle,
     metaTitle: rawTitle,
-    metaDescription: record.meta_description || record.meta_descriptior || record.sub_description || rawTitle,
-    excerpt: record.sub_description || record.subtitle || 'Read full insights from L2 Global Technology enterprise integration architects.',
+    metaDescription: record.meta_description || record.meta_descriptior || excerpt,
+    excerpt,
     content: rawContent || '<p>Content coming soon.</p>',
     author: 'L2 Global Tech Editorial',
     authorRole: 'Enterprise Integration Experts',

@@ -1,68 +1,33 @@
 "use client";
 
 import Slider from "react-slick";
-import Image from "next/image";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import SectionHeader from "./SectionHeader";
 import Divider from "./Divider";
+import {
+  fetchPublicTestimonials,
+  defaultTestimonials,
+} from "@/actions/testimonialsAction";
+import { TestimonialRecord } from "@/types/cms";
 
-const testimonials = [
-  {
-    id: 1,
-    title: "“The most reliable design agency we’ve worked with”",
-    desc: "From initial brainstorming to final delivery, the team demonstrated exceptional creativity and attention to detail. Their ability to understand our brand and translate it into impactful digital designs truly set them apart.",
-    name: "Sophia Moore",
-    role: "Marketing Head at BrightEdge Solutions",
-    img: 'https://api.dicebear.com/7.x/initials/svg?seed=SophiaM&backgroundColor=0F766E'
-  },
-  {
-    id: 2,
-    title: "“Exceptional quality and innovative ideas”",
-    desc: "The team consistently delivered high-quality designs backed by innovative thinking. Their structured approach, clear communication, and commitment to deadlines made the entire collaboration smooth and efficient.",
-    name: "Adam Smith",
-    role: "Founder of TechNova Labs",
-    img: 'https://api.dicebear.com/7.x/initials/svg?seed=AdamS&backgroundColor=9D174D'
-  },
-  {
-    id: 3,
-    title: "“Professional, creative, and easy to collaborate with”",
-    desc: "Working with L2 Global was a seamless experience. They took the time to understand our requirements and delivered creative solutions that aligned perfectly with our business goals and long-term vision.",
-    name: "Mike Warren",
-    role: "CEO of NextWave Technologies",
-    img: 'https://api.dicebear.com/7.x/initials/svg?seed=MikeWarren&backgroundColor=074FDA'
-  },
-  {
-    id: 4,
-    title: "“A partner we can truly rely on”",
-    desc: "Their team brought clarity and confidence to our project by combining technical expertise with strong design sensibilities. The results exceeded our expectations and significantly improved user engagement.",
-    name: "Emily Carter",
-    role: "Product Manager at Innovex Corp",
-    img: 'https://api.dicebear.com/7.x/initials/svg?seed=EmilyC&backgroundColor=F15A23'
-  },
-  {
-    id: 5,
-    title: "“Outstanding collaboration and execution”",
-    desc: "From planning to execution, every stage of the project was handled with professionalism. The team was responsive, adaptable, and delivered solutions that were both functional and visually impressive.",
-    name: "Daniel Roberts",
-    role: "Operations Director at CloudSphere",
-    img: 'https://api.dicebear.com/7.x/initials/svg?seed=DanielR&backgroundColor=15803D'
-  },
-  {
-    id: 6,
-    title: "“Creative solutions backed by strong expertise”",
-    desc: "L2 Global combined creative thinking with technical excellence to deliver a product that truly reflected our brand values. Their proactive approach and attention to detail made a noticeable difference.",
-    name: "Rachel Thompson",
-    role: "Head of Digital Strategy at Elevate Studios",
-    img: 'https://api.dicebear.com/7.x/initials/svg?seed=RachelT&backgroundColor=7C3AED'
-  },
-];
+interface TestimonialCarouselProps {
+  initialTestimonials?: TestimonialRecord[];
+}
 
-export default function TestimonialCarousel() {
+export default function TestimonialCarousel({
+  initialTestimonials,
+}: TestimonialCarouselProps) {
   const sliderRef = useRef<Slider | null>(null);
   const [current, setCurrent] = useState(0);
   const [isMobile, setIsMobile] = useState(false);
+  const [testimonials, setTestimonials] = useState<TestimonialRecord[]>(
+    initialTestimonials && initialTestimonials.length > 0
+      ? initialTestimonials
+      : defaultTestimonials
+  );
 
+  // Responsive mobile detection
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -73,15 +38,38 @@ export default function TestimonialCarousel() {
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
+  // Fetch dynamic testimonials from Supabase
+  useEffect(() => {
+    let isMounted = true;
+    async function loadData() {
+      try {
+        const liveData = await fetchPublicTestimonials();
+        if (isMounted && liveData && liveData.length > 0) {
+          setTestimonials(liveData);
+        }
+      } catch (err) {
+        console.warn("Failed to load live testimonials, using defaults:", err);
+      }
+    }
+
+    loadData();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const count = testimonials.length;
+  const slidesToShow = isMobile ? 1 : Math.min(3, count);
+
   const settings = {
     dots: false,
-    infinite: true,
+    infinite: count > 1,
     arrows: false,
     autoplay: true,
-    autoplaySpeed: 2500,
+    autoplaySpeed: 3000,
     speed: 800,
-    slidesToShow: isMobile ? 1 : 3,
-    centerMode: !isMobile,
+    slidesToShow: slidesToShow,
+    centerMode: !isMobile && count >= 3,
     centerPadding: "0px",
     beforeChange: (_: any, next: number) => setCurrent(next),
   };
@@ -103,60 +91,91 @@ export default function TestimonialCarousel() {
       </div>
 
       <div className="overflow-hidden">
-        <Slider key={isMobile ? "mobile" : "desktop"} ref={sliderRef} {...settings}>
+        <Slider
+          key={`${isMobile ? "mobile" : "desktop"}-${count}`}
+          ref={sliderRef}
+          {...settings}
+        >
           {testimonials.map((t, i) => {
             const isCenter = isMobile
               ? true
+              : count < 3
+              ? true
               : i === current ||
-              (current > testimonials.length - 3 &&
-                i === (current - testimonials.length) % testimonials.length);
+                (current > count - 3 && i === (current - count) % count);
+
+            const ratingStars = Math.max(1, Math.min(5, Number(t.rating) || 5));
 
             return (
               <div
-                key={t.id}
+                key={t.id || i}
                 className="px-0 md:px-4 transition-all duration-500"
               >
                 <div
                   className={`
-                    bg-white p-8 rounded-3xl flex flex-col justify-between
+                    bg-white p-7 md:p-8 rounded-3xl flex flex-col justify-between
                     transition-all duration-500 m-5 md:m-0 h-full!
-                    ${isCenter
-                      ? "border border-[#FF6A1A] scale-100 shadow-xl"
-                      : "border border-transparent scale-[0.94] opacity-70"
+                    ${
+                      isCenter
+                        ? "border border-[#FF6A1A] scale-100 shadow-xl"
+                        : "border border-transparent scale-[0.94] opacity-70"
                     }
                   `}
                 >
                   <div>
-                    <h3
-                      className={`text-[22px] font-semibold transition-colors duration-500 ${isCenter ? "text-[#FF6A1A]" : "text-gray-900"
-                        }`}
-                      style={{ letterSpacing: "-1px" }}
-                    >
-                      {t.title}
-                    </h3>
+                    {/* Rating Stars */}
+                    <div className="flex items-center gap-1 mb-3 text-amber-400">
+                      {Array.from({ length: ratingStars }).map((_, starIdx) => (
+                        <Star
+                          key={starIdx}
+                          className="w-4 h-4 fill-amber-400 text-amber-400"
+                        />
+                      ))}
+                    </div>
 
-                    <p className="text-gray-600 mt-3 text-md leading-relaxed">
+                    {t.title && (
+                      <h3
+                        className={`text-[20px] md:text-[22px] font-semibold transition-colors duration-500 line-clamp-2 ${
+                          isCenter ? "text-[#FF6A1A]" : "text-gray-900"
+                        }`}
+                        style={{ letterSpacing: "-1px" }}
+                      >
+                        {t.title}
+                      </h3>
+                    )}
+
+                    <p className="text-gray-600 mt-3 text-sm md:text-md leading-relaxed">
                       {t.desc}
                     </p>
                   </div>
 
-                  <div className="flex items-center gap-3 mt-6">
-                    <Image
-                      src={t.img}
-                      alt={t.name}
-                      width={45}
-                      height={45}
-                      loading="lazy"
-                      className="rounded-full object-cover bg-[#feebe2]"
-                    />
-                    <div>
+                  <div className="flex items-center gap-3 mt-6 pt-2 border-t border-gray-50">
+                    {t.img ? (
+                      <img
+                        src={t.img}
+                        alt={t.name}
+                        loading="lazy"
+                        className="rounded-full object-cover w-12 h-12 border border-gray-100 shadow-xs shrink-0 bg-slate-100"
+                        onError={(e) => {
+                          (e.target as HTMLElement).style.display = "none";
+                        }}
+                      />
+                    ) : (
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm shrink-0 shadow-xs">
+                        {t.name ? t.name.charAt(0).toUpperCase() : "U"}
+                      </div>
+                    )}
+                    <div className="min-w-0">
                       <p
-                        className={`font-semibold transition-colors duration-500 ${isCenter ? "text-[#FF6A1A]" : "text-gray-900"
-                          }`}
+                        className={`font-semibold transition-colors duration-500 truncate ${
+                          isCenter ? "text-[#FF6A1A]" : "text-gray-900"
+                        }`}
                       >
                         {t.name}
                       </p>
-                      <p className="text-gray-500 text-sm">{t.role}</p>
+                      <p className="text-gray-500 text-xs md:text-sm truncate">
+                        {t.role}
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -168,16 +187,18 @@ export default function TestimonialCarousel() {
 
       <div className="flex justify-center items-end gap-6 h-40 md:h-60 lg:h-80 pb-6 md:pb-10 lg:pb-16 -mt-10 md:-mt-20 lg:-mt-40 bg-[url('/assets/web/home/bg-testimonials.webp')] bg-cover bg-center">
         <button
+          type="button"
           aria-label="Previous testimonial"
-          className="w-10 h-10 md:w-12 md:h-12 bg-[#5A59FF] text-white flex items-center justify-center rounded-full shadow-md hover:scale-105 transition"
+          className="w-10 h-10 md:w-12 md:h-12 bg-[#5A59FF] text-white flex items-center justify-center rounded-full shadow-md hover:scale-105 transition cursor-pointer"
           onClick={() => sliderRef.current?.slickPrev()}
         >
           <ChevronLeft className="w-5 h-5 md:w-6 md:h-6" />
         </button>
 
         <button
+          type="button"
           aria-label="Next testimonial"
-          className="w-10 h-10 md:w-12 md:h-12 bg-[#5A59FF] text-white flex items-center justify-center rounded-full shadow-md hover:scale-105 transition"
+          className="w-10 h-10 md:w-12 md:h-12 bg-[#5A59FF] text-white flex items-center justify-center rounded-full shadow-md hover:scale-105 transition cursor-pointer"
           onClick={() => sliderRef.current?.slickNext()}
         >
           <ChevronRight className="w-5 h-5 md:w-6 md:h-6" />

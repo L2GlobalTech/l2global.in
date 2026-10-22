@@ -15,6 +15,7 @@ import {
   ShieldCheck,
   Users,
   Briefcase,
+  MessageSquareQuote,
 } from 'lucide-react';
 import { isSupabaseConfigured } from '@/configs/supabase';
 
@@ -46,6 +47,12 @@ export const Sidebar: React.FC = () => {
       name: 'Team',
       href: '/asgard/team',
       icon: Users,
+      exact: false,
+    },
+    {
+      name: 'Testimonials',
+      href: '/asgard/testimonials',
+      icon: MessageSquareQuote,
       exact: false,
     },
     {

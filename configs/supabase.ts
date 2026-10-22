@@ -28,3 +28,20 @@ export const supabase: SupabaseClient = createClient(
     },
   }
 );
+
+// Admin client that bypasses RLS if SUPABASE_SERVICE_ROLE_KEY is set in environment
+export const getSupabaseAdmin = (): SupabaseClient => {
+  const serviceKey =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY;
+
+  if (serviceKey && supabaseUrl) {
+    return createClient(supabaseUrl, serviceKey, {
+      auth: {
+        persistSession: false,
+        autoRefreshToken: false,
+      },
+    });
+  }
+  return supabase;
+};

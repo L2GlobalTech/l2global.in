@@ -70,6 +70,10 @@ export const AsgardHeader: React.FC = () => {
       crumbs.push({ label: 'Team Members', href: '/asgard/team' });
       if (pathname.includes('/create')) crumbs.push({ label: 'Add Member' });
       else if (pathname.includes('/edit')) crumbs.push({ label: 'Edit Member' });
+    } else if (pathname.includes('/asgard/testimonials')) {
+      crumbs.push({ label: 'Testimonials', href: '/asgard/testimonials' });
+      if (pathname.includes('/create')) crumbs.push({ label: 'Add Testimonial' });
+      else if (pathname.includes('/edit')) crumbs.push({ label: 'Edit Testimonial' });
     } else if (pathname.includes('/asgard/faqs')) {
       crumbs.push({ label: 'FAQs', href: '/asgard/faqs' });
       if (pathname.includes('/create')) crumbs.push({ label: 'Add FAQ' });

@@ -1,8 +1,8 @@
 import ServiceDetailContainer from '@/containers/services/ServiceDetailContainer';
+import ServiceExploreMore from '@/components/web/services/ServiceExploreMore';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getPublishedService, getPublishedServices } from '@/lib/publicServices';
-import Link from 'next/link';
 
 export const dynamic = 'force-dynamic';
 interface PageProps { params: Promise<{ slug: string }> }
@@ -47,9 +47,8 @@ export default async function ServiceDetailPage({ params }: PageProps) {
     return <>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify([schema, breadcrumb]).replace(/</g, '\\u003c') }} />
         <ServiceDetailContainer service={service} slug={service.slug} />
-        {otherServices.length > 0 && <section className="container mx-auto px-5 py-16" aria-labelledby="more-services-heading">
-            <h2 id="more-services-heading" className="text-3xl font-semibold">Explore More Services</h2>
-            <ul className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{otherServices.map(item => <li key={item.slug}><Link href={`/services/${item.slug}`} className="block rounded-xl border border-gray-200 p-5 text-[#195DF0] hover:underline">{item.title}</Link></li>)}</ul>
-        </section>}
+        {otherServices.length > 0 && (
+            <ServiceExploreMore services={otherServices} currentTitle={service.title} />
+        )}
     </>;
 }

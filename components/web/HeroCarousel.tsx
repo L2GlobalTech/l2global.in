@@ -153,7 +153,7 @@ export default function HeroCarousel() {
                                     <div className="space-y-3 md:space-y-8 relative">
                                         {/* TITLE */}
                                         <h2
-                                            className="text-[40px] md:text-[65px] leading-tight text-center md:text-left tracking-tighter md:tracking-[-3px] h-40"
+                                            className="text-[28px] sm:text-[38px] md:text-[65px] leading-tight text-center md:text-left tracking-tight md:tracking-[-3px] min-h-[74px] sm:min-h-[96px] md:min-h-[160px] md:h-40"
                                             style={{
                                                 background: "linear-gradient(2.84deg, rgba(20,20,20,0.7) 0.04%, #131313 36.04%)",
                                                 WebkitBackgroundClip: "text",

@@ -112,6 +112,21 @@ export const asgardSeoConfig: Record<string, PageSeoConfig> = {
     description: 'View full career opening details, requirements, and publishing status.',
     keywords: ['job details', 'career opening', 'asgard careers'],
   },
+  testimonials: {
+    title: 'Testimonials Management',
+    description: 'Manage client reviews, ratings, designations, and homepage carousel order.',
+    keywords: ['asgard testimonials', 'reviews', 'client feedback', 'testimonials cms'],
+  },
+  createTestimonial: {
+    title: 'Add New Testimonial',
+    description: 'Add client review with company, role, rating, avatar image, and quote.',
+    keywords: ['create testimonial', 'add review', 'asgard testimonials'],
+  },
+  editTestimonial: {
+    title: 'Edit Testimonial',
+    description: 'Update testimonial review, client info, avatar image, rating, and status.',
+    keywords: ['edit testimonial', 'update review', 'asgard testimonials'],
+  },
 };
 
 

@@ -261,3 +261,31 @@ export interface JobOpeningFormData {
   display_order?: number;
 }
 
+export interface TestimonialRecord {
+  id?: string;
+  name: string;
+  role: string;
+  company?: string | null;
+  title?: string | null;
+  desc: string;
+  img?: string | null;
+  rating?: number | null;
+  display_order?: number | null;
+  is_active?: boolean | null;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface TestimonialFormData {
+  id?: string;
+  name: string;
+  role: string;
+  company?: string;
+  title?: string;
+  desc: string;
+  img?: string | null;
+  rating?: number;
+  display_order?: number;
+  is_active?: boolean;
+}
+

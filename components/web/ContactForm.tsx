@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { trackEvent } from "@/lib/gtag";
+import toast from "react-hot-toast";
 
 // const COUNTRIES = [
 //   { name: "India", phoneCode: "91", flag: "https://flagcdn.com/in.svg", maxLength: 10 },
@@ -31,8 +32,11 @@ const COUNTRIES = [
   { name: 'Australia', phoneCode: '61', flag: 'https://flagcdn.com/au.svg', maxLength: 9 },
 ];
 
+interface ContactFormProps {
+  onSuccess?: () => void;
+}
 
-export default function ContactForm() {
+export default function ContactForm({ onSuccess }: ContactFormProps = {}) {
   const [open, setOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const [selectedCountry, setSelectedCountry] = useState(COUNTRIES[0]);
@@ -166,7 +170,11 @@ export default function ContactForm() {
         description: "",
         service: ""
       });
+      setErrors({});
+      setSubmitError(null);
+      toast.success("Thank you! We’ll contact you shortly.");
       showToast();
+      onSuccess?.();
     } catch (err) {
       setSubmitError(
         "Something went wrong sending your request. Please try again, or email us directly at contactus@l2global.in."
@@ -335,7 +343,7 @@ export default function ContactForm() {
         {/* Toast */}
         <div
           id="sf-toast"
-          className="opacity-0 pointer-events-none transition-opacity fixed bottom-6 right-6 bg-green-600 text-white px-5 py-3 rounded-xl shadow-lg"
+          className="opacity-0 pointer-events-none transition-opacity fixed bottom-6 right-6 z-[99999] bg-green-600 text-white px-5 py-3 rounded-xl shadow-lg"
         >
           ✅ Thank you! We’ll contact you shortly.
         </div>

@@ -134,19 +134,23 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
         })
         : []
 
-    // Dynamic Stats - only show integrated data
-    const mappedStats = serviceData?.results_stats && serviceData.results_stats.length > 0
-        ? serviceData.results_stats.map((stat: any, index: number) => {
-            const defaultStat = defaultStats[index % defaultStats.length]
+    // Dynamic Stats - only show integrated data from backend
+    const rawStats = Array.isArray(serviceData?.results_stats) ? serviceData.results_stats : [];
+    const mappedStats = rawStats
+        .map((stat: any, index: number) => {
+            const defaultStat = defaultStats[index % defaultStats.length];
+            const num = extractString(stat?.value, '').trim();
+            const tit = extractString(stat?.label, '').trim();
+            const sub = extractString(stat?.sub_label || stat?.description, '').trim();
             return {
                 icon: defaultStat.icon,
-                number: extractString(stat?.value, ''),
-                title: extractString(stat?.label, ''),
-                subtitle: extractString(stat?.sub_label, ''),
+                number: num,
+                title: tit,
+                subtitle: sub,
                 gradient: defaultStat.gradient,
-            }
+            };
         })
-        : []
+        .filter((item: any) => Boolean(item.number || item.title || item.subtitle));
 
     // Dynamic Features / Highlights - preserve structured objects and legacy strings
     const features = serviceData?.about_features && Array.isArray(serviceData.about_features)
@@ -196,7 +200,15 @@ const ServiceDetailContainer: React.FC<ServiceDetailContainerProps> = ({ service
                 tag3={extractString(serviceData?.hero_badges?.[2], '')}
             />
 
-            {mappedStats.length > 0 && <ServiceKPISection stats={mappedStats} />}
+            {mappedStats.length > 0 && (
+                <ServiceKPISection
+                    stats={mappedStats}
+                    badge={extractString(serviceData?.results_badge).trim()}
+                    title={extractString(serviceData?.results_title).trim()}
+                    highlight={extractString(serviceData?.results_highlight).trim()}
+                    description={extractString(serviceData?.results_description).trim()}
+                />
+            )}
 
             <ServiceAboutSection
                 image={aboutImg}

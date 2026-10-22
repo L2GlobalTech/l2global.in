@@ -1,8 +1,10 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import { supabase } from '@/configs/supabase';
+import { mapBlogRecordToBlogPost } from '@/app/(asgard)/asgard/blogs/action';
 import {
     Calendar,
     Clock,
@@ -95,9 +97,55 @@ interface BlogPostContainerProps {
 }
 
 const BlogPostContainer: React.FC<BlogPostContainerProps> = ({ post: initialPost, slug: propSlug, relatedPosts: initialRelated = [] }) => {
-    const post = initialPost || null;
-    const relatedPosts = initialRelated;
+    const [post, setPost] = useState<BlogPost | null>(initialPost || null);
+    const [loading, setLoading] = useState<boolean>(!initialPost && Boolean(propSlug));
+    const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>(initialRelated);
     const [copied, setCopied] = useState(false);
+
+    useEffect(() => {
+        if (initialPost) {
+            setPost(initialPost);
+            setLoading(false);
+        }
+    }, [initialPost]);
+
+    useEffect(() => {
+        if (!post && propSlug) {
+            setLoading(true);
+            const cleanSlug = propSlug.trim().replace(/^\/+|\/+$/g, '').toLowerCase();
+
+            async function fetchClientBlog() {
+                try {
+                    const { data } = await supabase
+                        .from('blogs')
+                        .select('*')
+                        .or(`slug.ilike.${cleanSlug},id.eq.${cleanSlug}`)
+                        .maybeSingle();
+
+                    if (data && data.title) {
+                        setPost(mapBlogRecordToBlogPost(data));
+                    }
+                } catch (err) {
+                    console.error('Failed to load blog on client:', err);
+                } finally {
+                    setLoading(false);
+                }
+            }
+
+            fetchClientBlog();
+        }
+    }, [post, propSlug]);
+
+    if (loading) {
+        return (
+            <div className="bg-[#fcfcfd] min-h-screen text-slate-900 font-sans flex items-center justify-center pt-32 pb-20">
+                <div className="flex flex-col items-center gap-3">
+                    <Loader2 className="w-8 h-8 text-[#074FDA] animate-spin" />
+                    <p className="text-sm text-slate-500 font-medium font-mono">Loading publication...</p>
+                </div>
+            </div>
+        );
+    }
 
     if (!post) {
         return (
