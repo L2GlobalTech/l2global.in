@@ -1,7 +1,7 @@
 "use client";
 
 import Slider from "react-slick";
-import { ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useRef, useState, useEffect } from "react";
 import SectionHeader from "./SectionHeader";
 import Divider from "./Divider";
@@ -104,8 +104,6 @@ export default function TestimonialCarousel({
               : i === current ||
                 (current > count - 3 && i === (current - count) % count);
 
-            const ratingStars = Math.max(1, Math.min(5, Number(t.rating) || 5));
-
             return (
               <div
                 key={t.id || i}
@@ -123,16 +121,6 @@ export default function TestimonialCarousel({
                   `}
                 >
                   <div>
-                    {/* Rating Stars */}
-                    <div className="flex items-center gap-1 mb-3 text-amber-400">
-                      {Array.from({ length: ratingStars }).map((_, starIdx) => (
-                        <Star
-                          key={starIdx}
-                          className="w-4 h-4 fill-amber-400 text-amber-400"
-                        />
-                      ))}
-                    </div>
-
                     {t.title && (
                       <h3
                         className={`text-[20px] md:text-[22px] font-semibold transition-colors duration-500 line-clamp-2 ${
