@@ -36,7 +36,9 @@ async function main() {
   records.pop(); failure = true;
   await assert.rejects(services.getPublishedServices(), /Unable/); failure = false;
   const page = load('app/(web)/services/[slug]/page.tsx', {
-    '@/containers/services/ServiceDetailContainer': {}, 'next/link': { default: 'a' },
+    '@/containers/services/ServiceDetailContainer': {},
+    '@/components/web/services/ServiceExploreMore': { default: () => null },
+    'next/link': { default: 'a' },
     'react/jsx-runtime': { jsx: (type, props) => ({ type, props }), jsxs: (type, props) => ({ type, props }) },
     'next/navigation': { notFound: () => { throw new Error('404'); } }, '@/lib/publicServices': services,
   });
@@ -108,8 +110,13 @@ async function main() {
     async range(start, end) { return { data: blogRows.slice(start, end + 1), error: blogFailure ? {} : null }; } };
   const publishedBlogs = load('lib/publicBlogs.ts', {
     react: { cache: fn => fn },
-    '@/configs/supabase': { isSupabaseConfigured: () => true, supabase: { from: () => blogQuery } },
+    '@/configs/supabase': {
+      isSupabaseConfigured: () => true,
+      supabase: { from: () => blogQuery },
+      getSupabaseAdmin: () => ({ from: () => blogQuery }),
+    },
     '@/app/(asgard)/asgard/blogs/action': { mapBlogRecordToBlogPost: row => row, slugify: title => title.toLowerCase().replace(/ /g, '-') },
+    '@/constants/blogData': { blogPosts: [] },
   });
   assert.equal((await publishedBlogs.getPublishedBlogs()).length, 1);
   assert.equal(await publishedBlogs.getPublishedBlog('missing'), null);

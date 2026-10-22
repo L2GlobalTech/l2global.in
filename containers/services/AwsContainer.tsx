@@ -146,18 +146,20 @@ const AwsContainer: React.FC<AwsContainerProps> = ({ initialData }) => {
         })
         : defaultServices
 
-    const mappedStats = serviceData?.results_stats && serviceData.results_stats.length > 0
-        ? serviceData.results_stats.map((stat: any, index: number) => {
-            const defaultStat = defaultStats[index % defaultStats.length]
+    // Map Dynamic Stats only if present in backend
+    const rawStats = Array.isArray(serviceData?.results_stats) ? serviceData.results_stats : [];
+    const mappedStats = rawStats
+        .map((stat: any, index: number) => {
+            const defaultStat = defaultStats[index % defaultStats.length];
             return {
                 icon: defaultStat.icon,
-                number: extractString(stat?.value, defaultStat.number),
-                title: extractString(stat?.label, defaultStat.title),
-                subtitle: extractString(stat?.sub_label || stat?.description, defaultStat.subtitle),
+                number: extractString(stat?.value, '').trim(),
+                title: extractString(stat?.label, '').trim(),
+                subtitle: extractString(stat?.sub_label || stat?.description, '').trim(),
                 gradient: defaultStat.gradient,
-            }
+            };
         })
-        : defaultStats
+        .filter((item: any) => Boolean(item.number || item.title || item.subtitle));
 
     const mappedFaqs = serviceData?.faqs && serviceData.faqs.length > 0
         ? serviceData.faqs.map((f: any) => ({
@@ -203,7 +205,7 @@ const AwsContainer: React.FC<AwsContainerProps> = ({ initialData }) => {
                 tag3={extractString(serviceData?.hero_badges?.[2], '24/7 Support')}
             />
 
-            <ServiceKPISection stats={mappedStats} />
+            {mappedStats.length > 0 && <ServiceKPISection stats={mappedStats} />}
 
             <ServiceAboutSection
                 image={aboutImg}

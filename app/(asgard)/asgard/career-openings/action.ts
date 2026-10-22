@@ -1,4 +1,4 @@
-import { supabase, isSupabaseConfigured } from '@/configs/supabase';
+import { supabase, getSupabaseAdmin, isSupabaseConfigured } from '@/configs/supabase';
 import { JobOpeningRecord, JobOpeningFormData } from '@/types/cms';
 
 export type { JobOpeningRecord, JobOpeningFormData };
@@ -276,11 +276,12 @@ export async function createJobOpening(jobData: Partial<JobOpeningRecord>) {
         : 0,
     };
 
-    const { data, error } = await supabase
+    const client = typeof window === 'undefined' ? getSupabaseAdmin() : supabase;
+
+    const { data, error } = await client
       .from('job_openings')
-      .insert(insertPayload)
-      .select()
-      .single();
+      .insert([insertPayload])
+      .select();
 
     if (error) {
       console.error('Error inserting job opening into Supabase:', error);
@@ -290,10 +291,17 @@ export async function createJobOpening(jobData: Partial<JobOpeningRecord>) {
           error: `A job opening with slug "${slug}" already exists. Please choose a different slug.`,
         };
       }
+      if (error.code === '42501' || error.message?.toLowerCase().includes('row-level security')) {
+        return {
+          success: false,
+          error:
+            'Supabase Row-Level Security (RLS) violation: Please run the RLS policy script in Supabase SQL Editor to allow authenticated users to insert into "job_openings".',
+        };
+      }
       return { success: false, error: error.message };
     }
 
-    return { success: true, data };
+    return { success: true, data: data?.[0] || insertPayload };
   } catch (error: any) {
     console.error('Failed to create job opening:', error);
     return { success: false, error: error.message || 'Failed to create job opening' };
@@ -400,12 +408,13 @@ export async function updateJobOpening(id: string, updates: Partial<JobOpeningRe
         : 0;
     }
 
-    const { data, error } = await supabase
+    const client = typeof window === 'undefined' ? getSupabaseAdmin() : supabase;
+
+    const { data, error } = await client
       .from('job_openings')
       .update(payload)
       .eq('id', id)
-      .select()
-      .single();
+      .select();
 
     if (error) {
       console.error('Error updating job opening:', error);
@@ -415,10 +424,17 @@ export async function updateJobOpening(id: string, updates: Partial<JobOpeningRe
           error: `A job opening with slug "${cleanSlug}" already exists. Please choose a different slug.`,
         };
       }
+      if (error.code === '42501' || error.message?.toLowerCase().includes('row-level security')) {
+        return {
+          success: false,
+          error:
+            'Supabase Row-Level Security (RLS) violation: Please run the RLS policy script in Supabase SQL Editor to allow authenticated users to update "job_openings".',
+        };
+      }
       return { success: false, error: error.message };
     }
 
-    return { success: true, data: data || payload };
+    return { success: true, data: data?.[0] || payload };
   } catch (error: any) {
     console.error('Failed to update job opening:', error);
     return { success: false, error: error.message || 'Failed to update job opening' };
@@ -445,10 +461,19 @@ export async function deleteJobOpening(id: string) {
       };
     }
 
-    const { error } = await supabase.from('job_openings').delete().eq('id', id);
+    const client = typeof window === 'undefined' ? getSupabaseAdmin() : supabase;
+
+    const { error } = await client.from('job_openings').delete().eq('id', id);
 
     if (error) {
       console.error('Error deleting job opening:', error);
+      if (error.code === '42501' || error.message?.toLowerCase().includes('row-level security')) {
+        return {
+          success: false,
+          error:
+            'Supabase Row-Level Security (RLS) violation: Please run the RLS policy script in Supabase SQL Editor to allow authenticated users to delete from "job_openings".',
+        };
+      }
       return { success: false, error: error.message };
     }
 
@@ -480,23 +505,30 @@ export async function toggleJobOpeningActiveStatus(id: string, currentStatus: bo
     }
 
     const newStatus = !currentStatus;
+    const client = typeof window === 'undefined' ? getSupabaseAdmin() : supabase;
 
-    const { data, error } = await supabase
+    const { data, error } = await client
       .from('job_openings')
       .update({
         is_active: newStatus,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
-      .select()
-      .single();
+      .select();
 
     if (error) {
       console.error('Error toggling job opening status:', error);
+      if (error.code === '42501' || error.message?.toLowerCase().includes('row-level security')) {
+        return {
+          success: false,
+          error:
+            'Supabase Row-Level Security (RLS) violation: Please run the RLS policy script in Supabase SQL Editor to allow authenticated users to update "job_openings".',
+        };
+      }
       return { success: false, error: error.message };
     }
 
-    return { success: true, data };
+    return { success: true, data: data?.[0] };
   } catch (error: any) {
     console.error('Failed to toggle status:', error);
     return { success: false, error: error.message || 'Failed to toggle status' };

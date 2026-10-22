@@ -63,7 +63,7 @@ const ContactPopup: React.FC<ContactPopupProps> = ({ isOpen, setIsOpen }) => {
 
                             {/* scrollable form area */}
                             <div className="max-h-[calc(90vh-80px)] overflow-y-auto px-8 py-6">
-                                <ContactForm />
+                                <ContactForm onSuccess={() => setIsOpen(false)} />
                             </div>
                         </DialogPanel>
 
